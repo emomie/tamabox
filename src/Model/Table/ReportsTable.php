@@ -3,8 +3,6 @@ declare(strict_types=1);
 
 namespace App\Model\Table;
 
-use Cake\ORM\Query;
-use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 
@@ -12,8 +10,7 @@ use Cake\Validation\Validator;
  * Reports Model
  *
  * @property \App\Model\Table\MessagesTable&\Cake\ORM\Association\BelongsTo $Messages
- * @property \App\Model\Table\UsersTable&\Cake\ORM\Association\BelongsTo $Users
- *
+ * @property \App\Model\Table\UsersTable&\Cake\ORM\Association\BelongsTo $ReporterUsers
  * @method \App\Model\Entity\Report newEmptyEntity()
  * @method \App\Model\Entity\Report newEntity(array $data, array $options = [])
  * @method \App\Model\Entity\Report[] newEntities(array $data, array $options = [])
@@ -58,8 +55,10 @@ class ReportsTable extends Table
             'foreignKey' => 'message_id',
             'joinType' => 'INNER',
         ]);
-        $this->belongsTo('Users', [
+        $this->belongsTo('ReporterUsers', [
+            'className' => 'Users',
             'foreignKey' => 'reporter_user_id',
+            'joinType' => 'LEFT',
         ]);
     }
 

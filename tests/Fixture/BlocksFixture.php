@@ -20,10 +20,10 @@ class BlocksFixture extends TestFixture
         $this->records = [
             [
                 'id' => '2c6c3fe8-b629-4c91-8143-abf7995de6ea',
-                'blocker_user_id' => 'fb1b9e85-33af-4d70-8c75-77bc9c88d7a7',
-                'blocked_user_id' => '539350fd-5259-44cb-84e2-2b2095fc1534',
-                'reason' => 'Lorem ipsum dolor sit amet',
-                'created_at' => '',
+                'blocker_user_id' => '11111111-1111-1111-1111-111111111111',
+                'blocked_user_id' => '22222222-2222-2222-2222-222222222222',
+                'reason' => 'spam',
+                'created_at' => '2026-04-22 12:00:00',
             ],
         ];
         parent::init();

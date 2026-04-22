@@ -17,24 +17,25 @@ class MessagesFixture extends TestFixture
      */
     public function init(): void
     {
+        $body = 'Hello from Bob!';
         $this->records = [
             [
                 'id' => '644a57ef-ca39-42b5-aa7c-c7774ec39f80',
-                'inbox_id' => '5a13c00a-7a15-4120-9f84-2961911e8ebb',
-                'sender_user_id' => '3d42fbce-c51e-4e01-8414-ba557001d6a3',
-                'body' => 'Lorem ipsum dolor sit amet, aliquet feugiat. Convallis morbi fringilla gravida, phasellus feugiat dapibus velit nunc, pulvinar eget sollicitudin venenatis cum nullam, vivamus ut a sed, mollitia lectus. Nulla vestibulum massa neque ut et, id hendrerit sit, feugiat in taciti enim proin nibh, tempor dignissim, rhoncus duis vestibulum nunc mattis convallis.',
-                'body_length' => 1,
-                'is_ssr' => 1,
-                'ssr_probability_at_send' => 1.5,
-                'ssr_seed' => 'Lorem ipsum dolor sit amet',
-                'sender_provider' => 'Lorem ipsum dolor sit amet',
-                'sender_handle_snapshot' => 'Lorem ipsum dolor sit amet',
-                'sender_avatar_url_snapshot' => 'Lorem ipsum dolor sit amet',
-                'sender_profile_url_snapshot' => 'Lorem ipsum dolor sit amet',
-                'opened_at' => '',
-                'deleted_at' => '',
-                'deleted_reason' => 'Lorem ipsum dolor sit amet',
-                'created_at' => '',
+                'inbox_id' => 'ef8c90df-5fd3-4e2c-be65-744fa440be90',
+                'sender_user_id' => '22222222-2222-2222-2222-222222222222',
+                'body' => $body,
+                'body_length' => 15,
+                'is_ssr' => 0,
+                'ssr_probability_at_send' => 0.100,
+                'ssr_seed' => 'a' . str_repeat('0', 63),
+                'sender_provider' => 'bluesky',
+                'sender_handle_snapshot' => 'bob.bsky.social',
+                'sender_avatar_url_snapshot' => null,
+                'sender_profile_url_snapshot' => null,
+                'opened_at' => null,
+                'deleted_at' => null,
+                'deleted_reason' => null,
+                'created_at' => '2026-04-22 12:00:00',
             ],
         ];
         parent::init();

@@ -3,8 +3,6 @@ declare(strict_types=1);
 
 namespace App\Model\Table;
 
-use Cake\ORM\Query;
-use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 
@@ -12,9 +10,8 @@ use Cake\Validation\Validator;
  * Messages Model
  *
  * @property \App\Model\Table\InboxesTable&\Cake\ORM\Association\BelongsTo $Inboxes
- * @property \App\Model\Table\UsersTable&\Cake\ORM\Association\BelongsTo $Users
+ * @property \App\Model\Table\UsersTable&\Cake\ORM\Association\BelongsTo $SenderUsers
  * @property \App\Model\Table\ReportsTable&\Cake\ORM\Association\HasMany $Reports
- *
  * @method \App\Model\Entity\Message newEmptyEntity()
  * @method \App\Model\Entity\Message newEntity(array $data, array $options = [])
  * @method \App\Model\Entity\Message[] newEntities(array $data, array $options = [])
@@ -59,7 +56,8 @@ class MessagesTable extends Table
             'foreignKey' => 'inbox_id',
             'joinType' => 'INNER',
         ]);
-        $this->belongsTo('Users', [
+        $this->belongsTo('SenderUsers', [
+            'className' => 'Users',
             'foreignKey' => 'sender_user_id',
             'joinType' => 'INNER',
         ]);

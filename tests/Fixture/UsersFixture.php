@@ -19,11 +19,18 @@ class UsersFixture extends TestFixture
     {
         $this->records = [
             [
-                'id' => '8a37b43b-7522-4006-a7a4-e0d91975ec38',
-                'display_name' => 'Lorem ipsum dolor sit amet',
-                'created_at' => '',
-                'updated_at' => 1776867777,
-                'deleted_at' => '',
+                'id' => '11111111-1111-1111-1111-111111111111',
+                'display_name' => 'Alice Example',
+                'created_at' => '2026-04-22 12:00:00',
+                'updated_at' => '2026-04-22 12:00:00',
+                'deleted_at' => null,
+            ],
+            [
+                'id' => '22222222-2222-2222-2222-222222222222',
+                'display_name' => 'Bob Example',
+                'created_at' => '2026-04-22 12:00:00',
+                'updated_at' => '2026-04-22 12:00:00',
+                'deleted_at' => null,
             ],
         ];
         parent::init();

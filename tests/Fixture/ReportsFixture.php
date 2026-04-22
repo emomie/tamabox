@@ -20,15 +20,15 @@ class ReportsFixture extends TestFixture
         $this->records = [
             [
                 'id' => '4995bda6-1c41-4ece-950a-091115adc818',
-                'message_id' => '0d771e17-d083-44f3-aec2-10dffb3b0f4b',
-                'reporter_user_id' => 'ff9c585b-200a-4a87-a273-846df6ff8b05',
-                'reason' => 'Lorem ipsum dolor sit amet',
-                'detail' => 'Lorem ipsum dolor sit amet, aliquet feugiat. Convallis morbi fringilla gravida, phasellus feugiat dapibus velit nunc, pulvinar eget sollicitudin venenatis cum nullam, vivamus ut a sed, mollitia lectus. Nulla vestibulum massa neque ut et, id hendrerit sit, feugiat in taciti enim proin nibh, tempor dignissim, rhoncus duis vestibulum nunc mattis convallis.',
-                'status' => 'Lorem ipsum dolor sit amet',
-                'reviewed_at' => '',
-                'reviewed_by_admin' => 'Lorem ipsum dolor sit amet',
-                'resolution_note' => 'Lorem ipsum dolor sit amet, aliquet feugiat. Convallis morbi fringilla gravida, phasellus feugiat dapibus velit nunc, pulvinar eget sollicitudin venenatis cum nullam, vivamus ut a sed, mollitia lectus. Nulla vestibulum massa neque ut et, id hendrerit sit, feugiat in taciti enim proin nibh, tempor dignissim, rhoncus duis vestibulum nunc mattis convallis.',
-                'created_at' => '',
+                'message_id' => '644a57ef-ca39-42b5-aa7c-c7774ec39f80',
+                'reporter_user_id' => '11111111-1111-1111-1111-111111111111',
+                'reason' => 'harassment',
+                'detail' => 'Report detail text for fixture.',
+                'status' => 'pending',
+                'reviewed_at' => null,
+                'reviewed_by_admin' => null,
+                'resolution_note' => null,
+                'created_at' => '2026-04-22 12:00:00',
             ],
         ];
         parent::init();

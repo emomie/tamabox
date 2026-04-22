@@ -3,17 +3,14 @@ declare(strict_types=1);
 
 namespace App\Model\Table;
 
-use Cake\ORM\Query;
-use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 
 /**
  * Blocks Model
  *
- * @property \App\Model\Table\UsersTable&\Cake\ORM\Association\BelongsTo $Users
- * @property \App\Model\Table\UsersTable&\Cake\ORM\Association\BelongsTo $Users
- *
+ * @property \App\Model\Table\UsersTable&\Cake\ORM\Association\BelongsTo $BlockerUsers
+ * @property \App\Model\Table\UsersTable&\Cake\ORM\Association\BelongsTo $BlockedUsers
  * @method \App\Model\Entity\Block newEmptyEntity()
  * @method \App\Model\Entity\Block newEntity(array $data, array $options = [])
  * @method \App\Model\Entity\Block[] newEntities(array $data, array $options = [])
@@ -54,11 +51,13 @@ class BlocksTable extends Table
             ],
         ]);
 
-        $this->belongsTo('Users', [
+        $this->belongsTo('BlockerUsers', [
+            'className' => 'Users',
             'foreignKey' => 'blocker_user_id',
             'joinType' => 'INNER',
         ]);
-        $this->belongsTo('Users', [
+        $this->belongsTo('BlockedUsers', [
+            'className' => 'Users',
             'foreignKey' => 'blocked_user_id',
             'joinType' => 'INNER',
         ]);

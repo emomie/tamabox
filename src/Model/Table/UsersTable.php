@@ -3,8 +3,6 @@ declare(strict_types=1);
 
 namespace App\Model\Table;
 
-use Cake\ORM\Query;
-use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 
@@ -13,7 +11,10 @@ use Cake\Validation\Validator;
  *
  * @property \App\Model\Table\InboxesTable&\Cake\ORM\Association\HasOne $Inboxes
  * @property \App\Model\Table\UserIdentitiesTable&\Cake\ORM\Association\HasOne $UserIdentities
- *
+ * @property \App\Model\Table\MessagesTable&\Cake\ORM\Association\HasMany $SentMessages
+ * @property \App\Model\Table\BlocksTable&\Cake\ORM\Association\HasMany $BlockerBlocks
+ * @property \App\Model\Table\BlocksTable&\Cake\ORM\Association\HasMany $BlockedByBlocks
+ * @property \App\Model\Table\ReportsTable&\Cake\ORM\Association\HasMany $ReportsMade
  * @method \App\Model\Entity\User newEmptyEntity()
  * @method \App\Model\Entity\User newEntity(array $data, array $options = [])
  * @method \App\Model\Entity\User[] newEntities(array $data, array $options = [])
@@ -58,6 +59,22 @@ class UsersTable extends Table
         ]);
         $this->hasOne('UserIdentities', [
             'foreignKey' => 'user_id',
+        ]);
+        $this->hasMany('SentMessages', [
+            'className' => 'Messages',
+            'foreignKey' => 'sender_user_id',
+        ]);
+        $this->hasMany('BlockerBlocks', [
+            'className' => 'Blocks',
+            'foreignKey' => 'blocker_user_id',
+        ]);
+        $this->hasMany('BlockedByBlocks', [
+            'className' => 'Blocks',
+            'foreignKey' => 'blocked_user_id',
+        ]);
+        $this->hasMany('ReportsMade', [
+            'className' => 'Reports',
+            'foreignKey' => 'reporter_user_id',
         ]);
     }
 
