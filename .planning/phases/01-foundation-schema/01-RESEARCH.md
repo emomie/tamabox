@@ -554,29 +554,34 @@ Translation for Phase 1 tasks:
 
 **If user confirms A2 (ENUM stays) and A5 (dotenv moves to require) during planning, all other assumptions are low-risk.**
 
-## Open Questions
+## Open Questions (RESOLVED)
 
 1. **Is `config/.env` the ONLY secret source, or a dev-convenience with Lolipop-side env also set?**
+   **RESOLVED:** `.env` is the only secret source for Phase 1 (D-02 + CONTEXT specifics). Lolipop SetEnv is deferred to Phase 4 production hardening.
    - What we know: D-02 says uncomment the dotenv loader; CONCERNS.md:95-99 flags both approaches.
    - What's unclear: Whether production Lolipop will also need `.htaccess SetEnv` entries as defense-in-depth.
    - Recommendation: Document "dev: .env file; prod: both .env AND SetEnv as fail-safe" but **defer the SetEnv part to Phase 4**. Phase 1 only wires the dotenv loader.
 
 2. **For the 4 ENUM columns, match DB-SCHEMA.md literally or apply the `deleted_reason=VARCHAR` reasoning uniformly?**
+   **RESOLVED:** Keep ENUM for `user_identities.provider`, `messages.sender_provider`, `reports.reason`, `reports.status` per DB-SCHEMA.md v0.2 (D-10). VARCHAR(64) only for `messages.deleted_reason` per CONTEXT `<specifics>`.
    - What we know: DB-SCHEMA.md uses ENUM; CONTEXT `<specifics>` prefers VARCHAR for `deleted_reason`.
    - What's unclear: Whether "avoid ENUM" was a universal principle or a one-off.
    - Recommendation: Ask user at plan time; default to DB-SCHEMA.md verbatim (ENUM) if no preference expressed.
 
 3. **Does the planner want a dedicated migration verification step (e.g., `bin/cake migrations status` output attached to the phase-complete artifact), or is "it ran without error" sufficient?**
+   **RESOLVED:** Use INFORMATION_SCHEMA introspection in Plan 02b final task (covers charset/collation/PK/FK/constraints via standard SQL; portable output).
    - What we know: ROADMAP Phase 1 success criteria not yet exposed in this research scope.
    - What's unclear: Observable artifact.
    - Recommendation: At minimum, include a verification node that runs `SHOW CREATE TABLE users;` etc. and diffs against DB-SCHEMA.md v0.2. This catches CHECK-constraint-silently-ignored cases.
 
 4. **Does `SERVER_SECRET` need to be in `.env.example` (committed) as `__SERVER_SECRET__` placeholder, or just documented in README?**
+   **RESOLVED:** Use `__SERVER_SECRET__` (matches CakePHP skeleton `__SALT__` convention, documented in Plan 01 Task 4 action).
    - What we know: `.env.example` IS committed (gitignore only excludes `.env`, not `.env.example`).
    - What's unclear: Whether placeholder pattern matches project-wide convention.
    - Recommendation: Place `__SERVER_SECRET__` in `.env.example` matching the existing `__SALT__` placeholder pattern seen in `app_local.example.php:28` — consistency wins.
 
 5. **Should there be a downgrade path if a migration fails partway through?**
+   **RESOLVED:** Each migration has explicit `up()` + `down()` pair (P1 canonical template). Recovery = `bin/cake migrations rollback` per-step; documented in Plan 02b final task notes.
    - What we know: Each migration has `down()`; Phinx transaction behavior on DDL is MySQL-engine-dependent (InnoDB doesn't do DDL transactions at all).
    - What's unclear: Recovery procedure.
    - Recommendation: Document in phase README: "on migration failure, manually `DROP TABLE <failed> CASCADE;` and re-run `bin/cake migrations migrate`". No automation needed for MVP.
