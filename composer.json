@@ -13,11 +13,11 @@
         "mobiledetect/mobiledetectlib": "^3.74"
     },
     "require-dev": {
-        "cakedc/cakephp-phpstan": "^4.1",
+        "cakedc/cakephp-phpstan": "^2.1",
         "cakephp/bake": "^2.8",
         "cakephp/cakephp-codesniffer": "^4.5",
         "cakephp/debug_kit": "^4.9",
-        "phpstan/phpstan": "^2.1",
+        "phpstan/phpstan": "^1.10",
         "phpunit/phpunit": "^9.6"
     },
     "suggest": {
