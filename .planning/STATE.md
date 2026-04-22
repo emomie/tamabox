@@ -15,17 +15,17 @@ Project memory. Updated by every gsd-* command.
 ## Current Position
 
 **Milestone**: v1 launch
-**Phase**: Phase 1 — Foundation & Schema (in progress, Wave 3/4 complete)
-**Plan**: 01-02b — Schema Dependents (done; 4/4 tasks complete)
-**Next Plan**: 01-03 — Table Classes (Wave 4)
-**Status**: executing — next `/gsd-execute-phase 1` resumes at plan 01-03
+**Phase**: Phase 1 — Foundation & Schema (**COMPLETE** — 4/4 plans done)
+**Plan**: 01-03 — Table Classes (done; 4/4 tasks complete)
+**Next Plan**: Phase 2 kickoff (Bluesky OAuth & Identity)
+**Status**: Phase 1 complete — awaiting `/gsd-verify-phase 1` then Phase 2 start
 
-**Progress**: Phase 1 at 3/4 plans — `[███████████████░░░░░] 75%` (Phase 1 internal)
-Overall: Phases 0/4 complete — `[░░░░░░░░░░░░░░░░░░░░] 0%`
+**Progress**: Phase 1 at 4/4 plans — `[████████████████████] 100%` (Phase 1 internal)
+Overall: Phases 0/4 complete (Phase 1 pending verifier) — `[░░░░░░░░░░░░░░░░░░░░] 0%`
 
 ## Phase Status
 
-- [ ] **Phase 1: Foundation & Schema** — In progress (3/4 plans done: 01-01 ✓, 01-02a ✓, 01-02b ✓; 01-03 pending)
+- [x] **Phase 1: Foundation & Schema** — Complete (4/4 plans done: 01-01 ✓, 01-02a ✓, 01-02b ✓, 01-03 ✓); awaits verifier
 - [ ] **Phase 2: Bluesky OAuth & Identity** — Not started
 - [ ] **Phase 3: Inbox, Message & SSR Reveal** — Not started
 - [ ] **Phase 4: Moderation & Production Launch** — Not started
@@ -34,10 +34,10 @@ Overall: Phases 0/4 complete — `[░░░░░░░░░░░░░░░
 
 | Metric | Value |
 |--------|-------|
-| Phases completed | 0/4 |
-| Plans completed | 3/4 (Phase 1: 01-01, 01-02a, 01-02b) |
-| Nodes completed | 13 tasks across 3 plans |
-| Requirements shipped | 4/34 (INFRA-02, -03, -04, -05) |
+| Phases completed | 0/4 (Phase 1 pending verify) |
+| Plans completed | 4/4 (Phase 1: 01-01, 01-02a, 01-02b, 01-03) |
+| Nodes completed | 17 tasks across 4 plans |
+| Requirements shipped | 5/34 (INFRA-02, -03, -04, -05, -07) |
 
 ### Plan Duration Log
 
@@ -46,6 +46,7 @@ Overall: Phases 0/4 complete — `[░░░░░░░░░░░░░░░
 | 01-01 infra-hygiene | 1 | 5 | (not recorded) | 2026-04-22 |
 | 01-02a schema-root | 2 | 4 | 4m 29s | 2026-04-22 |
 | 01-02b schema-dependents | 3 | 4 | 6m 57s | 2026-04-22 |
+| 01-03 table-classes | 4 | 4 | 12m | 2026-04-22 |
 
 ## Accumulated Context
 
@@ -69,10 +70,13 @@ Overall: Phases 0/4 complete — `[░░░░░░░░░░░░░░░
 - `reports.status` ENUM has 4 values: `pending` / `reviewed` / `actioned` / `dismissed` (Phase 4 moderation UI must handle the intermediate `reviewed` state).
 - `messages.deleted_reason` is `VARCHAR(64)` NOT ENUM, with allowed values enforced at app layer (app-layer validation in Phase 4 MOD-03).
 - `config/app_local.php` is required for any `bin/cake` invocation but is gitignored; recreate from `config/app_local.example.php` if local state is wiped.
+- cakephp/bake 2.8 correctly emits `@property string` for CHAR(36) UUID columns; RESEARCH Pitfall 6 does not apply to this bake version (verified empirically in Plan 01-03 Task 1).
+- Bake default fixtures violate tamabox CHECK/ENUM/DATETIME constraints; Plan 01-03 rewrote all 6 fixtures with schema-valid data (deviation #1). Future bake re-runs will re-introduce the broken defaults — do NOT re-bake fixtures without re-applying the fix.
+- BlocksTable's dual FK-to-users required manual alias disambiguation (BlockerUsers/BlockedUsers) — bake emitted duplicate `belongsTo('Users')` which silently overwrites in CakePHP's associations collection (Plan 01-03 deviation #2).
 
 ### Open Todos
 
-- [ ] Plan 01-03 (Wave 4): bake Table/Entity classes for 6 tables, UUID @property fix, TableLocator smoke test under `allowFallbackClass(false)` → closes INFRA-07 and Phase 1.
+- [ ] Phase 2 kickoff: `/gsd-plan-phase 2` (Bluesky OAuth & Identity).
 
 ### Blockers
 
@@ -87,9 +91,9 @@ None currently. Resolved blockers:
 
 ## Session Continuity
 
-**Last Agent Run**: execute-phase 1 wave 3 @ 2026-04-22 — Plan 01-02b Schema Dependents complete. 3 new Phinx migrations (CreateMessages, CreateBlocks, CreateReports) authored + `bin/cake migrations migrate` applied + INFORMATION_SCHEMA verified + rollback-to-zero + re-migrate round trip passed. 13 D-10 DB-SCHEMA-verbatim deviations tracked across Waves 2+3. 4 commits on `main` (dff4cbf, 3d8662a, 2238c7d, 4eb0704). Duration 6m 57s.
-**Next Action**: `/gsd-execute-phase 1` resumes at Plan 01-03 (Wave 4 — Table class bake).
-**Context Notes**: Phase 1 plans total 17 tasks; 13 done (5 in Wave 1, 4 in Wave 2, 4 in Wave 3), 4 remaining (Wave 4 bake). Wave 3 Rule 3 blocker: `config/app_local.php` was absent blocking `bin/cake migrations`; created locally (gitignored), see 01-02b-SUMMARY deviation #12. MySQL state post-Wave-3: all 6 domain tables + phinxlog present, empty (0 rows). DB ready for Plan 01-03 `bin/cake bake model` introspection. Key Phinx 0.13 details for Wave 4 consumers: messages/blocks/reports have NO `updated_at` (Table class Timestamp behavior must skip `modified` mapping); messages.ssr_seed is NOT NULL (Phase 3 computes pre-INSERT); CHECK constraints applied via raw `$this->execute()`.
+**Last Agent Run**: execute-phase 1 wave 4 @ 2026-04-22 — Plan 01-03 Table Classes complete. 6 App\Model\Table\* + 6 App\Model\Entity\* + 6 Fixture + 6 TableTest skeletons baked via `bin/cake bake model`, then post-bake Timestamp Behavior + association alias disambiguation + fixture data repair + LocatorSmokeTest. 4 commits on main (276c5fb, 8716ec1, 14e0412, e2b705a). All verification green: phpcs 0 / phpstan 0 (level 8) / phpunit 0 (17 tests, 29 assertions, 6 bake markTestIncomplete stubs). Phase 1 complete; all 5 ROADMAP success criteria closed. Duration 12m.
+**Next Action**: `/gsd-verify-phase 1` to run phase-level verifier, then `/gsd-plan-phase 2` for Bluesky OAuth kickoff.
+**Context Notes**: Phase 1 plans total 17 tasks; all 17 done (5 Wave 1, 4 Wave 2, 4 Wave 3, 4 Wave 4). 6 Table classes now resolvable via TableLocator::getTableLocator() under allowFallbackClass(false). LocatorSmokeTest committed as ongoing regression guard. For Phase 2 AUTH-07 (OAuth tokens): AES-GCM decorator/behavior needed for user_identities.access_token_enc / refresh_token_enc; `Text::uuid()` hook needed in UsersTable/UserIdentitiesTable initialize() for Phase 2 user creation; `$_accessible` mass-assignment hardening deferred to Phase 3. Bake-generated fixtures were rewritten with schema-valid data (all 6); re-baking fixtures in later phases requires re-applying the fix.
 
 ---
-*Last updated: 2026-04-22 (Plan 01-02b Wave 3 complete)*
+*Last updated: 2026-04-22 (Plan 01-03 Wave 4 complete; Phase 1 done pending verifier)*

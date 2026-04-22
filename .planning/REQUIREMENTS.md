@@ -55,7 +55,7 @@ PROJECT.md の Active 要件を REQ-ID 付きで正規化したもの。ROADMAP 
 - [x] **INFRA-04** — `bin/cake migrations migrate` で MySQL 8.0 向けスキーマ(users / user_identities / inboxes / messages / reports / blocks)を適用できる
 - [x] **INFRA-05** — `.htaccess` の httpoxy ブロックを有効化する(現在コメントアウト)
 - [ ] **INFRA-06** — 本番は `debug=false` 固定で DebugKit 無効化、ステージ/開発時のみ true
-- [ ] **INFRA-07** — CakePHP `TableLocator::allowFallbackClass(false)` は維持、全テーブルに明示 Table クラスを作成する
+- [x] **INFRA-07** — CakePHP `TableLocator::allowFallbackClass(false)` は維持、全テーブルに明示 Table クラスを作成する
 
 ---
 
@@ -116,7 +116,7 @@ PROJECT.md の Active 要件を REQ-ID 付きで正規化したもの。ROADMAP 
 | INFRA-04 | Phase 1: Foundation & Schema | Shipped (01-02a + 01-02b) |
 | INFRA-05 | Phase 1: Foundation & Schema | Shipped (01-01) |
 | INFRA-06 | Phase 4: Moderation & Production Launch | Pending |
-| INFRA-07 | Phase 1: Foundation & Schema | Pending |
+| INFRA-07 | Phase 1: Foundation & Schema | Shipped (01-03) |
 
 **Coverage**: 34/34 v1 requirements mapped to exactly one phase. No orphans, no duplicates.
 

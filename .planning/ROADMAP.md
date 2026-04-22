@@ -32,7 +32,7 @@
   - [x] 01-01-infra-hygiene-PLAN.md — composer ^8.0 / .env loader / httpoxy / server_secret wiring / dev scripts (INFRA-02, INFRA-03, INFRA-05) [wave 1] — **done 2026-04-22**
   - [x] 01-02a-schema-root-PLAN.md — env bootstrap + MySQL 8.0.16 gate + 3 Phinx migrations (users / user_identities / inboxes) with UUID PK, CHECK constraints, FK cascade per DB-SCHEMA.md v0.2 (INFRA-04) [wave 2] — **done 2026-04-22**
   - [x] 01-02b-schema-dependents-PLAN.md — 3 Phinx migrations (messages / blocks / reports) + `bin/cake migrations migrate` + INFORMATION_SCHEMA introspection + rollback sanity (INFRA-04) [wave 3] — **done 2026-04-22**
-  - [ ] 01-03-table-classes-PLAN.md — bake 6 Table + Entity + Fixture + Test classes, fix UUID @property types, TableLocator smoke test under allowFallbackClass(false) (INFRA-07) [wave 4]
+  - [x] 01-03-table-classes-PLAN.md — bake 6 Table + Entity + Fixture + Test classes, fix UUID @property types, TableLocator smoke test under allowFallbackClass(false) (INFRA-07) [wave 4] — **done 2026-04-22**
 
 ### Phase 2: Bluesky OAuth & Identity
 
@@ -85,7 +85,7 @@
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation & Schema | 3/4 | In progress (01-01 ✓, 01-02a ✓, 01-02b ✓; 01-03 next) | - |
+| 1. Foundation & Schema | 4/4 | Complete (01-01 ✓, 01-02a ✓, 01-02b ✓, 01-03 ✓); awaits verifier | 2026-04-22 |
 | 2. Bluesky OAuth & Identity | 0/? | Not started | - |
 | 3. Inbox, Message & SSR Reveal | 0/? | Not started | - |
 | 4. Moderation & Production Launch | 0/? | Not started | - |
@@ -103,4 +103,4 @@
 **Total**: 34/34 v1 requirements mapped, no orphans, no duplicates.
 
 ---
-*Last updated: 2026-04-22 (Phase 1 wave 3 complete — 3/4 plans done)*
+*Last updated: 2026-04-22 (Phase 1 wave 4 complete — all 4/4 plans done; awaits verifier)*
