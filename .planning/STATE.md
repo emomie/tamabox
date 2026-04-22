@@ -15,15 +15,15 @@ Project memory. Updated by every gsd-* command.
 ## Current Position
 
 **Milestone**: v1 launch
-**Phase**: — (not started; next → Phase 1: Foundation & Schema)
-**Plan**: — (not created yet)
-**Status**: roadmap complete, awaiting `/gsd-plan-phase 1`
+**Phase**: Phase 1 — Foundation & Schema (planned, ready to execute)
+**Plan**: — (4 plans created: 01-01, 01-02a, 01-02b, 01-03 across 4 waves)
+**Status**: ready to execute — `/gsd-execute-phase 1`
 
 **Progress**: Phase 0/4 — `[░░░░░░░░░░░░░░░░░░░░] 0%`
 
 ## Phase Status
 
-- [ ] **Phase 1: Foundation & Schema** — Not started
+- [ ] **Phase 1: Foundation & Schema** — Planned (4 plans, awaiting execution)
 - [ ] **Phase 2: Bluesky OAuth & Identity** — Not started
 - [ ] **Phase 3: Inbox, Message & SSR Reveal** — Not started
 - [ ] **Phase 4: Moderation & Production Launch** — Not started
@@ -33,7 +33,7 @@ Project memory. Updated by every gsd-* command.
 | Metric | Value |
 |--------|-------|
 | Phases completed | 0/4 |
-| Plans completed | 0/? |
+| Plans completed | 0/4 |
 | Nodes completed | 0/? |
 | Requirements shipped | 0/34 |
 
@@ -67,9 +67,9 @@ None currently. Pre-build risks tracked in `.planning/codebase/CONCERNS.md` and 
 
 ## Session Continuity
 
-**Last Agent Run**: discuss-phase 1 @ 2026-04-22 — Phase 1 context captured (4 gray areas resolved, 15 decisions)
-**Next Action**: `/gsd-plan-phase 1` — CONTEXT.md at `.planning/phases/01-foundation-schema/01-CONTEXT.md`
-**Context Notes**: Phase 1 は discovery の DB-SCHEMA.md v0.2 を single source of truth として migration + Table クラスに落とし込むフェーズ。server_secret は `.env` 固定で MVP 運用、migration は 1 テーブル 1 file、CI は Phase 4 に後送り。
+**Last Agent Run**: plan-phase 1 @ 2026-04-22 — 4 plans created (01-01 / 01-02a / 01-02b / 01-03) across 4 waves. Checker PASSED iteration 2 after 1 revision (split 02 into 02a/02b, RESEARCH.md Open Questions → RESOLVED).
+**Next Action**: `/gsd-execute-phase 1`
+**Context Notes**: Phase 1 plans total 17 tasks. Wave 1 = infra hygiene (composer / .env / httpoxy / scripts). Wave 2 = FK-root migrations (users / user_identities / inboxes). Wave 3 = FK-dependent migrations (messages / blocks / reports + migrate + INFORMATION_SCHEMA verify). Wave 4 = bake 6 Table/Entity classes + UUID @property fix + LocatorSmokeTest. Phinx 0.13 は CHECK 制約 API 無しで raw `execute()` 使う点、`updated_at` は Phinx `timestamp` 型で `update: CURRENT_TIMESTAMP(6)` する点に注意。
 
 ---
-*Last updated: 2026-04-22 (phase 1 context gathered)*
+*Last updated: 2026-04-22 (phase 1 planned)*
