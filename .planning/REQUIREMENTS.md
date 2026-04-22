@@ -81,9 +81,44 @@ PROJECT.md の Active 要件を REQ-ID 付きで正規化したもの。ROADMAP 
 
 ## Traceability
 
-<!-- ROADMAP.md 作成時に各 REQ-ID がどの Phase にマップされたか roadmapper が埋める -->
+| REQ-ID | Phase | Status |
+|--------|-------|--------|
+| AUTH-01 | Phase 2: Bluesky OAuth & Identity | Pending |
+| AUTH-02 | Phase 2: Bluesky OAuth & Identity | Pending |
+| AUTH-03 | Phase 3: Inbox, Message & SSR Reveal | Pending |
+| AUTH-04 | Phase 2: Bluesky OAuth & Identity | Pending |
+| AUTH-05 | Phase 2: Bluesky OAuth & Identity | Pending |
+| AUTH-06 | Phase 2: Bluesky OAuth & Identity | Pending |
+| AUTH-07 | Phase 2: Bluesky OAuth & Identity | Pending |
+| AUTH-08 | Phase 2: Bluesky OAuth & Identity | Pending |
+| AUTH-09 | Phase 2: Bluesky OAuth & Identity | Pending |
+| INBOX-01 | Phase 3: Inbox, Message & SSR Reveal | Pending |
+| INBOX-02 | Phase 3: Inbox, Message & SSR Reveal | Pending |
+| INBOX-03 | Phase 3: Inbox, Message & SSR Reveal | Pending |
+| INBOX-04 | Phase 4: Moderation & Production Launch | Pending |
+| INBOX-05 | Phase 4: Moderation & Production Launch | Pending |
+| INBOX-06 | Phase 3: Inbox, Message & SSR Reveal | Pending |
+| MSG-01 | Phase 3: Inbox, Message & SSR Reveal | Pending |
+| MSG-02 | Phase 3: Inbox, Message & SSR Reveal | Pending |
+| MSG-03 | Phase 3: Inbox, Message & SSR Reveal | Pending |
+| MSG-04 | Phase 3: Inbox, Message & SSR Reveal | Pending |
+| MSG-05 | Phase 3: Inbox, Message & SSR Reveal | Pending |
+| MSG-06 | Phase 3: Inbox, Message & SSR Reveal | Pending |
+| MSG-07 | Phase 3: Inbox, Message & SSR Reveal | Pending |
+| MSG-08 | Phase 4: Moderation & Production Launch | Pending |
+| MOD-01 | Phase 4: Moderation & Production Launch | Pending |
+| MOD-02 | Phase 4: Moderation & Production Launch | Pending |
+| MOD-03 | Phase 4: Moderation & Production Launch | Pending |
+| MOD-04 | Phase 4: Moderation & Production Launch | Pending |
+| INFRA-01 | Phase 4: Moderation & Production Launch | Pending |
+| INFRA-02 | Phase 1: Foundation & Schema | Pending |
+| INFRA-03 | Phase 1: Foundation & Schema | Pending |
+| INFRA-04 | Phase 1: Foundation & Schema | Pending |
+| INFRA-05 | Phase 1: Foundation & Schema | Pending |
+| INFRA-06 | Phase 4: Moderation & Production Launch | Pending |
+| INFRA-07 | Phase 1: Foundation & Schema | Pending |
 
-(空 — roadmapper が埋める)
+**Coverage**: 34/34 v1 requirements mapped to exactly one phase. No orphans, no duplicates.
 
 ---
-*Last updated: 2026-04-22 after initialization*
+*Last updated: 2026-04-22 after roadmap creation*
