@@ -76,6 +76,7 @@ return [
      */
     'Security' => [
         'salt' => env('SECURITY_SALT'),
+        'serverSecret' => env('SERVER_SECRET'),
     ],
 
     /*
