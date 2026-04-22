@@ -15,15 +15,17 @@ Project memory. Updated by every gsd-* command.
 ## Current Position
 
 **Milestone**: v1 launch
-**Phase**: Phase 1 — Foundation & Schema (planned, ready to execute)
-**Plan**: — (4 plans created: 01-01, 01-02a, 01-02b, 01-03 across 4 waves)
-**Status**: ready to execute — `/gsd-execute-phase 1`
+**Phase**: Phase 1 — Foundation & Schema (in progress, Wave 3/4 complete)
+**Plan**: 01-02b — Schema Dependents (done; 4/4 tasks complete)
+**Next Plan**: 01-03 — Table Classes (Wave 4)
+**Status**: executing — next `/gsd-execute-phase 1` resumes at plan 01-03
 
-**Progress**: Phase 0/4 — `[░░░░░░░░░░░░░░░░░░░░] 0%`
+**Progress**: Phase 1 at 3/4 plans — `[███████████████░░░░░] 75%` (Phase 1 internal)
+Overall: Phases 0/4 complete — `[░░░░░░░░░░░░░░░░░░░░] 0%`
 
 ## Phase Status
 
-- [ ] **Phase 1: Foundation & Schema** — Planned (4 plans, awaiting execution)
+- [ ] **Phase 1: Foundation & Schema** — In progress (3/4 plans done: 01-01 ✓, 01-02a ✓, 01-02b ✓; 01-03 pending)
 - [ ] **Phase 2: Bluesky OAuth & Identity** — Not started
 - [ ] **Phase 3: Inbox, Message & SSR Reveal** — Not started
 - [ ] **Phase 4: Moderation & Production Launch** — Not started
@@ -33,9 +35,17 @@ Project memory. Updated by every gsd-* command.
 | Metric | Value |
 |--------|-------|
 | Phases completed | 0/4 |
-| Plans completed | 0/4 |
-| Nodes completed | 0/? |
-| Requirements shipped | 0/34 |
+| Plans completed | 3/4 (Phase 1: 01-01, 01-02a, 01-02b) |
+| Nodes completed | 13 tasks across 3 plans |
+| Requirements shipped | 4/34 (INFRA-02, -03, -04, -05) |
+
+### Plan Duration Log
+
+| Plan | Wave | Tasks | Duration | Date |
+|------|------|-------|----------|------|
+| 01-01 infra-hygiene | 1 | 5 | (not recorded) | 2026-04-22 |
+| 01-02a schema-root | 2 | 4 | 4m 29s | 2026-04-22 |
+| 01-02b schema-dependents | 3 | 4 | 6m 57s | 2026-04-22 |
 
 ## Accumulated Context
 
@@ -51,13 +61,23 @@ Project memory. Updated by every gsd-* command.
 - UUID (CHAR(36)) PK 採用 — 共有鯖 + CakePHP 統合容易
 - 退会時も送信者 snapshot 保持 — V1 仮説補強(逃げ得防止)
 
+### Executor-discovered decisions (Phase 1)
+
+- **D-10 applied 13 times** in Waves 2+3: DB-SCHEMA.md v0.2 wins over plan text paraphrases. Every migration's column set, CHECK name, FK cascade direction, and index name matches DB-SCHEMA verbatim.
+- `messages`, `blocks`, `reports` tables have **NO `updated_at`** column (DB-SCHEMA v0.2 §4-§6 define only `created_at`). Plan 01-03 Table classes must NOT apply default Timestamp Behavior `modified` mapping on these three.
+- `messages.ssr_seed` is `VARCHAR(64) NOT NULL` (not nullable). Phase 3 MSG-03 must compute the sha256 before INSERT.
+- `reports.status` ENUM has 4 values: `pending` / `reviewed` / `actioned` / `dismissed` (Phase 4 moderation UI must handle the intermediate `reviewed` state).
+- `messages.deleted_reason` is `VARCHAR(64)` NOT ENUM, with allowed values enforced at app layer (app-layer validation in Phase 4 MOD-03).
+- `config/app_local.php` is required for any `bin/cake` invocation but is gitignored; recreate from `config/app_local.example.php` if local state is wiped.
+
 ### Open Todos
 
-(何も走っていない — Phase 1 開始時に plan-phase が埋める)
+- [ ] Plan 01-03 (Wave 4): bake Table/Entity classes for 6 tables, UUID @property fix, TableLocator smoke test under `allowFallbackClass(false)` → closes INFRA-07 and Phase 1.
 
 ### Blockers
 
-None currently. Pre-build risks tracked in `.planning/codebase/CONCERNS.md` and will be addressed as part of Phase 1 (PHP 8.0 整合 / .env / httpoxy / migrations) and Phase 4 (debug=false / webroot 配置 / key 管理).
+None currently. Resolved blockers:
+- **Rule 3 (resolved in Plan 01-02b Task 4)**: `config/app_local.php` was absent, blocking `bin/cake migrations migrate`. Created locally with `DATABASE_URL` / `DATABASE_TEST_URL` passthroughs from `config/.env`. File is gitignored per CakePHP convention. If you wipe local state, recreate from `config/app_local.example.php`. See `.planning/phases/01-foundation-schema/01-02b-SUMMARY.md` deviation #12.
 
 ### Research Flags
 
@@ -67,9 +87,9 @@ None currently. Pre-build risks tracked in `.planning/codebase/CONCERNS.md` and 
 
 ## Session Continuity
 
-**Last Agent Run**: plan-phase 1 @ 2026-04-22 — 4 plans created (01-01 / 01-02a / 01-02b / 01-03) across 4 waves. Checker PASSED iteration 2 after 1 revision (split 02 into 02a/02b, RESEARCH.md Open Questions → RESOLVED).
-**Next Action**: `/gsd-execute-phase 1`
-**Context Notes**: Phase 1 plans total 17 tasks. Wave 1 = infra hygiene (composer / .env / httpoxy / scripts). Wave 2 = FK-root migrations (users / user_identities / inboxes). Wave 3 = FK-dependent migrations (messages / blocks / reports + migrate + INFORMATION_SCHEMA verify). Wave 4 = bake 6 Table/Entity classes + UUID @property fix + LocatorSmokeTest. Phinx 0.13 は CHECK 制約 API 無しで raw `execute()` 使う点、`updated_at` は Phinx `timestamp` 型で `update: CURRENT_TIMESTAMP(6)` する点に注意。
+**Last Agent Run**: execute-phase 1 wave 3 @ 2026-04-22 — Plan 01-02b Schema Dependents complete. 3 new Phinx migrations (CreateMessages, CreateBlocks, CreateReports) authored + `bin/cake migrations migrate` applied + INFORMATION_SCHEMA verified + rollback-to-zero + re-migrate round trip passed. 13 D-10 DB-SCHEMA-verbatim deviations tracked across Waves 2+3. 4 commits on `main` (dff4cbf, 3d8662a, 2238c7d, 4eb0704). Duration 6m 57s.
+**Next Action**: `/gsd-execute-phase 1` resumes at Plan 01-03 (Wave 4 — Table class bake).
+**Context Notes**: Phase 1 plans total 17 tasks; 13 done (5 in Wave 1, 4 in Wave 2, 4 in Wave 3), 4 remaining (Wave 4 bake). Wave 3 Rule 3 blocker: `config/app_local.php` was absent blocking `bin/cake migrations`; created locally (gitignored), see 01-02b-SUMMARY deviation #12. MySQL state post-Wave-3: all 6 domain tables + phinxlog present, empty (0 rows). DB ready for Plan 01-03 `bin/cake bake model` introspection. Key Phinx 0.13 details for Wave 4 consumers: messages/blocks/reports have NO `updated_at` (Table class Timestamp behavior must skip `modified` mapping); messages.ssr_seed is NOT NULL (Phase 3 computes pre-INSERT); CHECK constraints applied via raw `$this->execute()`.
 
 ---
-*Last updated: 2026-04-22 (phase 1 planned)*
+*Last updated: 2026-04-22 (Plan 01-02b Wave 3 complete)*
