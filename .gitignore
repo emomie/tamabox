@@ -5,6 +5,9 @@
 /logs/*
 /tmp/*
 /vendor/*
+# Phinx schema snapshot produced by `bin/cake migrations migrate` (local cache
+# for bake migration diffs). Not source; regenerated on every migrate run.
+/config/Migrations/schema-dump-*.lock
 
 # OAuth keys (ES256 private/public) #
 /config/keys/*.key
