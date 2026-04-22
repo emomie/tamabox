@@ -45,6 +45,16 @@ class MessagesTable extends Table
         $this->setDisplayField('ssr_seed');
         $this->setPrimaryKey('id');
 
+        // messages has no `updated_at` column per DB-SCHEMA.md v0.2 §4
+        // (immutable post-send; lifecycle encoded via opened_at/deleted_at).
+        $this->addBehavior('Timestamp', [
+            'events' => [
+                'Model.beforeSave' => [
+                    'created_at' => 'new',
+                ],
+            ],
+        ]);
+
         $this->belongsTo('Inboxes', [
             'foreignKey' => 'inbox_id',
             'joinType' => 'INNER',

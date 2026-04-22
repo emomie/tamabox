@@ -44,6 +44,16 @@ class ReportsTable extends Table
         $this->setDisplayField('reason');
         $this->setPrimaryKey('id');
 
+        // reports has no `updated_at` column per DB-SCHEMA.md v0.2 §6
+        // (audit trail encoded via status + reviewed_at, not a generic updated_at).
+        $this->addBehavior('Timestamp', [
+            'events' => [
+                'Model.beforeSave' => [
+                    'created_at' => 'new',
+                ],
+            ],
+        ]);
+
         $this->belongsTo('Messages', [
             'foreignKey' => 'message_id',
             'joinType' => 'INNER',

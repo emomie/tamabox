@@ -44,6 +44,16 @@ class BlocksTable extends Table
         $this->setDisplayField('id');
         $this->setPrimaryKey('id');
 
+        // blocks has no `updated_at` column per DB-SCHEMA.md v0.2 §5
+        // (create-or-delete only; never mutated).
+        $this->addBehavior('Timestamp', [
+            'events' => [
+                'Model.beforeSave' => [
+                    'created_at' => 'new',
+                ],
+            ],
+        ]);
+
         $this->belongsTo('Users', [
             'foreignKey' => 'blocker_user_id',
             'joinType' => 'INNER',

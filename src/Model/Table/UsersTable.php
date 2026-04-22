@@ -43,6 +43,16 @@ class UsersTable extends Table
         $this->setTable('users');
         $this->setDisplayField('display_name');
         $this->setPrimaryKey('id');
+
+        $this->addBehavior('Timestamp', [
+            'events' => [
+                'Model.beforeSave' => [
+                    'created_at' => 'new',
+                    'updated_at' => 'always',
+                ],
+            ],
+        ]);
+
         $this->hasOne('Inboxes', [
             'foreignKey' => 'user_id',
         ]);
