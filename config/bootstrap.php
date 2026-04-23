@@ -92,6 +92,13 @@ if (file_exists(CONFIG . 'app_local.php')) {
 }
 
 /*
+ * Load Bluesky OAuth configuration (Phase 2). Shipped as config/bluesky.php.
+ * Non-sensitive defaults; env() calls inside override per-environment.
+ * Third arg `false` = do NOT merge — `Bluesky.*` namespace isolates these keys.
+ */
+Configure::load('bluesky', 'default', false);
+
+/*
  * When debug = true the metadata cache should only last
  * for a short time.
  */
