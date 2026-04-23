@@ -47,9 +47,9 @@
   5. `/oauth/jwks.json` と `/oauth/client-metadata.json` が公開され、Bluesky AS から参照可能な JWKS/metadata を返す
   6. OAuth アクセス/リフレッシュトークンが `*_enc` 列に AES-GCM 暗号化で保存され、平文が DB に残らない
   7. OAuth プロバイダが interface 抽象化され、Bluesky 以外(将来の X)を追加するときに既存コードを書き換えずに追加クラスで実装できる構造になっている
-**Plans**: 4 plans (3 waves)
-  - [ ] 02-01-foundation-setup-PLAN.md — composer require cakephp/authentication, Application.php AuthenticationMiddleware wiring, config/bluesky.php, .env OAuth keys, routes (6 new), OAuthProviderInterface, EC P-256 keypair generation (AUTH-06 / AUTH-08 foundation) [wave 1]
-  - [ ] 02-02-crypto-services-PLAN.md — KeyManager (PEM→JWK), TokenEncryptionService (AES-256-GCM), DpopService (RFC 9449 proof JWT + DER→Raw), ClientJwtService (private_key_jwt) + 4 unit tests + test-fixture EC keys (AUTH-07 / AUTH-08) [wave 2, parallel with 02-03]
+**Plans**: 4 plans (3 waves) — 2/4 complete
+  - [x] 02-01-foundation-setup-PLAN.md — composer require cakephp/authentication, Application.php AuthenticationMiddleware wiring, config/bluesky.php, .env OAuth keys, routes (6 new), OAuthProviderInterface, EC P-256 keypair generation (AUTH-06 / AUTH-08 foundation) [wave 1] **✓ 2026-04-23**
+  - [x] 02-02-crypto-services-PLAN.md — KeyManager (PEM→JWK), TokenEncryptionService (AES-256-GCM), DpopService (RFC 9449 proof JWT + DER→Raw), ClientJwtService (private_key_jwt) + 4 unit tests + test-fixture EC keys (AUTH-07 / AUTH-08) [wave 2, parallel with 02-03] **✓ 2026-04-23**
   - [ ] 02-03-metadata-did-PLAN.md — OauthController (clientMetadata + jwks + callback stub) + DidResolver (plc.directory DID→PDS via Cake\Http\Client) + integration tests (AUTH-08) [wave 2, parallel with 02-02]
   - [ ] 02-04-oauth-flow-PLAN.md — BlueskyOAuthClient (OAuthProviderInterface impl, PAR + token exchange + nonce retry + resolveProfile), AuthController (startBluesky, logout), OauthController::callback fill-in, UsersController dashboard, UserIdentitiesTable::upsertBlueskyIdentity, 5 templates, tamabox.css, integration tests (AUTH-01 / AUTH-02 / AUTH-04 / AUTH-05 / AUTH-09) [wave 3]
 **UI hint**: yes
@@ -90,7 +90,7 @@
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation & Schema | 4/4 | Complete (01-01 ✓, 01-02a ✓, 01-02b ✓, 01-03 ✓); awaits verifier | 2026-04-22 |
-| 2. Bluesky OAuth & Identity | 0/4 | Plans created (02-01, 02-02, 02-03, 02-04); awaiting execute | - |
+| 2. Bluesky OAuth & Identity | 2/4 | In progress — 02-01 ✓, 02-02 ✓ (2026-04-23); 02-03, 02-04 pending | - |
 | 3. Inbox, Message & SSR Reveal | 0/? | Not started | - |
 | 4. Moderation & Production Launch | 0/? | Not started | - |
 
@@ -107,4 +107,4 @@
 **Total**: 34/34 v1 requirements mapped, no orphans, no duplicates.
 
 ---
-*Last updated: 2026-04-23 (Phase 2 plans created — 4 plans across 3 waves)*
+*Last updated: 2026-04-23 (Phase 2 Wave 1 + crypto leg of Wave 2 complete; 02-01 ✓ / 02-02 ✓; 02-03 & 02-04 pending)*

@@ -16,7 +16,7 @@ PROJECT.md の Active 要件を REQ-ID 付きで正規化したもの。ROADMAP 
 - [ ] **AUTH-04** — `users` テーブルと `user_identities` テーブルで 1 ユーザー = 1 SNS アカウント (1:1) を DB 制約で担保する
 - [ ] **AUTH-05** — ユーザーログイン時に SNS handle / avatar / profile_url を最新取得して DB に同期する
 - [ ] **AUTH-06** — OAuth プロバイダインタフェースを抽象化し、将来 X (Twitter) を追加できる構造にする(Bluesky 実装は具体クラス)
-- [ ] **AUTH-07** — OAuth アクセストークン / リフレッシュトークンは AES-GCM でアプリ側暗号化して `*_enc` 列に格納する
+- [x] **AUTH-07** — OAuth アクセストークン / リフレッシュトークンは AES-GCM でアプリ側暗号化して `*_enc` 列に格納する _(service shipped in Plan 02-02: `App\Service\OAuth\TokenEncryptionService`; column write-path lands in Plan 02-04)_
 - [ ] **AUTH-08** — ES256 鍵ペアは `config/keys/`(web 公開外)に配置、`jwks.json` と `client-metadata.json` のエンドポイントを公開する
 - [ ] **AUTH-09** — ログアウト動作を提供(セッション破棄 + CSRF 対応)
 
@@ -88,9 +88,9 @@ PROJECT.md の Active 要件を REQ-ID 付きで正規化したもの。ROADMAP 
 | AUTH-03 | Phase 3: Inbox, Message & SSR Reveal | Pending |
 | AUTH-04 | Phase 2: Bluesky OAuth & Identity | Pending |
 | AUTH-05 | Phase 2: Bluesky OAuth & Identity | Pending |
-| AUTH-06 | Phase 2: Bluesky OAuth & Identity | Pending |
-| AUTH-07 | Phase 2: Bluesky OAuth & Identity | Pending |
-| AUTH-08 | Phase 2: Bluesky OAuth & Identity | Pending |
+| AUTH-06 | Phase 2: Bluesky OAuth & Identity | Partial (Plan 02-01 shipped OAuthProviderInterface shell; concrete BlueskyOAuthClient lands in 02-04) |
+| AUTH-07 | Phase 2: Bluesky OAuth & Identity | Shipped 2026-04-23 (Plan 02-02: TokenEncryptionService) |
+| AUTH-08 | Phase 2: Bluesky OAuth & Identity | Partial (ES256 keypair + KeyManager JWK export shipped 02-01/02-02; /oauth/jwks.json + /oauth/client-metadata.json Controller actions land in 02-03) |
 | AUTH-09 | Phase 2: Bluesky OAuth & Identity | Pending |
 | INBOX-01 | Phase 3: Inbox, Message & SSR Reveal | Pending |
 | INBOX-02 | Phase 3: Inbox, Message & SSR Reveal | Pending |
