@@ -16,6 +16,10 @@ declare(strict_types=1);
  */
 namespace App;
 
+use Authentication\AuthenticationService;
+use Authentication\AuthenticationServiceInterface;
+use Authentication\AuthenticationServiceProviderInterface;
+use Authentication\Middleware\AuthenticationMiddleware;
 use Cake\Core\Configure;
 use Cake\Core\ContainerInterface;
 use Cake\Datasource\FactoryLocator;
@@ -27,6 +31,7 @@ use Cake\Http\MiddlewareQueue;
 use Cake\ORM\Locator\TableLocator;
 use Cake\Routing\Middleware\AssetMiddleware;
 use Cake\Routing\Middleware\RoutingMiddleware;
+use Psr\Http\Message\ServerRequestInterface;
 
 /**
  * Application setup class.
@@ -34,7 +39,7 @@ use Cake\Routing\Middleware\RoutingMiddleware;
  * This defines the bootstrapping logic and middleware layers you
  * want to use in your application.
  */
-class Application extends BaseApplication
+class Application extends BaseApplication implements AuthenticationServiceProviderInterface
 {
     /**
      * Load all the application configuration and bootstrap logic.
@@ -62,6 +67,8 @@ class Application extends BaseApplication
         if (Configure::read('debug')) {
             $this->addPlugin('DebugKit');
         }
+
+        $this->addPlugin('Authentication');
 
         // Load more plugins here
     }
@@ -99,7 +106,11 @@ class Application extends BaseApplication
             // https://book.cakephp.org/4/en/security/csrf.html#cross-site-request-forgery-csrf-middleware
             ->add(new CsrfProtectionMiddleware([
                 'httponly' => true,
-            ]));
+            ]))
+
+            // Authentication Middleware must run AFTER CSRF per CakePHP docs
+            // (T-02-01-06: reversing order would allow identity bypass).
+            ->add(new AuthenticationMiddleware($this));
 
         return $middlewareQueue;
     }
@@ -113,6 +124,45 @@ class Application extends BaseApplication
      */
     public function services(ContainerInterface $container): void
     {
+    }
+
+    /**
+     * Returns the AuthenticationService instance used by AuthenticationMiddleware.
+     *
+     * Session authenticator only (no form/password authenticator — OAuth is the sole
+     * identity source per Phase 2 D-02). ORM identifier resolves an authenticated
+     * user by its `id` (UUID, users table PK) from the session-stored identity.
+     *
+     * @param \Psr\Http\Message\ServerRequestInterface $request Request used to inspect identity config if needed.
+     * @return \Authentication\AuthenticationServiceInterface
+     */
+    public function getAuthenticationService(ServerRequestInterface $request): AuthenticationServiceInterface
+    {
+        $service = new AuthenticationService();
+        $service->setConfig([
+            // Users hitting a protected route without a session are redirected to '/'
+            // (UI-SPEC §5 — home page shows the login CTA with optional ?reason=expired).
+            'unauthenticatedRedirect' => '/',
+            'queryParam' => 'redirect',
+        ]);
+        $service->loadIdentifier('Authentication.Password', [
+            'resolver' => [
+                'className' => 'Authentication.Orm',
+                'userModel' => 'Users',
+                'finder' => 'all',
+            ],
+            'fields' => [
+                // OAuth-only: no password field; identify solely by session-stored id.
+                'username' => 'id',
+                'password' => null,
+            ],
+            'passwordHasher' => null,
+        ]);
+        $service->loadAuthenticator('Authentication.Session', [
+            'identify' => true,
+        ]);
+
+        return $service;
     }
 
     /**
