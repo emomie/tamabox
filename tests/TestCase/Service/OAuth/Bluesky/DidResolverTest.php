@@ -89,10 +89,10 @@ class DidResolverTest extends TestCase
         return [
             'empty' => [''],
             'wrong-scheme' => ['did:evil:abcdefghij234567klmnopqr'],
-            'too-short' => ['did:plc:abcdefghij234567klmnopq'],     // 23 chars
-            'too-long' => ['did:plc:abcdefghij234567klmnopqrs'],    // 25 chars
-            'uppercase' => ['did:plc:ABCDEFGHIJ234567KLMNOPQR'],    // A-Z not allowed
-            'with-1' => ['did:plc:1bcdefghij234567klmnopqr'],       // '1' not in base32-hex [a-z2-7]
+            'too-short' => ['did:plc:abcdefghij234567klmnopq'], // 23 chars
+            'too-long' => ['did:plc:abcdefghij234567klmnopqrs'], // 25 chars
+            'uppercase' => ['did:plc:ABCDEFGHIJ234567KLMNOPQR'], // A-Z not allowed
+            'with-1' => ['did:plc:1bcdefghij234567klmnopqr'], // '1' not in base32-hex [a-z2-7]
             'sql-inject' => ["did:plc:' OR 1=1 --                 "],
         ];
     }
