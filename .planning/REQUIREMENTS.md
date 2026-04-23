@@ -17,7 +17,7 @@ PROJECT.md の Active 要件を REQ-ID 付きで正規化したもの。ROADMAP 
 - [ ] **AUTH-05** — ユーザーログイン時に SNS handle / avatar / profile_url を最新取得して DB に同期する
 - [ ] **AUTH-06** — OAuth プロバイダインタフェースを抽象化し、将来 X (Twitter) を追加できる構造にする(Bluesky 実装は具体クラス)
 - [x] **AUTH-07** — OAuth アクセストークン / リフレッシュトークンは AES-GCM でアプリ側暗号化して `*_enc` 列に格納する _(service shipped in Plan 02-02: `App\Service\OAuth\TokenEncryptionService`; column write-path lands in Plan 02-04)_
-- [ ] **AUTH-08** — ES256 鍵ペアは `config/keys/`(web 公開外)に配置、`jwks.json` と `client-metadata.json` のエンドポイントを公開する
+- [x] **AUTH-08** — ES256 鍵ペアは `config/keys/`(web 公開外)に配置、`jwks.json` と `client-metadata.json` のエンドポイントを公開する
 - [ ] **AUTH-09** — ログアウト動作を提供(セッション破棄 + CSRF 対応)
 
 ### 受信箱 (INBOX)

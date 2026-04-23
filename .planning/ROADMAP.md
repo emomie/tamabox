@@ -50,7 +50,7 @@
 **Plans**: 4 plans (3 waves) — 2/4 complete
   - [x] 02-01-foundation-setup-PLAN.md — composer require cakephp/authentication, Application.php AuthenticationMiddleware wiring, config/bluesky.php, .env OAuth keys, routes (6 new), OAuthProviderInterface, EC P-256 keypair generation (AUTH-06 / AUTH-08 foundation) [wave 1] **✓ 2026-04-23**
   - [x] 02-02-crypto-services-PLAN.md — KeyManager (PEM→JWK), TokenEncryptionService (AES-256-GCM), DpopService (RFC 9449 proof JWT + DER→Raw), ClientJwtService (private_key_jwt) + 4 unit tests + test-fixture EC keys (AUTH-07 / AUTH-08) [wave 2, parallel with 02-03] **✓ 2026-04-23**
-  - [ ] 02-03-metadata-did-PLAN.md — OauthController (clientMetadata + jwks + callback stub) + DidResolver (plc.directory DID→PDS via Cake\Http\Client) + integration tests (AUTH-08) [wave 2, parallel with 02-02]
+  - [x] 02-03-metadata-did-PLAN.md — OauthController (clientMetadata + jwks + callback stub) + DidResolver (plc.directory DID→PDS via Cake\Http\Client) + integration tests (AUTH-08) [wave 2, parallel with 02-02]
   - [ ] 02-04-oauth-flow-PLAN.md — BlueskyOAuthClient (OAuthProviderInterface impl, PAR + token exchange + nonce retry + resolveProfile), AuthController (startBluesky, logout), OauthController::callback fill-in, UsersController dashboard, UserIdentitiesTable::upsertBlueskyIdentity, 5 templates, tamabox.css, integration tests (AUTH-01 / AUTH-02 / AUTH-04 / AUTH-05 / AUTH-09) [wave 3]
 **UI hint**: yes
 
