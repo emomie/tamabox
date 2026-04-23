@@ -98,7 +98,8 @@ created: 2026-04-23
 | Heading | 24px | 600 (semibold) | 1.2 | セクション見出し、エラータイトル |
 | Body | 16px | 400 (regular) | 1.6 | 通常テキスト、ボタンラベル、フォームラベル |
 | Label / Caption | 14px | 400 (regular) | 1.5 | ハンドル表示、補足説明、フラッシュメッセージ |
-| Small | 12px | 400 (regular) | 1.4 | 法的注記、タイムスタンプ (Phase 3+) |
+
+※ Phase 2 のスコープでは4サイズ。小さな注記 (12px) が必要になった場合は Phase 4 のデザイン整備時に追加する。
 
 font-family (全要素共通):
 ```
