@@ -15,11 +15,11 @@ Project memory. Updated by every gsd-* command.
 ## Current Position
 
 **Milestone**: v1 launch
-**Phase**: Phase 2 — Bluesky OAuth & Identity (context gathered 2026-04-23)
-**Plan**: Not created yet
-**Next Plan**: `/gsd-plan-phase 2`
-**Status**: Phase 2 CONTEXT.md written — next step plan-phase
-**Resume file**: `.planning/phases/02-bluesky-oauth-identity/02-CONTEXT.md`
+**Phase**: Phase 2 — Bluesky OAuth & Identity (plans ready 2026-04-23)
+**Plan**: 4 plans in 3 waves — 02-01 foundation / 02-02 crypto / 02-03 metadata+DID / 02-04 oauth-flow
+**Next Plan**: `/gsd-execute-phase 2`
+**Status**: Phase 2 PLAN.md x4 + RESEARCH + UI-SPEC + PATTERNS all committed — ready to execute
+**Resume file**: `.planning/phases/02-bluesky-oauth-identity/02-01-foundation-setup-PLAN.md`
 
 **Progress**: Phase 1 at 4/4 plans — `[████████████████████] 100%` (Phase 1 internal)
 Overall: Phases 0/4 complete (Phase 1 pending verifier) — `[░░░░░░░░░░░░░░░░░░░░] 0%`
@@ -77,7 +77,8 @@ Overall: Phases 0/4 complete (Phase 1 pending verifier) — `[░░░░░░
 
 ### Open Todos
 
-- [ ] Phase 2 planning: `/gsd-plan-phase 2` (Bluesky OAuth & Identity — CONTEXT.md ready 2026-04-23).
+- [x] Phase 2 planning complete 2026-04-23 — 4 plans (02-01 foundation / 02-02 crypto / 02-03 metadata+DID / 02-04 oauth-flow), 3 waves, VERIFICATION PASSED on first pass.
+- [ ] Phase 2 execution: `/gsd-execute-phase 2` (Wave 1: 02-01 foundation — no HTTP/DB, safe to start).
 
 ### Blockers
 
