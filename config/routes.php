@@ -63,6 +63,36 @@ return function (RouteBuilder $routes): void {
         $builder->connect('/pages/*', 'Pages::display');
 
         /*
+         * Phase 2 — Bluesky OAuth routes.
+         * See UI-SPEC.md §1 for route/method/auth-required mapping.
+         * Controller classes (AuthController, OauthController, UsersController)
+         * are introduced in Plans 02-03 and 02-04; route definitions are valid now.
+         */
+        // GET (future login-start page) / POST (CTA form submit starts PAR flow).
+        $builder->connect('/login/bluesky', ['controller' => 'Auth', 'action' => 'startBluesky'])
+            ->setMethods(['GET', 'POST']);
+
+        // GET only — Bluesky AS redirects here with code/state/iss.
+        $builder->connect('/oauth/callback', ['controller' => 'Oauth', 'action' => 'callback'])
+            ->setMethods(['GET']);
+
+        // GET only — Bluesky AS polls this as client_id. Must return application/json verbatim.
+        $builder->connect('/oauth/client-metadata.json', ['controller' => 'Oauth', 'action' => 'clientMetadata'])
+            ->setMethods(['GET']);
+
+        // GET only — public JWKS for AS signature verification.
+        $builder->connect('/oauth/jwks.json', ['controller' => 'Oauth', 'action' => 'jwks'])
+            ->setMethods(['GET']);
+
+        // POST only — CSRF-protected logout (D-18).
+        $builder->connect('/oauth/logout', ['controller' => 'Auth', 'action' => 'logout'])
+            ->setMethods(['POST']);
+
+        // GET only — authenticated landing (placeholder for Plan 02-04; Phase 3 adds inbox).
+        $builder->connect('/dashboard', ['controller' => 'Users', 'action' => 'dashboard'])
+            ->setMethods(['GET']);
+
+        /*
          * Connect catchall routes for all controllers.
          *
          * The `fallbacks` method is a shortcut for

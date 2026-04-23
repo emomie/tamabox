@@ -1,0 +1,5 @@
+# config/keys/.gitignore — Phase 2 added to keep directory tracked while excluding key material.
+# Rotation/generation: see config/.env.example header comment.
+*.key
+*.pem
+!.gitignore
