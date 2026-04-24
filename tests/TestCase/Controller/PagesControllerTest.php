@@ -40,8 +40,9 @@ class PagesControllerTest extends TestCase
         Configure::write('debug', true);
         $this->get('/pages/home');
         $this->assertResponseOk();
-        $this->assertResponseContains('CakePHP');
-        $this->assertResponseContains('<html>');
+        // Phase 2 Plan 02-04 replaced the CakePHP welcome template with the tamabox login CTA.
+        $this->assertResponseContains('Bluesky でログイン');
+        $this->assertResponseContains('<html');
     }
 
     /**

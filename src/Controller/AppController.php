@@ -24,6 +24,7 @@ use Cake\Controller\Controller;
  * Add your application-wide methods in the class below, your controllers
  * will inherit them.
  *
+ * @property \Authentication\Controller\Component\AuthenticationComponent $Authentication
  * @link https://book.cakephp.org/4/en/controllers.html#the-app-controller
  */
 class AppController extends Controller
@@ -43,6 +44,13 @@ class AppController extends Controller
 
         $this->loadComponent('RequestHandler');
         $this->loadComponent('Flash');
+
+        // Authentication plugin (Phase 2 Plan 02-01). The middleware is installed in
+        // Application::middleware(); this component exposes $this->Authentication in
+        // controllers ($this->Authentication->getIdentity() / setIdentity() / logout() /
+        // allowUnauthenticated()). All controllers inherit; actions default to requiring
+        // identity and opt out via allowUnauthenticated() per-action.
+        $this->loadComponent('Authentication.Authentication');
 
         /*
          * Enable the following component for recommended CakePHP form protection settings.

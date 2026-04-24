@@ -99,11 +99,12 @@ class OauthControllerTest extends TestCase
         $this->assertArrayNotHasKey('d', $body['keys'][0]);
     }
 
-    public function testCallbackStubReturns501(): void
+    public function testCallbackStub501HasBeenReplaced(): void
     {
-        // Plan 02-03 ships a 501 stub so pre-Plan-02-04 hits are visibly broken.
-        // Plan 02-04 MUST flip this to either 302 (success) or 302 to /?flash=error (failure).
+        // Plan 02-03 shipped a 501 stub held as a hand-off contract; Plan 02-04 replaces
+        // the body with the real flow. Any state-bearing hit should now redirect (302),
+        // never 501 (stub) or 200 (naive OK).
         $this->get('/oauth/callback?code=x&state=y');
-        $this->assertResponseCode(501);
+        $this->assertResponseCode(302);
     }
 }
