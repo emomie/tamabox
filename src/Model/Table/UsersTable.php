@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Model\Table;
 
+use Cake\ORM\Query;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 
@@ -105,5 +106,34 @@ class UsersTable extends Table
             ->allowEmptyDateTime('deleted_at');
 
         return $validator;
+    }
+
+    /**
+     * Custom finder: fetch user by SNS DID via user_identities join.
+     *
+     * Usage:
+     *   $user = $this->Users->find('byDid', ['did' => 'did:plc:...'])->first();
+     *
+     * Returns a User entity with UserIdentities contained, or null if no match.
+     *
+     * @param \Cake\ORM\Query $query Base query from find('byDid', ...).
+     * @param array<string, mixed> $options Must contain 'did' => non-empty string.
+     * @return \Cake\ORM\Query
+     */
+    public function findByDid(Query $query, array $options): Query
+    {
+        if (!isset($options['did']) || !is_string($options['did']) || $options['did'] === '') {
+            return $query->where(['1 = 0']); // empty result on bad input
+        }
+        $did = $options['did'];
+
+        return $query
+            ->contain(['UserIdentities'])
+            ->matching('UserIdentities', function (Query $q) use ($did): Query {
+                return $q->where([
+                    'UserIdentities.provider' => 'bluesky',
+                    'UserIdentities.provider_account_id' => $did,
+                ]);
+            });
     }
 }
