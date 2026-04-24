@@ -2,8 +2,8 @@
 gsd_state_version: 1.0
 milestone: v0.2
 milestone_name: milestone
-status: Phase 2 complete — ready for verify
-last_updated: "2026-04-24T06:45:30.697Z"
+status: Phase 2 VERIFIED (human-verification pending for live-AS) — ready for Phase 3 planning
+last_updated: "2026-04-24T06:55:59Z"
 progress:
   total_phases: 4
   completed_phases: 2
@@ -28,22 +28,22 @@ Project memory. Updated by every gsd-* command.
 
 ## Current Position
 
-Phase: 02 (bluesky-oauth-identity) — COMPLETE (awaits verifier)
+Phase: 02 (bluesky-oauth-identity) — **VERIFIED 2026-04-24** (7/7 observable truths; 3 human items for live Bluesky AS / browser cookie-destroy / handle-change sync — inherent to external-OAuth-provider contract)
 Plan: 4 of 4 complete (02-01 foundation ✓ 2026-04-23; 02-02 crypto ✓ 2026-04-23; 02-03 metadata+DID ✓ 2026-04-23; 02-04 oauth-flow ✓ 2026-04-24)
 **Milestone**: v1 launch
-**Phase**: Phase 2 — Bluesky OAuth & Identity (all 4 plans shipped; awaits `/gsd-verify-phase 2`)
-**Plan**: 4 plans in 3 waves — all shipped. 02-01 foundation ✓ / 02-02 crypto ✓ / 02-03 metadata+DID ✓ / 02-04 oauth-flow ✓
-**Next Plan**: `/gsd-verify-phase 2` to validate Phase 2 success criteria + ROADMAP delta; then `/gsd-plan-phase 3` to start Inbox/Message/SSR planning
-**Status**: Phase 2 complete. All 8 requirements AUTH-01/02/04/05/06/07/08/09 closed. Full OAuth handshake wired end-to-end (PKCE + PAR + DPoP + private_key_jwt + nonce retry + DID→PDS → getProfile → UPSERT → setIdentity → /dashboard). 6 Phase-2 routes all live. composer test 85 tests green.
-**Resume file**: `.planning/phases/02-bluesky-oauth-identity/02-04-SUMMARY.md` (latest plan summary)
+**Phase**: Phase 2 — Bluesky OAuth & Identity (**VERIFICATION PASSED at code level**; human gate for live-AS smoke test deferred to tamabox.emomie.com deployment in Phase 4)
+**Plan**: 4 plans in 3 waves — all shipped and verified. 02-01 foundation ✓ / 02-02 crypto ✓ / 02-03 metadata+DID ✓ / 02-04 oauth-flow ✓ / VERIFICATION.md ✓
+**Next Plan**: `/gsd-plan-phase 3` to start Inbox / Message / SSR Reveal planning (Phase 3 scope: AUTH-03 + INBOX-01/02/03/06 + MSG-01..07)
+**Status**: Phase 2 verification complete. All 8 requirements AUTH-01/02/04/05/06/07/08/09 satisfied at code level (Reflection + Configure smoke + ORM data-flow trace + QA gates all green). Full OAuth handshake wired end-to-end (PKCE + PAR + DPoP + private_key_jwt + nonce retry + DID→PDS → getProfile → UPSERT → setIdentity → /dashboard). 6 Phase-2 routes all live. D-DEF-01 resolved as a side effect of Plan 02-04's home.php rewrite. Zero anti-patterns in Phase 2 artifacts. composer test 85 tests / 221 assertions / 0 failures. phpstan level 8 [OK] / phpcs 54/54.
+**Resume file**: `.planning/phases/02-bluesky-oauth-identity/VERIFICATION.md` (verification report, 2026-04-24)
 
-**Progress**: Phase 2 at 4/4 plans — `[████████████████████] 100%` (Phase 2 internal)
-Overall: Phases 2/4 complete — plans 8/8 done (of originally planned; Phase 3+4 plans not yet generated) — `[██████████░░░░░░░░░░] 50%` (phase-completion)
+**Progress**: Phase 2 at 4/4 plans + verified — `[████████████████████] 100%` (Phase 2 internal)
+Overall: Phases 2/4 verified — plans 8/8 done (of originally planned; Phase 3+4 plans not yet generated) — `[██████████░░░░░░░░░░] 50%` (phase-completion)
 
 ## Phase Status
 
 - [x] **Phase 1: Foundation & Schema** — Complete (4/4 plans done: 01-01 ✓, 01-02a ✓, 01-02b ✓, 01-03 ✓); awaits verifier
-- [x] **Phase 2: Bluesky OAuth & Identity** — Complete (4/4 plans: 02-01 ✓, 02-02 ✓, 02-03 ✓, 02-04 ✓); awaits verifier
+- [x] **Phase 2: Bluesky OAuth & Identity** — **VERIFIED 2026-04-24** (4/4 plans: 02-01 ✓, 02-02 ✓, 02-03 ✓, 02-04 ✓; VERIFICATION.md status=human_needed for live-AS happy path only — code-level 7/7 PASS)
 - [ ] **Phase 3: Inbox, Message & SSR Reveal** — Not started
 - [ ] **Phase 4: Moderation & Production Launch** — Not started
 
@@ -51,7 +51,7 @@ Overall: Phases 2/4 complete — plans 8/8 done (of originally planned; Phase 3+
 
 | Metric | Value |
 |--------|-------|
-| Phases completed | 0/4 certified (Phase 1 + Phase 2 pending verify) |
+| Phases completed | 1/4 certified (Phase 2 VERIFIED 2026-04-24; Phase 1 pending verify) |
 | Plans completed | 8/8 (Phase 1: 01-01, 01-02a, 01-02b, 01-03; Phase 2: 02-01, 02-02, 02-03, 02-04) |
 | Nodes completed | 28 tasks across 8 plans (+3 Phase 2-04: BlueskyOAuthClient / DB upsert / controllers+templates+tests) |
 | Requirements shipped | 13/34 (INFRA-02, -03, -04, -05, -07; AUTH-01, AUTH-02, AUTH-04, AUTH-05, AUTH-06, AUTH-07, AUTH-08, AUTH-09) |
@@ -69,6 +69,7 @@ Overall: Phases 2/4 complete — plans 8/8 done (of originally planned; Phase 3+
 | 02-02 crypto-services | 2 | 2 | ~20m | 2026-04-23 |
 | 02-03 metadata-did | 2 | 2 | ~4m | 2026-04-23 |
 | 02-04 oauth-flow | 3 | 3 | ~17m 29s | 2026-04-24 |
+| 02-verify | — | — | ~9m | 2026-04-24 |
 
 ## Accumulated Context
 
@@ -102,13 +103,18 @@ Overall: Phases 2/4 complete — plans 8/8 done (of originally planned; Phase 3+
 - **`tests/Fixture/keys/` now hosts VCS-tracked dummy ES256 P-256 keypair** (Plan 02-02 Task 1). These are separate from production `config/keys/*.key` (gitignored). Any future crypto test should inject `TESTS . 'Fixture' . DS . 'keys' . DS . 'private.key'` (or `public.key`) through KeyManager's constructor override.
 - **`derToRawSignature()` is duplicated across DpopService and ClientJwtService** by design (Plan 02-02 Task 2). Altotoo verbatim copy — per-class review locality chosen over DRY for 15 lines of crypto. Trait extraction deferred to post-MVP refactor. If Plan 02-03 or 02-04 needs a third signer, THEN extract to `App\Service\OAuth\Support\Es256JwtSignerTrait`.
 - **OAUTH_KID must match across jwks.json and client_assertion**: `KeyManager::getPublicJwk()` uses `env('OAUTH_KID')` for `kid`; `ClientJwtService::createAssertion()` uses the same env var for header `kid`. Must be set once in `config/.env` and never drift. Default `'ssr-box-key-1'` covers test/CI; production deploy MUST set explicitly to enable future rotation.
-- **Pre-existing `templates/Pages/home.php` $connection->connect() deprecation** (D-DEF-01 in `deferred-items.md`): emits harmless stack trace during `composer test`. Not caused by Phase 2 work; assigned to Phase 4 production-launch plan.
+- **D-DEF-01 RESOLVED 2026-04-24 by verifier**: Pre-existing `templates/Pages/home.php` `$connection->connect()` deprecation trace is gone — Plan 02-04 Task 3 fully rewrote home.php as the Bluesky CTA landing, removing all skeleton code. `grep -c '$connection' templates/Pages/home.php` = 0; `composer test 2>&1 | grep -i deprecat` only emits the benign `phpunit.xml.dist` XML-schema migration notice (unrelated to D-DEF-01). `deferred-items.md` D-DEF-01 entry can be marked resolved.
 - **Cake\Http\Client mock pattern for 4.5** (Plan 02-03 deviation #1): the public static `Client::addMockResponse($method, $url, $response, $options = [])` is the idiomatic HTTP test stub — it installs a process-global mock adapter that intercepts every Client instance. The lower-level `Cake\Http\Client\Adapter\Mock::addResponse(RequestInterface, Response, array)` exists but the signature is awkward; skip it. Always call `Client::clearMockResponses()` in both `setUp()` AND `tearDown()` to prevent cross-test bleed. Applies to Plan 02-04 BlueskyOAuthClient tests (PAR / token / profile endpoint stubs all use the same pattern).
-- **Callback stub invariant for forward-plan reservation** (Plan 02-03 Task 1): `OauthController::callback()` ships as a 501 stub with integration test `testCallbackStubReturns501` locking that contract. Plan 02-04's first task MUST replace both the method body AND this test — if the 501 test still passes after Plan 02-04, the implementation never happened. This is the general pattern for "reserve the class method slot now so the future plan is pure logic fill-in without class-level edits." — **RESOLVED 2026-04-24 in Plan 02-04 Task 3**: callback 完全実装 + 501 test を 302 assert 版に差し替え、Plan 02-04 SUMMARY Self-Check で verified.
+- **Callback stub invariant for forward-plan reservation** (Plan 02-03 Task 1): `OauthController::callback()` ships as a 501 stub with integration test `testCallbackStubReturns501` locking that contract. Plan 02-04's first task MUST replace both the method body AND this test — if the 501 test still passes after Plan 02-04, the implementation never happened. This is the general pattern for "reserve the class method slot now so the future plan is pure logic fill-in without class-level edits." — **RESOLVED 2026-04-24 in Plan 02-04 Task 3**: callback 完全実装 + 501 test を 302 assert 版に差し替え、Plan 02-04 SUMMARY Self-Check で verified. Verifier re-confirmed `grep -c 'withStatus(501)' src/Controller/OauthController.php` = 0.
 - **AppController Authentication component wiring missed in Plan 02-01** (Plan 02-04 deviation Rule 2): Plan 02-01 wired `AuthenticationMiddleware` in `Application::middleware()` but **did not** load the `Authentication.Authentication` component in `AppController::initialize()`. Middleware alone populates `request.identity` attribute, but `$this->Authentication->getIdentity()` / `setIdentity()` / `logout()` / `allowUnauthenticated()` calls need the component. Plan 02-04 added this retroactively. Future plans (Phase 3+) can assume `$this->Authentication` is always available in any AppController subclass.
 - **CakePHP 4.5 `protected array $fixtures` typed-property collision** (Plan 02-04 Task 3 deviation Rule 1): `Cake\TestSuite\TestCase` declares `protected $fixtures = []` with no native type. Subclasses MUST NOT redeclare with `protected array $fixtures` — PHP emits `Fatal error: Type of $fixtures must not be defined`. Always use phpdoc `@var array<int, string>` + `protected $fixtures = [...]`. Future integration tests inherit this convention.
 - **`$request->getQuery()` return type `array|string|null` breaks phpstan level 8** (Plan 02-04 Task 3 deviation Rule 1): naive `(string)$this->request->getQuery('k')` is flagged. Introduced `queryString(string $key): string` + `sessionString(string $key): string` private helpers on OauthController that `is_string()`-guard the value. Phase 3+ controllers consuming query params should use the same pattern.
-- **Plan 02-04 replaced `templates/Pages/home.php`** — old CakePHP skeleton welcome page is gone; new version shows 'Bluesky でログイン' CTA. `PagesControllerTest::testDisplay` was updated accordingly. This likely **resolved D-DEF-01** (pre-existing `$connection->connect()` deprecation trace in composer test output); verifier should re-check `composer test 2>&1 | grep -i deprecated` and delete D-DEF-01 from `deferred-items.md` if the trace is gone.
+- **Plan 02-04 replaced `templates/Pages/home.php`** — old CakePHP skeleton welcome page is gone; new version shows 'Bluesky でログイン' CTA. `PagesControllerTest::testDisplay` was updated accordingly. **D-DEF-01 verified resolved 2026-04-24.**
+
+### Verifier-discovered decisions (Phase 2)
+
+- **Live-AS OAuth happy-path is out of automated verification scope** (recorded 2026-04-24 by `/gsd-verify-phase 2`): BlueskyOAuthClient integration tests use `Client::addMockResponse()` stubs for PAR / token / profile endpoints. The actual AS + PDS handshake (production Bluesky) can only be observed from a real browser against `tamabox.emomie.com`. Verifier returned `status: human_needed` with 3 human items (live signup / logout cookie-destroy / handle-change sync). Phase 2 goal is achieved at code level; production smoke test is a Phase 4 launch gate.
+- **Data-flow Level 4 pattern reusable for Phase 3**: verifier traced rendered-to-source for UsersController::dashboard (real ORM query + contain), OauthController::clientMetadata (Configure read), and upsertBlueskyIdentity (encrypt → `*_enc` write). No hollow props / static returns in Phase 2. Phase 3 inbox/message controllers should follow the same pattern (no `return Response::json([])` style stubs).
 
 ### Open Todos
 
@@ -117,8 +123,8 @@ Overall: Phases 2/4 complete — plans 8/8 done (of originally planned; Phase 3+
 - [x] Phase 2 Wave 2 crypto leg done 2026-04-23 — 02-02 crypto-services shipped (KeyManager / TokenEncryptionService / DpopService / ClientJwtService; 25 unit tests; signature-verification-via-openssl_verify invariant established; AUTH-07 closed, AUTH-08 partial).
 - [x] Phase 2 Wave 2 metadata leg done 2026-04-23 — 02-03 metadata+DID shipped (OauthController with clientMetadata/jwks/callback-stub actions + DidResolver for plc.directory DID → PDS lookup; 20 new tests; AUTH-08 closed; callback 501 stub held as hand-off contract for 02-04).
 - [x] Phase 2 Wave 3 oauth-flow done 2026-04-24 — 02-04 shipped (BlueskyOAuthClient 5-method impl + TDD RED/GREEN, UsersTable::findByDid + UserIdentitiesTable::upsertBlueskyIdentity with AES-GCM encrypt & UPSERT-in-txn, AuthController::startBluesky + logout, OauthController::callback full implementation replacing 501 stub, UsersController::dashboard, 5 templates + tamabox.css 218 lines, 10 new integration tests + 13 unit tests = 23 new tests; 85 tests total green). AUTH-01/02/04/05/06/09 closed.
-- [ ] `/gsd-verify-phase 2` next — validate Phase 2 success criteria observable (signup / login / logout / UNIQUE guard / jwks+metadata / token encryption / OAuthProviderInterface abstraction) + ROADMAP delta. Verifier should also check for D-DEF-01 resolution and consider removing it from deferred-items.md.
-- [ ] Phase 3 planning (`/gsd-plan-phase 3`) — Inbox, Message & SSR Reveal — after verify passes.
+- [x] `/gsd-verify-phase 2` complete 2026-04-24 — VERIFICATION.md written. 7/7 ROADMAP Success Criteria verified at code level (truths + artifacts + key links + data-flow trace + spot-checks all green). phpcs 54/54 / phpstan level 8 [OK] / composer test 85/221/0-failure re-confirmed live. D-DEF-01 resolved as a side effect of Plan 02-04 home.php rewrite. Zero anti-patterns found. status=human_needed with 3 inherent human items (live Bluesky AS signup / browser cookie destroy / handle-change sync) deferred to tamabox.emomie.com launch.
+- [ ] `/gsd-plan-phase 3` next — Inbox / Message / SSR Reveal (AUTH-03 + INBOX-01/02/03/06 + MSG-01..07). Phase 3 assumes: `$this->Authentication` component always available in any AppController subclass; `BlueskyOAuthClient::refreshToken` is implemented + unit-tested but needs call site added by send flow; `user_identities.last_synced_at` is fresh per login so no TTL check needed; `queryString/sessionString` helper pattern for phpstan-safe query/session reads.
 
 ### Blockers
 
@@ -131,12 +137,13 @@ None currently. Resolved blockers:
 - Lolipop 共有鯖での `trustProxy` / `fullBaseUrl` / TLS 終端の実測が必要 (Phase 2 で OAuth redirect_uri 決定時、または Phase 4 本番デプロイ時)
 - `session.save_path` が Lolipop でどこに向くか実測 (Phase 1 または 2)
 - `altotoo.emomie.com` の OAuth 実装知見を流用(Phase 2 開始時に参照)
+- **Phase 4 production smoke test contract**: VERIFICATION.md の 3 human items (live-AS signup / cookie destroy / handle-change sync) は tamabox.emomie.com デプロイ直後に人手確認必要。デプロイ手順 + 確認手順を Phase 4 plan に入れる。
 
 ## Session Continuity
 
-**Last Agent Run**: execute-phase 2 wave 3 (oauth-flow) @ 2026-04-24 — Plan 02-04 BlueskyOAuthClient + UsersTable::findByDid + UserIdentitiesTable::upsertBlueskyIdentity + AuthController + UsersController + OauthController::callback impl + 5 templates + tamabox.css (218 lines) + 10 new integration tests + 13 unit tests. 4 atomic commits on main: c94c006 (Task 1 RED), da4028f (Task 1 GREEN), 3946ada (Task 2), 7fde47f (Task 3). Verification: phpcs 54/54 / phpstan level 8 [OK] / phpunit 85 tests 221 assertions, 6 pre-existing bake incompletes unchanged, 0 failures. Zero new composer deps. Duration ~17m 29s. 3 deviations: (Rule 2) AppController に Authentication component loadComponent 追加 (Plan 02-01 の漏れ)、(Rule 1) `protected array $fixtures` 型衝突 → phpdoc-only、(Rule 1) `$request->getQuery()` 型問題 → `queryString`/`sessionString` helpers。Callback 501 stub が 302 assert に flip されて Plan 02-03 の hand-off contract が正しく解除されたことを integration test で観測。
-**Next Action**: `/gsd-verify-phase 2` to validate Phase 2 success criteria observable (signup → /dashboard; re-login sync; /oauth/logout destroys session; UNIQUE uk_user_identities_provider_account guard; /oauth/jwks.json + /oauth/client-metadata.json live; tokens AES-GCM encrypted in `*_enc`; OAuthProviderInterface 抽象化). Then `/gsd-plan-phase 3` to start Inbox/Message/SSR Reveal planning.
-**Context Notes**: Phase 2 is COMPLETE. All 8 AUTH requirements (AUTH-01〜AUTH-09 minus 03) closed. Phase 2 Wave 3 used TDD for Task 1 only (BlueskyOAuthClient: RED commit c94c006 with 13 failing tests, then GREEN commit da4028f); Tasks 2+3 used plan-guided implementation (non-TDD). STATE.md decisions section now records the 3 newly-discovered patterns (Rule 2 AppController wiring, fixture type collision, query-cast helper pattern). D-DEF-01 (home.php `$connection->connect()` deprecation trace) **likely resolved** — home.php was fully replaced in Plan 02-04 Task 3 — verifier should re-check. Phase 3 hand-off: `BlueskyOAuthClient::refreshToken()` is implemented + unit-tested but unused; Phase 3 MSG-03 send flow should invoke it when `token_expires_at <= now()` (see 02-04 SUMMARY Handoff Notes for full lifecycle). `user_identities.last_synced_at` is updated on every login by upsertBlueskyIdentity, so Phase 3 can assume cached handle/avatar are "fresh enough" without additional TTL.
+**Last Agent Run**: verify-phase 2 @ 2026-04-24 06:55Z — goal-backward verification complete. 7/7 observable truths verified at code level via Configure smoke + Reflection + Level 4 data-flow trace + 11 behavioral spot-checks. All 22 artifacts present/substantive/wired. All 10 key links WIRED. Anti-pattern scan clean. phpstan level 8 [OK] / phpcs 54/54 / composer test 85/221/0-failure. D-DEF-01 resolved (home.php no longer refs `$connection`). status=human_needed returned with 3 inherent-to-external-OAuth human items. VERIFICATION.md written at `.planning/phases/02-bluesky-oauth-identity/VERIFICATION.md`.
+**Next Action**: `/gsd-plan-phase 3` to plan Inbox, Message & SSR Reveal (AUTH-03 + INBOX-01/02/03/06 + MSG-01..07). Phase 3 Plan 1 候補: inbox creation + slug / display_name mutability (INBOX-01, INBOX-06) + SSR probability config (INBOX-02). Plan 2 候補: send form with consent UI + AUTH-03 gate (MSG-01, MSG-05) + is_ssr/ssr_seed compute at send-time (MSG-02, MSG-03, MSG-04). Plan 3 候補: receiver dashboard inbox list + open action + SSR reveal (INBOX-03, MSG-06, MSG-07).
+**Context Notes**: Phase 2 VERIFIED. All 8 AUTH requirements (AUTH-01〜AUTH-09 minus 03) closed at code level. 3 human verification items deferred to production deployment (Phase 4). D-DEF-01 deferred-items.md entry can be marked resolved (verifier confirmed). Phase 3 hand-off sticky notes: (1) `$this->Authentication` component is always available in any controller extending AppController, (2) `BlueskyOAuthClient::refreshToken` is implemented + unit-tested but needs a call site in send flow when `token_expires_at <= now()`, (3) `queryString/sessionString` helper pattern is the phpstan-safe way to read from `$this->request->getQuery()` / session, (4) `user_identities.last_synced_at` is updated every login so cached handle/avatar is "fresh enough" without a TTL check, (5) `TokenEncryptionService` decrypt → refresh → re-encrypt pattern needs a helper method in Phase 3 (candidate: `UserIdentitiesTable::refreshTokenIfExpired($identity)`).
 
 ---
-*Last updated: 2026-04-24 (Plan 02-04 Wave 3 oauth-flow complete; Phase 2 all 4 plans shipped, awaits verify)*
+*Last updated: 2026-04-24 (Phase 2 VERIFIED 06:55Z; all 4 plans shipped + VERIFICATION.md written; status=human_needed for live-AS smoke test — inherent to external-OAuth-provider contract)*
