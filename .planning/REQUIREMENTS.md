@@ -10,15 +10,15 @@ PROJECT.md の Active 要件を REQ-ID 付きで正規化したもの。ROADMAP 
 
 ### 認証 / アイデンティティ (AUTH)
 
-- [ ] **AUTH-01** — 受け手は Bluesky OAuth (AT Protocol, ES256 confidential client, PAR + DPoP + PKCE 必須) でサインアップできる
-- [ ] **AUTH-02** — 既存ユーザーは Bluesky OAuth でログインでき、セッションが確立する
+- [x] **AUTH-01** — 受け手は Bluesky OAuth (AT Protocol, ES256 confidential client, PAR + DPoP + PKCE 必須) でサインアップできる _(Plan 02-04: BlueskyOAuthClient PAR+PKCE+DPoP → OauthController::callback upsert 新規 user + identity)_
+- [x] **AUTH-02** — 既存ユーザーは Bluesky OAuth でログインでき、セッションが確立する _(Plan 02-04: upsertBlueskyIdentity existing-user path + Authentication->setIdentity)_
 - [ ] **AUTH-03** — 送り手は Bluesky OAuth を完了していないとメッセージ送信フォームから送信できない
-- [ ] **AUTH-04** — `users` テーブルと `user_identities` テーブルで 1 ユーザー = 1 SNS アカウント (1:1) を DB 制約で担保する
-- [ ] **AUTH-05** — ユーザーログイン時に SNS handle / avatar / profile_url を最新取得して DB に同期する
-- [ ] **AUTH-06** — OAuth プロバイダインタフェースを抽象化し、将来 X (Twitter) を追加できる構造にする(Bluesky 実装は具体クラス)
-- [x] **AUTH-07** — OAuth アクセストークン / リフレッシュトークンは AES-GCM でアプリ側暗号化して `*_enc` 列に格納する _(service shipped in Plan 02-02: `App\Service\OAuth\TokenEncryptionService`; column write-path lands in Plan 02-04)_
-- [x] **AUTH-08** — ES256 鍵ペアは `config/keys/`(web 公開外)に配置、`jwks.json` と `client-metadata.json` のエンドポイントを公開する
-- [ ] **AUTH-09** — ログアウト動作を提供(セッション破棄 + CSRF 対応)
+- [x] **AUTH-04** — `users` テーブルと `user_identities` テーブルで 1 ユーザー = 1 SNS アカウント (1:1) を DB 制約で担保する _(Phase 1 uk_user_identities_provider_account UNIQUE 制約 + Plan 02-04 DatabaseException catch の race 対応)_
+- [x] **AUTH-05** — ユーザーログイン時に SNS handle / avatar / profile_url を最新取得して DB に同期する _(Plan 02-04: upsertBlueskyIdentity が毎ログイン時に handle_cached / avatar_url_cached / profile_url_cached / last_synced_at を更新)_
+- [x] **AUTH-06** — OAuth プロバイダインタフェースを抽象化し、将来 X (Twitter) を追加できる構造にする(Bluesky 実装は具体クラス) _(Plan 02-01 interface shell + Plan 02-04 BlueskyOAuthClient が 5 methods concrete impl)_
+- [x] **AUTH-07** — OAuth アクセストークン / リフレッシュトークンは AES-GCM でアプリ側暗号化して `*_enc` 列に格納する _(Plan 02-02: TokenEncryptionService、Plan 02-04 で upsertBlueskyIdentity が encrypt 後に *_enc 列に保存する write-path 完了)_
+- [x] **AUTH-08** — ES256 鍵ペアは `config/keys/`(web 公開外)に配置、`jwks.json` と `client-metadata.json` のエンドポイントを公開する _(Plan 02-01 鍵 + Plan 02-03 endpoint actions)_
+- [x] **AUTH-09** — ログアウト動作を提供(セッション破棄 + CSRF 対応) _(Plan 02-04: AuthController::logout POST-only + allowMethod + $this->Authentication->logout() + ログアウト flash)_
 
 ### 受信箱 (INBOX)
 
@@ -83,15 +83,15 @@ PROJECT.md の Active 要件を REQ-ID 付きで正規化したもの。ROADMAP 
 
 | REQ-ID | Phase | Status |
 |--------|-------|--------|
-| AUTH-01 | Phase 2: Bluesky OAuth & Identity | Pending |
-| AUTH-02 | Phase 2: Bluesky OAuth & Identity | Pending |
+| AUTH-01 | Phase 2: Bluesky OAuth & Identity | Shipped 2026-04-24 (Plan 02-04: BlueskyOAuthClient PAR+PKCE+DPoP + OauthController::callback new-user path) |
+| AUTH-02 | Phase 2: Bluesky OAuth & Identity | Shipped 2026-04-24 (Plan 02-04: upsertBlueskyIdentity existing-user path + setIdentity) |
 | AUTH-03 | Phase 3: Inbox, Message & SSR Reveal | Pending |
-| AUTH-04 | Phase 2: Bluesky OAuth & Identity | Pending |
-| AUTH-05 | Phase 2: Bluesky OAuth & Identity | Pending |
-| AUTH-06 | Phase 2: Bluesky OAuth & Identity | Partial (Plan 02-01 shipped OAuthProviderInterface shell; concrete BlueskyOAuthClient lands in 02-04) |
-| AUTH-07 | Phase 2: Bluesky OAuth & Identity | Shipped 2026-04-23 (Plan 02-02: TokenEncryptionService) |
-| AUTH-08 | Phase 2: Bluesky OAuth & Identity | Partial (ES256 keypair + KeyManager JWK export shipped 02-01/02-02; /oauth/jwks.json + /oauth/client-metadata.json Controller actions land in 02-03) |
-| AUTH-09 | Phase 2: Bluesky OAuth & Identity | Pending |
+| AUTH-04 | Phase 2: Bluesky OAuth & Identity | Shipped 2026-04-24 (Phase 1 UNIQUE 制約 + Plan 02-04 DatabaseException catch) |
+| AUTH-05 | Phase 2: Bluesky OAuth & Identity | Shipped 2026-04-24 (Plan 02-04: upsertBlueskyIdentity が毎ログイン時に handle/avatar/profile/last_synced_at 更新) |
+| AUTH-06 | Phase 2: Bluesky OAuth & Identity | Shipped 2026-04-24 (Plan 02-01 interface + Plan 02-04 BlueskyOAuthClient concrete impl) |
+| AUTH-07 | Phase 2: Bluesky OAuth & Identity | Shipped 2026-04-24 (Plan 02-02: TokenEncryptionService service; Plan 02-04: UserIdentitiesTable write-path 完成) |
+| AUTH-08 | Phase 2: Bluesky OAuth & Identity | Shipped 2026-04-23 (Plan 02-01 鍵 + Plan 02-03 /oauth/jwks.json + /oauth/client-metadata.json endpoints) |
+| AUTH-09 | Phase 2: Bluesky OAuth & Identity | Shipped 2026-04-24 (Plan 02-04: AuthController::logout POST-only + CSRF + session destroy) |
 | INBOX-01 | Phase 3: Inbox, Message & SSR Reveal | Pending |
 | INBOX-02 | Phase 3: Inbox, Message & SSR Reveal | Pending |
 | INBOX-03 | Phase 3: Inbox, Message & SSR Reveal | Pending |

@@ -2,14 +2,14 @@
 gsd_state_version: 1.0
 milestone: v0.2
 milestone_name: milestone
-status: Ready to execute
-last_updated: "2026-04-23T12:32:46.002Z"
+status: Phase 2 complete — ready for verify
+last_updated: "2026-04-24T06:45:30.697Z"
 progress:
   total_phases: 4
-  completed_phases: 1
+  completed_phases: 2
   total_plans: 8
-  completed_plans: 7
-  percent: 88
+  completed_plans: 8
+  percent: 50
 ---
 
 # tamabox — STATE
@@ -28,22 +28,22 @@ Project memory. Updated by every gsd-* command.
 
 ## Current Position
 
-Phase: 02 (bluesky-oauth-identity) — EXECUTING
-Plan: 3 of 4 complete (02-01 foundation ✓ 2026-04-23; 02-02 crypto ✓ 2026-04-23; 02-03 metadata+DID ✓ 2026-04-23)
+Phase: 02 (bluesky-oauth-identity) — COMPLETE (awaits verifier)
+Plan: 4 of 4 complete (02-01 foundation ✓ 2026-04-23; 02-02 crypto ✓ 2026-04-23; 02-03 metadata+DID ✓ 2026-04-23; 02-04 oauth-flow ✓ 2026-04-24)
 **Milestone**: v1 launch
-**Phase**: Phase 2 — Bluesky OAuth & Identity (execution in progress)
-**Plan**: 4 plans in 3 waves — 02-01 foundation ✓ / 02-02 crypto ✓ / 02-03 metadata+DID ✓ / 02-04 oauth-flow (next, Wave 3)
-**Next Plan**: `/gsd-execute-phase 2 --wave 3` to launch 02-04 oauth-flow (BlueskyOAuthClient wiring; consumes 02-02 crypto + 02-03 endpoints)
-**Status**: Phase 2 Wave 2 both legs complete (02-02 crypto + 02-03 metadata). Wave 3 (02-04) now unblocked — depends on 02-01 + 02-02 + 02-03, all satisfied.
-**Resume file**: `.planning/phases/02-bluesky-oauth-identity/02-04-oauth-flow-PLAN.md` (next, final Phase 2 plan)
+**Phase**: Phase 2 — Bluesky OAuth & Identity (all 4 plans shipped; awaits `/gsd-verify-phase 2`)
+**Plan**: 4 plans in 3 waves — all shipped. 02-01 foundation ✓ / 02-02 crypto ✓ / 02-03 metadata+DID ✓ / 02-04 oauth-flow ✓
+**Next Plan**: `/gsd-verify-phase 2` to validate Phase 2 success criteria + ROADMAP delta; then `/gsd-plan-phase 3` to start Inbox/Message/SSR planning
+**Status**: Phase 2 complete. All 8 requirements AUTH-01/02/04/05/06/07/08/09 closed. Full OAuth handshake wired end-to-end (PKCE + PAR + DPoP + private_key_jwt + nonce retry + DID→PDS → getProfile → UPSERT → setIdentity → /dashboard). 6 Phase-2 routes all live. composer test 85 tests green.
+**Resume file**: `.planning/phases/02-bluesky-oauth-identity/02-04-SUMMARY.md` (latest plan summary)
 
-**Progress**: Phase 2 at 3/4 plans — `[███████████████░░░░░] 75%` (Phase 2 internal)
-Overall: Phases 1/4 complete + Phase 2 three-quarters shipped — plans 7/8 done — `[██████████████████░░] 88%`
+**Progress**: Phase 2 at 4/4 plans — `[████████████████████] 100%` (Phase 2 internal)
+Overall: Phases 2/4 complete — plans 8/8 done (of originally planned; Phase 3+4 plans not yet generated) — `[██████████░░░░░░░░░░] 50%` (phase-completion)
 
 ## Phase Status
 
 - [x] **Phase 1: Foundation & Schema** — Complete (4/4 plans done: 01-01 ✓, 01-02a ✓, 01-02b ✓, 01-03 ✓); awaits verifier
-- [~] **Phase 2: Bluesky OAuth & Identity** — In progress (3/4 plans: 02-01 ✓, 02-02 ✓, 02-03 ✓; 02-04 pending)
+- [x] **Phase 2: Bluesky OAuth & Identity** — Complete (4/4 plans: 02-01 ✓, 02-02 ✓, 02-03 ✓, 02-04 ✓); awaits verifier
 - [ ] **Phase 3: Inbox, Message & SSR Reveal** — Not started
 - [ ] **Phase 4: Moderation & Production Launch** — Not started
 
@@ -51,11 +51,11 @@ Overall: Phases 1/4 complete + Phase 2 three-quarters shipped — plans 7/8 done
 
 | Metric | Value |
 |--------|-------|
-| Phases completed | 0/4 (Phase 1 pending verify; Phase 2 three-quarters shipped) |
-| Plans completed | 7/8 (Phase 1: 01-01, 01-02a, 01-02b, 01-03; Phase 2: 02-01, 02-02, 02-03) |
-| Nodes completed | 25 tasks across 7 plans (+4 Phase 2-01 + 2 Phase 2-02 + 2 Phase 2-03) |
-| Requirements shipped | 7/34 (INFRA-02, -03, -04, -05, -07; AUTH-07, AUTH-08) |
-| Requirements partial | AUTH-06 (interface shell 02-01; concrete impl pending 02-04) |
+| Phases completed | 0/4 certified (Phase 1 + Phase 2 pending verify) |
+| Plans completed | 8/8 (Phase 1: 01-01, 01-02a, 01-02b, 01-03; Phase 2: 02-01, 02-02, 02-03, 02-04) |
+| Nodes completed | 28 tasks across 8 plans (+3 Phase 2-04: BlueskyOAuthClient / DB upsert / controllers+templates+tests) |
+| Requirements shipped | 13/34 (INFRA-02, -03, -04, -05, -07; AUTH-01, AUTH-02, AUTH-04, AUTH-05, AUTH-06, AUTH-07, AUTH-08, AUTH-09) |
+| Requirements partial | なし (Phase 2 で AUTH-06 concrete impl 完成、全 AUTH シリーズ closed) |
 
 ### Plan Duration Log
 
@@ -68,6 +68,7 @@ Overall: Phases 1/4 complete + Phase 2 three-quarters shipped — plans 7/8 done
 | 02-01 foundation-setup | 1 | 4 | (not recorded) | 2026-04-23 |
 | 02-02 crypto-services | 2 | 2 | ~20m | 2026-04-23 |
 | 02-03 metadata-did | 2 | 2 | ~4m | 2026-04-23 |
+| 02-04 oauth-flow | 3 | 3 | ~17m 29s | 2026-04-24 |
 
 ## Accumulated Context
 
@@ -103,7 +104,11 @@ Overall: Phases 1/4 complete + Phase 2 three-quarters shipped — plans 7/8 done
 - **OAUTH_KID must match across jwks.json and client_assertion**: `KeyManager::getPublicJwk()` uses `env('OAUTH_KID')` for `kid`; `ClientJwtService::createAssertion()` uses the same env var for header `kid`. Must be set once in `config/.env` and never drift. Default `'ssr-box-key-1'` covers test/CI; production deploy MUST set explicitly to enable future rotation.
 - **Pre-existing `templates/Pages/home.php` $connection->connect() deprecation** (D-DEF-01 in `deferred-items.md`): emits harmless stack trace during `composer test`. Not caused by Phase 2 work; assigned to Phase 4 production-launch plan.
 - **Cake\Http\Client mock pattern for 4.5** (Plan 02-03 deviation #1): the public static `Client::addMockResponse($method, $url, $response, $options = [])` is the idiomatic HTTP test stub — it installs a process-global mock adapter that intercepts every Client instance. The lower-level `Cake\Http\Client\Adapter\Mock::addResponse(RequestInterface, Response, array)` exists but the signature is awkward; skip it. Always call `Client::clearMockResponses()` in both `setUp()` AND `tearDown()` to prevent cross-test bleed. Applies to Plan 02-04 BlueskyOAuthClient tests (PAR / token / profile endpoint stubs all use the same pattern).
-- **Callback stub invariant for forward-plan reservation** (Plan 02-03 Task 1): `OauthController::callback()` ships as a 501 stub with integration test `testCallbackStubReturns501` locking that contract. Plan 02-04's first task MUST replace both the method body AND this test — if the 501 test still passes after Plan 02-04, the implementation never happened. This is the general pattern for "reserve the class method slot now so the future plan is pure logic fill-in without class-level edits."
+- **Callback stub invariant for forward-plan reservation** (Plan 02-03 Task 1): `OauthController::callback()` ships as a 501 stub with integration test `testCallbackStubReturns501` locking that contract. Plan 02-04's first task MUST replace both the method body AND this test — if the 501 test still passes after Plan 02-04, the implementation never happened. This is the general pattern for "reserve the class method slot now so the future plan is pure logic fill-in without class-level edits." — **RESOLVED 2026-04-24 in Plan 02-04 Task 3**: callback 完全実装 + 501 test を 302 assert 版に差し替え、Plan 02-04 SUMMARY Self-Check で verified.
+- **AppController Authentication component wiring missed in Plan 02-01** (Plan 02-04 deviation Rule 2): Plan 02-01 wired `AuthenticationMiddleware` in `Application::middleware()` but **did not** load the `Authentication.Authentication` component in `AppController::initialize()`. Middleware alone populates `request.identity` attribute, but `$this->Authentication->getIdentity()` / `setIdentity()` / `logout()` / `allowUnauthenticated()` calls need the component. Plan 02-04 added this retroactively. Future plans (Phase 3+) can assume `$this->Authentication` is always available in any AppController subclass.
+- **CakePHP 4.5 `protected array $fixtures` typed-property collision** (Plan 02-04 Task 3 deviation Rule 1): `Cake\TestSuite\TestCase` declares `protected $fixtures = []` with no native type. Subclasses MUST NOT redeclare with `protected array $fixtures` — PHP emits `Fatal error: Type of $fixtures must not be defined`. Always use phpdoc `@var array<int, string>` + `protected $fixtures = [...]`. Future integration tests inherit this convention.
+- **`$request->getQuery()` return type `array|string|null` breaks phpstan level 8** (Plan 02-04 Task 3 deviation Rule 1): naive `(string)$this->request->getQuery('k')` is flagged. Introduced `queryString(string $key): string` + `sessionString(string $key): string` private helpers on OauthController that `is_string()`-guard the value. Phase 3+ controllers consuming query params should use the same pattern.
+- **Plan 02-04 replaced `templates/Pages/home.php`** — old CakePHP skeleton welcome page is gone; new version shows 'Bluesky でログイン' CTA. `PagesControllerTest::testDisplay` was updated accordingly. This likely **resolved D-DEF-01** (pre-existing `$connection->connect()` deprecation trace in composer test output); verifier should re-check `composer test 2>&1 | grep -i deprecated` and delete D-DEF-01 from `deferred-items.md` if the trace is gone.
 
 ### Open Todos
 
@@ -111,7 +116,9 @@ Overall: Phases 1/4 complete + Phase 2 three-quarters shipped — plans 7/8 done
 - [x] Phase 2 Wave 1 done 2026-04-23 — 02-01 foundation shipped (cakephp/authentication wired, config/bluesky.php, 6 Phase-2 routes, OAuthProviderInterface shell, config/keys/ ES256 P-256 keypair).
 - [x] Phase 2 Wave 2 crypto leg done 2026-04-23 — 02-02 crypto-services shipped (KeyManager / TokenEncryptionService / DpopService / ClientJwtService; 25 unit tests; signature-verification-via-openssl_verify invariant established; AUTH-07 closed, AUTH-08 partial).
 - [x] Phase 2 Wave 2 metadata leg done 2026-04-23 — 02-03 metadata+DID shipped (OauthController with clientMetadata/jwks/callback-stub actions + DidResolver for plc.directory DID → PDS lookup; 20 new tests; AUTH-08 closed; callback 501 stub held as hand-off contract for 02-04).
-- [ ] Phase 2 Wave 3 oauth-flow next — `/gsd-execute-phase 2 --wave 3` to launch 02-04 (BlueskyOAuthClient implementing OAuthProviderInterface; AuthController::startBluesky; OauthController::callback body fill-in; UsersController::dashboard protected landing). Consumes 02-01 foundation + 02-02 crypto services + 02-03 DidResolver + metadata endpoints.
+- [x] Phase 2 Wave 3 oauth-flow done 2026-04-24 — 02-04 shipped (BlueskyOAuthClient 5-method impl + TDD RED/GREEN, UsersTable::findByDid + UserIdentitiesTable::upsertBlueskyIdentity with AES-GCM encrypt & UPSERT-in-txn, AuthController::startBluesky + logout, OauthController::callback full implementation replacing 501 stub, UsersController::dashboard, 5 templates + tamabox.css 218 lines, 10 new integration tests + 13 unit tests = 23 new tests; 85 tests total green). AUTH-01/02/04/05/06/09 closed.
+- [ ] `/gsd-verify-phase 2` next — validate Phase 2 success criteria observable (signup / login / logout / UNIQUE guard / jwks+metadata / token encryption / OAuthProviderInterface abstraction) + ROADMAP delta. Verifier should also check for D-DEF-01 resolution and consider removing it from deferred-items.md.
+- [ ] Phase 3 planning (`/gsd-plan-phase 3`) — Inbox, Message & SSR Reveal — after verify passes.
 
 ### Blockers
 
@@ -127,9 +134,9 @@ None currently. Resolved blockers:
 
 ## Session Continuity
 
-**Last Agent Run**: execute-phase 2 wave 2 (metadata leg) @ 2026-04-23 — Plan 02-03 Metadata Endpoints + DID Resolver complete. 2 files in src/ (OauthController with clientMetadata/jwks/callback-stub actions; DidResolver for plc.directory DID→PDS lookup) + 2 PHPUnit test files (7 OauthController integration tests + 13 DidResolver unit tests via Client::addMockResponse global adapter). 3 atomic commits on main (d9f3972 Task 1, 22044c6 Task 2 RED, d728411 Task 2 GREEN). All verification green: phpcs 48/48 / phpstan level 8 [OK] / phpunit 62 tests (42 baseline + 20 new) 145 assertions, 6 pre-existing bake-stub incompletes unchanged, 0 failures. Zero new composer deps. Duration ~4m. 1 functional deviation (Rule 1 — Cake Http Client Mock adapter signature differs from plan; used the higher-level `Client::addMockResponse()` static helper instead) + 1 cosmetic (phpcs double-space in dataProvider comments fixed inline in GREEN commit).
-**Next Action**: `/gsd-execute-phase 2 --wave 3` to run Plan 02-04 oauth-flow (BlueskyOAuthClient implementing OAuthProviderInterface; AuthController::startBluesky PAR initiation; OauthController::callback body fill-in replacing the 501 stub; UsersController::dashboard authenticated landing). Consumes 02-01 routes/config + 02-02 crypto services + 02-03 DidResolver + metadata endpoints. This is the final Phase 2 plan.
-**Context Notes**: Plan 02-03 is the LAST plan before Phase 2 completes. AUTH-08 now closed (both /oauth/jwks.json and /oauth/client-metadata.json are live with byte-exact client_id matching, single EC P-256 key with kid=env(OAUTH_KID), no private scalar leak). Callback-stub invariant: `testCallbackStubReturns501` integration test will FAIL when Plan 02-04 replaces the body — this is the hand-off contract that guarantees Plan 02-04 actually implemented the flow rather than silently leaving the stub. DidResolver uses `Cake\Http\Client` with 10s timeout + validates `^did:plc:[a-z2-7]{24}$` before any HTTP — Plan 02-04 BlueskyOAuthClient::resolveProfile() DI's this as-is. HTTP test pattern: `Client::addMockResponse($method, $url, $response)` + `Client::clearMockResponses()` in setUp/tearDown. OAUTH_KID env coordination still critical between jwks endpoint (this plan) and ClientJwtService client_assertion (02-02; consumed by 02-04). phpstan bootstrapFiles directive from 02-02 continues covering all Phase 2 src/ files using CakePHP runtime constants — no new phpstan config needed for 02-04.
+**Last Agent Run**: execute-phase 2 wave 3 (oauth-flow) @ 2026-04-24 — Plan 02-04 BlueskyOAuthClient + UsersTable::findByDid + UserIdentitiesTable::upsertBlueskyIdentity + AuthController + UsersController + OauthController::callback impl + 5 templates + tamabox.css (218 lines) + 10 new integration tests + 13 unit tests. 4 atomic commits on main: c94c006 (Task 1 RED), da4028f (Task 1 GREEN), 3946ada (Task 2), 7fde47f (Task 3). Verification: phpcs 54/54 / phpstan level 8 [OK] / phpunit 85 tests 221 assertions, 6 pre-existing bake incompletes unchanged, 0 failures. Zero new composer deps. Duration ~17m 29s. 3 deviations: (Rule 2) AppController に Authentication component loadComponent 追加 (Plan 02-01 の漏れ)、(Rule 1) `protected array $fixtures` 型衝突 → phpdoc-only、(Rule 1) `$request->getQuery()` 型問題 → `queryString`/`sessionString` helpers。Callback 501 stub が 302 assert に flip されて Plan 02-03 の hand-off contract が正しく解除されたことを integration test で観測。
+**Next Action**: `/gsd-verify-phase 2` to validate Phase 2 success criteria observable (signup → /dashboard; re-login sync; /oauth/logout destroys session; UNIQUE uk_user_identities_provider_account guard; /oauth/jwks.json + /oauth/client-metadata.json live; tokens AES-GCM encrypted in `*_enc`; OAuthProviderInterface 抽象化). Then `/gsd-plan-phase 3` to start Inbox/Message/SSR Reveal planning.
+**Context Notes**: Phase 2 is COMPLETE. All 8 AUTH requirements (AUTH-01〜AUTH-09 minus 03) closed. Phase 2 Wave 3 used TDD for Task 1 only (BlueskyOAuthClient: RED commit c94c006 with 13 failing tests, then GREEN commit da4028f); Tasks 2+3 used plan-guided implementation (non-TDD). STATE.md decisions section now records the 3 newly-discovered patterns (Rule 2 AppController wiring, fixture type collision, query-cast helper pattern). D-DEF-01 (home.php `$connection->connect()` deprecation trace) **likely resolved** — home.php was fully replaced in Plan 02-04 Task 3 — verifier should re-check. Phase 3 hand-off: `BlueskyOAuthClient::refreshToken()` is implemented + unit-tested but unused; Phase 3 MSG-03 send flow should invoke it when `token_expires_at <= now()` (see 02-04 SUMMARY Handoff Notes for full lifecycle). `user_identities.last_synced_at` is updated on every login by upsertBlueskyIdentity, so Phase 3 can assume cached handle/avatar are "fresh enough" without additional TTL.
 
 ---
-*Last updated: 2026-04-23 (Plan 02-03 Wave 2 metadata leg complete; Phase 2 at 3/4 plans)*
+*Last updated: 2026-04-24 (Plan 02-04 Wave 3 oauth-flow complete; Phase 2 all 4 plans shipped, awaits verify)*
