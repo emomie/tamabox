@@ -37,12 +37,12 @@ class BlueskyOAuthClientTest extends TestCase
         putenv('OAUTH_KID=test-kid-1');
         $_ENV['OAUTH_KID'] = 'test-kid-1';
         Configure::write('Bluesky', [
-            'issuer'         => 'https://bsky.social',
-            'par_endpoint'   => 'https://bsky.social/oauth/par',
+            'issuer' => 'https://bsky.social',
+            'par_endpoint' => 'https://bsky.social/oauth/par',
             'token_endpoint' => 'https://bsky.social/oauth/token',
-            'auth_endpoint'  => 'https://bsky.social/oauth/authorize',
-            'client_id'      => 'https://tamabox.emomie.com/oauth/client-metadata.json',
-            'redirect_uri'   => 'https://tamabox.emomie.com/oauth/callback',
+            'auth_endpoint' => 'https://bsky.social/oauth/authorize',
+            'client_id' => 'https://tamabox.emomie.com/oauth/client-metadata.json',
+            'redirect_uri' => 'https://tamabox.emomie.com/oauth/callback',
             'client_metadata' => ['scope' => 'atproto transition:generic'],
         ]);
 
@@ -144,11 +144,11 @@ class BlueskyOAuthClientTest extends TestCase
             new Response(
                 ['HTTP/1.1 200 OK', 'Content-Type: application/json'],
                 (string)json_encode([
-                    'access_token'  => 'at_test_123',
+                    'access_token' => 'at_test_123',
                     'refresh_token' => 'rt_test_456',
-                    'token_type'    => 'DPoP',
-                    'expires_in'    => 3600,
-                    'sub'           => 'did:plc:abcdefghij234567klmnopqr',
+                    'token_type' => 'DPoP',
+                    'expires_in' => 3600,
+                    'sub' => 'did:plc:abcdefghij234567klmnopqr',
                 ])
             )
         );
@@ -170,9 +170,9 @@ class BlueskyOAuthClientTest extends TestCase
                 ['HTTP/1.1 200 OK', 'Content-Type: application/json'],
                 (string)json_encode([
                     'access_token' => 'x',
-                    'token_type'   => 'DPoP',
-                    'expires_in'   => 1,
-                    'sub'          => 'did:plc:x',
+                    'token_type' => 'DPoP',
+                    'expires_in' => 1,
+                    'sub' => 'did:plc:x',
                     // refresh_token missing
                 ])
             )
@@ -191,9 +191,9 @@ class BlueskyOAuthClientTest extends TestCase
             new Response(
                 ['HTTP/1.1 200 OK', 'Content-Type: application/json'],
                 (string)json_encode([
-                    'access_token'  => 'at_new',
+                    'access_token' => 'at_new',
                     'refresh_token' => 'rt_new',
-                    'expires_in'    => 3600,
+                    'expires_in' => 3600,
                 ])
             )
         );
@@ -227,8 +227,8 @@ class BlueskyOAuthClientTest extends TestCase
             new Response(
                 ['HTTP/1.1 200 OK', 'Content-Type: application/json'],
                 (string)json_encode([
-                    'handle'      => 'alice.bsky.social',
-                    'avatar'      => 'https://cdn/av.png',
+                    'handle' => 'alice.bsky.social',
+                    'avatar' => 'https://cdn/av.png',
                     'displayName' => 'Alice',
                 ])
             )
