@@ -2,8 +2,8 @@
 gsd_state_version: 1.0
 milestone: v0.2
 milestone_name: milestone
-status: Phase 2 VERIFIED (human-verification pending for live-AS) — ready for Phase 3 planning
-last_updated: "2026-04-24T06:55:59Z"
+status: Phase 3 CONTEXT captured + scope rewrite (slug = SNS handle auto-derive). Ready for /gsd-plan-phase 3 (UI hint yes — /gsd-ui-phase 3 recommended first).
+last_updated: "2026-04-26T00:00:00Z"
 progress:
   total_phases: 4
   completed_phases: 2
@@ -141,9 +141,9 @@ None currently. Resolved blockers:
 
 ## Session Continuity
 
-**Last Agent Run**: verify-phase 2 @ 2026-04-24 06:55Z — goal-backward verification complete. 7/7 observable truths verified at code level via Configure smoke + Reflection + Level 4 data-flow trace + 11 behavioral spot-checks. All 22 artifacts present/substantive/wired. All 10 key links WIRED. Anti-pattern scan clean. phpstan level 8 [OK] / phpcs 54/54 / composer test 85/221/0-failure. D-DEF-01 resolved (home.php no longer refs `$connection`). status=human_needed returned with 3 inherent-to-external-OAuth human items. VERIFICATION.md written at `.planning/phases/02-bluesky-oauth-identity/VERIFICATION.md`.
-**Next Action**: `/gsd-plan-phase 3` to plan Inbox, Message & SSR Reveal (AUTH-03 + INBOX-01/02/03/06 + MSG-01..07). Phase 3 Plan 1 候補: inbox creation + slug / display_name mutability (INBOX-01, INBOX-06) + SSR probability config (INBOX-02). Plan 2 候補: send form with consent UI + AUTH-03 gate (MSG-01, MSG-05) + is_ssr/ssr_seed compute at send-time (MSG-02, MSG-03, MSG-04). Plan 3 候補: receiver dashboard inbox list + open action + SSR reveal (INBOX-03, MSG-06, MSG-07).
-**Context Notes**: Phase 2 VERIFIED. All 8 AUTH requirements (AUTH-01〜AUTH-09 minus 03) closed at code level. 3 human verification items deferred to production deployment (Phase 4). D-DEF-01 deferred-items.md entry can be marked resolved (verifier confirmed). Phase 3 hand-off sticky notes: (1) `$this->Authentication` component is always available in any controller extending AppController, (2) `BlueskyOAuthClient::refreshToken` is implemented + unit-tested but needs a call site in send flow when `token_expires_at <= now()`, (3) `queryString/sessionString` helper pattern is the phpstan-safe way to read from `$this->request->getQuery()` / session, (4) `user_identities.last_synced_at` is updated every login so cached handle/avatar is "fresh enough" without a TTL check, (5) `TokenEncryptionService` decrypt → refresh → re-encrypt pattern needs a helper method in Phase 3 (candidate: `UserIdentitiesTable::refreshTokenIfExpired($identity)`).
+**Last Agent Run**: discuss-phase 3 @ 2026-04-26 — interactive Discord session, 6 gray areas / 40 decisions captured into 03-CONTEXT.md + 03-DISCUSSION-LOG.md. Scope rewrite committed in same commit (`3863f7e`): INBOX-01 / INBOX-06 / PROJECT.md「安定 slug」/ ROADMAP Phase 3 Success #1 を「SNS handle 由来 slug 自動付与・改名追従・tamabox 単独変更不可」に改定。
+**Next Action**: `/gsd-ui-phase 3` (UI hint yes、ui_safety_gate true で plan-phase が要求してくる前段) → `/gsd-plan-phase 3` で本番計画。Phase 3 plan 候補は 03-CONTEXT.md `<code_context>` の Integration Points セクション参照(7 routes、4 controllers、4 templates、1 migration、1 SVG asset、CSS 拡張)。
+**Context Notes**: Phase 2 VERIFIED の上に Phase 3 CONTEXT が乗った状態。Phase 2 sticky note 5 (`refreshTokenIfExpired()`) は Phase 3 D-30 で Phase 4 へ defer 確定(Phase 3 は cached snapshot のみで成立)。Phase 3 の追加 sticky notes: (1) slug 衝突は `-2`/`-3` suffix で吸収、planner は `inboxes.slug_previous` 1 列 or `inbox_slug_history` 薄テーブルどちらかを判断して 1 件 migration 追加、(2) `MessagesController::report()` と `BlocksController::create()` は Phase 3 で 501 stub controller として実装、Phase 4 で本体置換、(3) SSR 判定アルゴリズムは `hexdec(substr(ssr_seed, 0, 8)) / 0xFFFFFFFF < ssr_probability`(F2 監査性のため deterministic)、(4) 送り手は SSR 結果を永遠に知らない(D-19、通知系も Phase 3 範囲外)、(5) Phase 3 verify-phase は Phase 2 と同様 live-AS E2E は human-needed として Phase 4 デプロイ後に持ち越し。
 
 ---
-*Last updated: 2026-04-24 (Phase 2 VERIFIED 06:55Z; all 4 plans shipped + VERIFICATION.md written; status=human_needed for live-AS smoke test — inherent to external-OAuth-provider contract)*
+*Last updated: 2026-04-26 (Phase 3 CONTEXT captured + scope rewrite committed `3863f7e`; ready for /gsd-ui-phase 3 → /gsd-plan-phase 3)*
