@@ -22,12 +22,12 @@ PROJECT.md の Active 要件を REQ-ID 付きで正規化したもの。ROADMAP 
 
 ### 受信箱 (INBOX)
 
-- [ ] **INBOX-01** — 受け手はサインアップ時にカスタム slug(SNS handle と非連動)を選んで inbox URL (`/<slug>`) を作成できる
+- [ ] **INBOX-01** — 受け手のサインアップ時に SNS handle から導出した slug が自動付与され、受け手は inbox URL (`/<slug>`) を持つ。slug 衝突時は `-2` / `-3` の suffix が自動で付く(Phase 3 改定: 元は『カスタム slug を選んで』だったが、receiver と sender の SNS identity 共有を維持するため自動付与方式に変更)
 - [ ] **INBOX-02** — 受け手は自分の inbox の SSR 確率を 0〜100% で設定・変更できる(デフォルト 10%)
 - [ ] **INBOX-03** — 受け手は自分の inbox の受信メッセージ一覧をダッシュボードで閲覧できる
 - [ ] **INBOX-04** — 受け手は送信者(identity)単位でブロックできる
 - [ ] **INBOX-05** — ブロックされた送信者が同じ inbox に送信しようとするとフォーム上でエラー表示される(「このユーザーには送信できません」)
-- [ ] **INBOX-06** — 受け手は自分の slug / display_name を後から変更できる
+- [ ] **INBOX-06** — 受け手の SNS handle 改名時に inbox の slug と display_name が自動追従する。tamabox 単独で slug / display_name を変更する機能はない(Phase 3 改定: 元は『受け手は slug / display_name を後から変更できる』だったが、SNS identity 連動方針に変更)
 
 ### メッセージ / SSR メカニクス (MSG)
 

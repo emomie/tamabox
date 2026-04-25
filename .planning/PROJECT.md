@@ -30,7 +30,7 @@ _注: リポジトリは CakePHP 4.5 skeleton のみで domain code はゼロ。
 - [ ] マルチプロバイダ抽象化を最初から組み込む(後で X を追加できるように)
 
 **受信箱 (inbox)**
-- [ ] 受け手は自分の安定 slug(SNS handle と非連動)で inbox URL を持つ
+- [ ] 受け手は自分の SNS handle から自動導出された slug で inbox URL を持つ。SNS 改名時は slug が自動追従する(tamabox 単独で slug を変更する機能はない)
 - [ ] 受け手は自分の inbox の SSR 確率を 0〜100% でカスタマイズできる(デフォルト 10%)
 - [ ] 受け手は特定送信者をブロックできる / ブロックされた送信者は送信時にエラー表示
 
@@ -103,6 +103,7 @@ _注: リポジトリは CakePHP 4.5 skeleton のみで domain code はゼロ。
 |----------|-----------|---------|
 | Web only(ネイティブアプリ非対応) | LP + 送信フォーム + 受信ダッシュボードを単一 URL で完結、MVP 工数削減 | — Pending |
 | Bluesky OAuth 先行、X は Phase 2 | Bluesky API 無料・制約少ない、マルチプロバイダ抽象化は最初から組み込む | — Pending |
+| slug は SNS handle 由来で自動付与・改名追従、tamabox 単独で変更不可 | 受け手と送り手が共通の SNS identity 表示を持つコア体験の一貫性。送り手は SSR 抽選で自分の SNS が暴露されるスリルを楽しむ。slug を独立に持たせると identity の単一性が崩れる(Phase 3 discuss-phase 2026-04-26) | — Pending |
 | SNS OAuth 送信必須(完全匿名送信不可) | SSR 露出時に identity が紐づくことが V1 仮説の根幹 | — Pending |
 | SSR 判定は送信時確定、開封時は「開示」のみ | F2 仮説(乱数に不正なし)の監査性を担保 | — Pending |
 | メッセージ本文は暗号化しない(トークンのみ暗号化) | 共有サーバー前提、通報レビュー運営要件とのバランス | — Pending |

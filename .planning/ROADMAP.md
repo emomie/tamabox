@@ -60,7 +60,7 @@
 **Depends on**: Phase 2
 **Requirements**: AUTH-03, INBOX-01, INBOX-02, INBOX-03, INBOX-06, MSG-01, MSG-02, MSG-03, MSG-04, MSG-05, MSG-06, MSG-07
 **Success Criteria** (what must be TRUE):
-  1. 受け手はサインアップ時に任意の slug を選び `/<slug>` で inbox URL を持てる。後から slug / display_name を変更できる
+  1. 受け手はサインアップ時に SNS handle 由来の slug が自動付与され `/<slug>` で inbox URL を持つ。SNS handle 改名時は slug と display_name が自動追従する(tamabox 単独で変更する機能はない / 衝突時は `-2` `-3` の suffix を自動付与)
   2. 受け手は自分の inbox の SSR 確率を 0〜100% のスライダ/数値で設定・保存でき、デフォルト 10% が適用される
   3. 未認証の訪問者が送信フォームにアクセスすると、Bluesky OAuth 同意を経なければ送信ボタンが押せない(`AUTH-03`)
   4. 送信フォームは「確率で名前がバレる可能性がある」旨を明示し、同意チェック/同意ボタンなしで送信 submit できない
