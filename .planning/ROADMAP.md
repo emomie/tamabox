@@ -71,7 +71,7 @@
   - [x] 03-01-slug-foundation-PLAN.md — SlugDeriver + SsrJudge + slug_previous migration + InboxesTable findBySlug/assignSlugForUser + UserIdentitiesTable rename hook + fixtures (INBOX-01, INBOX-06, MSG-03 algorithm) [wave 1] ✓ 2026-04-26
   - [x] 03-02-send-flow-PLAN.md — MessagesController send GET/POST + MessagesTable sendMessage + AuthController/OauthController D-13 pending body restoration + send.php / send_done.php templates + 4 routes (AUTH-03, MSG-01..05) [wave 2]
   - [x] 03-03a-dashboard-reveal-PLAN.md — UsersController dashboard expansion + InboxesController settings + MessagesController open + dashboard.php (paginated <details> receive list + SSR reveal + settings element) (INBOX-02, INBOX-03, MSG-06, MSG-07) [wave 3]
-  - [ ] 03-03b-stubs-styles-asset-PLAN.md — BlocksController 501 stub + default-avatar.svg + tamabox.css Phase 3 extension (~200 lines) + flash/info element + home.php Phase 3 minor copy (D-35 hand-off contract + visual layer) [wave 3, parallel with 03-03a]
+  - [x] 03-03b-stubs-styles-asset-PLAN.md — BlocksController 501 stub + default-avatar.svg + tamabox.css Phase 3 extension (~421 lines appended) + flash/info element + home.php Phase 3 minor copy (D-35 hand-off contract + visual layer) [wave 3, parallel with 03-03a] ✓ 2026-04-26
 **UI hint**: yes
 
 ### Phase 4: Moderation & Production Launch
@@ -89,8 +89,8 @@
 **Plans**: 4 plans (3 waves)
   - [x] 03-01-slug-foundation-PLAN.md — SlugDeriver + SsrJudge + slug_previous migration + InboxesTable findBySlug/assignSlugForUser + UserIdentitiesTable rename hook + fixtures (INBOX-01, INBOX-06, MSG-03 algorithm) [wave 1]
   - [x] 03-02-send-flow-PLAN.md — MessagesController send GET/POST + MessagesTable sendMessage + AuthController/OauthController D-13 pending body restoration + send.php / send_done.php templates + 4 routes (AUTH-03, MSG-01..05) [wave 2]
-  - [ ] 03-03a-dashboard-reveal-PLAN.md — UsersController dashboard expansion + InboxesController settings + MessagesController open + dashboard.php (paginated <details> receive list + SSR reveal + settings element) (INBOX-02, INBOX-03, MSG-06, MSG-07) [wave 3]
-  - [ ] 03-03b-stubs-styles-asset-PLAN.md — BlocksController 501 stub + default-avatar.svg + tamabox.css Phase 3 extension (~200 lines) + flash/info element + home.php Phase 3 minor copy (D-35 hand-off contract + visual layer) [wave 3, parallel with 03-03a]
+  - [x] 03-03a-dashboard-reveal-PLAN.md — UsersController dashboard expansion + InboxesController settings + MessagesController open + dashboard.php (paginated <details> receive list + SSR reveal + settings element) (INBOX-02, INBOX-03, MSG-06, MSG-07) [wave 3] ✓ 2026-04-26
+  - [x] 03-03b-stubs-styles-asset-PLAN.md — BlocksController 501 stub + default-avatar.svg + tamabox.css Phase 3 extension (~421 lines appended) + flash/info element + home.php Phase 3 minor copy (D-35 hand-off contract + visual layer) [wave 3, parallel with 03-03a] ✓ 2026-04-26
 **UI hint**: yes
 
 ## Progress
@@ -99,7 +99,7 @@
 |-------|----------------|--------|-----------|
 | 1. Foundation & Schema | 4/4 | Complete (01-01 ✓, 01-02a ✓, 01-02b ✓, 01-03 ✓); awaits verifier | 2026-04-22 |
 | 2. Bluesky OAuth & Identity | 4/4 | Complete (02-01 ✓, 02-02 ✓, 02-03 ✓ 2026-04-23; 02-04 ✓ 2026-04-24); awaits verifier | 2026-04-24 |
-| 3. Inbox, Message & SSR Reveal | 3/4 | In Progress|  |
+| 3. Inbox, Message & SSR Reveal | 4/4 | Execution complete (03-01 ✓, 03-02 ✓, 03-03a ✓, 03-03b ✓ 2026-04-26); awaiting verification | 2026-04-26 |
 | 4. Moderation & Production Launch | 0/? | Not started | - |
 
 ## Coverage Summary
