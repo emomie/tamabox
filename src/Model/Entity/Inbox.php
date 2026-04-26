@@ -11,6 +11,7 @@ use Cake\ORM\Entity;
  * @property string $id
  * @property string $user_id
  * @property string $slug
+ * @property string|null $slug_previous
  * @property string $ssr_probability
  * @property bool $is_accepting
  * @property string|null $welcome_message
@@ -34,6 +35,7 @@ class Inbox extends Entity
     protected $_accessible = [
         'user_id' => true,
         'slug' => true,
+        'slug_previous' => true,
         'ssr_probability' => true,
         'is_accepting' => true,
         'welcome_message' => true,
