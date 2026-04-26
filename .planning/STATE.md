@@ -2,12 +2,12 @@
 gsd_state_version: 1.0
 milestone: v0.2
 milestone_name: milestone
-status: Phase 3 CONTEXT + UI-SPEC ready. /gsd-ui-phase 3 完了 (UI-SPEC verified 6/6 dimensions PASS、commit `fd10239`)。次は /gsd-plan-phase 3。
-last_updated: "2026-04-26T00:01:00Z"
+status: Phase 3 PLANNED — 4 plans / 3 waves ready for execution. plan-checker iter #2 PASS (BLOCKER + 5 WARN → 0 after revision)、commit `403cc95`。次は /gsd-execute-phase 3。
+last_updated: "2026-04-26T00:30:00Z"
 progress:
   total_phases: 4
   completed_phases: 2
-  total_plans: 8
+  total_plans: 12
   completed_plans: 8
   percent: 50
 ---
@@ -44,7 +44,7 @@ Overall: Phases 2/4 verified — plans 8/8 done (of originally planned; Phase 3+
 
 - [x] **Phase 1: Foundation & Schema** — Complete (4/4 plans done: 01-01 ✓, 01-02a ✓, 01-02b ✓, 01-03 ✓); awaits verifier
 - [x] **Phase 2: Bluesky OAuth & Identity** — **VERIFIED 2026-04-24** (4/4 plans: 02-01 ✓, 02-02 ✓, 02-03 ✓, 02-04 ✓; VERIFICATION.md status=human_needed for live-AS happy path only — code-level 7/7 PASS)
-- [ ] **Phase 3: Inbox, Message & SSR Reveal** — Not started
+- [ ] **Phase 3: Inbox, Message & SSR Reveal** — PLANNED (4/0 plans done; 03-01 / 03-02 / 03-03a / 03-03b ready for execute)
 - [ ] **Phase 4: Moderation & Production Launch** — Not started
 
 ## Performance Metrics
@@ -141,9 +141,9 @@ None currently. Resolved blockers:
 
 ## Session Continuity
 
-**Last Agent Run**: ui-phase 3 @ 2026-04-26 — gsd-ui-researcher が 03-UI-SPEC.md を 525 行で生成(95% を 03-CONTEXT.md からプリ充填、追加質問 0 件)、gsd-ui-checker が 6 dimensions(Copywriting / Visuals / Color / Typography / Spacing / Registry Safety)を全て PASS で承認、FLAG なし。commit `fd10239`。13 component contracts、13 fixed copy strings、4 typography sizes / 2 weights、Phase 2 8-point spacing scale 継続、`<details>` 段階開示で JS なし動作可能。
-**Next Action**: `/gsd-plan-phase 3` で本番計画。03-CONTEXT.md(40 D-XX)+ 03-UI-SPEC.md(13 components)が planner 入力。Phase 3 plan 候補は 03-CONTEXT.md `<code_context>` の Integration Points セクション参照(7 routes、4 controllers、4 templates、1 migration、1 SVG asset、CSS 拡張)。
+**Last Agent Run**: plan-phase 3 @ 2026-04-26 — gsd-pattern-mapper(03-PATTERNS.md、25 files / 24 analog)→ gsd-planner(opus、4 plans / 3 waves)→ gsd-plan-checker iter #1(1 BLOCKER + 5 WARN + 2 INFO)→ planner 修正(allowUnauthenticated for 501 stubs / PageOutOfBoundsException catch type / +XSS test / +self-send POST test / listener を Application::bootstrap へ移動)→ checker iter #2(1 残 BLOCKER は pre-existing YAML indent bug、03-03a line 82 を直接 re-indent で修正)→ python YAML parse 確認 (4 key_links + 6 artifacts、structured dict 維持)。Coverage 12/12 REQ + 40/40 D-XX。commit `403cc95`。
+**Next Action**: `/gsd-execute-phase 3` で実装着手。Phase 3 wave plan: Wave 1 = 03-01(slug + ssr foundation)、Wave 2 = 03-02(send flow、深度 03-01)、Wave 3 = 03-03a(dashboard、深度 03-01+02)∥ 03-03b(stubs/styles/asset、深度 03-02、parallel-safe)。execute 開始前に /clear 推奨(context 圧迫回避)。
 **Context Notes**: Phase 2 VERIFIED の上に Phase 3 CONTEXT が乗った状態。Phase 2 sticky note 5 (`refreshTokenIfExpired()`) は Phase 3 D-30 で Phase 4 へ defer 確定(Phase 3 は cached snapshot のみで成立)。Phase 3 の追加 sticky notes: (1) slug 衝突は `-2`/`-3` suffix で吸収、planner は `inboxes.slug_previous` 1 列 or `inbox_slug_history` 薄テーブルどちらかを判断して 1 件 migration 追加、(2) `MessagesController::report()` と `BlocksController::create()` は Phase 3 で 501 stub controller として実装、Phase 4 で本体置換、(3) SSR 判定アルゴリズムは `hexdec(substr(ssr_seed, 0, 8)) / 0xFFFFFFFF < ssr_probability`(F2 監査性のため deterministic)、(4) 送り手は SSR 結果を永遠に知らない(D-19、通知系も Phase 3 範囲外)、(5) Phase 3 verify-phase は Phase 2 と同様 live-AS E2E は human-needed として Phase 4 デプロイ後に持ち越し。
 
 ---
-*Last updated: 2026-04-26 (Phase 3 UI-SPEC committed `fd10239` 6/6 dimensions PASS; ready for /gsd-plan-phase 3)*
+*Last updated: 2026-04-26 (Phase 3 PLANNED — 4 plans / 3 waves committed `403cc95`、checker iter #2 PASS、12/12 REQ + 40/40 D-XX coverage; ready for /gsd-execute-phase 3 — recommend /clear first)*
