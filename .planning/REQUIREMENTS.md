@@ -23,8 +23,8 @@ PROJECT.md の Active 要件を REQ-ID 付きで正規化したもの。ROADMAP 
 ### 受信箱 (INBOX)
 
 - [ ] **INBOX-01** — 受け手のサインアップ時に SNS handle から導出した slug が自動付与され、受け手は inbox URL (`/<slug>`) を持つ。slug 衝突時は `-2` / `-3` の suffix が自動で付く(Phase 3 改定: 元は『カスタム slug を選んで』だったが、receiver と sender の SNS identity 共有を維持するため自動付与方式に変更)
-- [ ] **INBOX-02** — 受け手は自分の inbox の SSR 確率を 0〜100% で設定・変更できる(デフォルト 10%)
-- [ ] **INBOX-03** — 受け手は自分の inbox の受信メッセージ一覧をダッシュボードで閲覧できる
+- [x] **INBOX-02** — 受け手は自分の inbox の SSR 確率を 0〜100% で設定・変更できる(デフォルト 10%)
+- [x] **INBOX-03** — 受け手は自分の inbox の受信メッセージ一覧をダッシュボードで閲覧できる
 - [ ] **INBOX-04** — 受け手は送信者(identity)単位でブロックできる
 - [ ] **INBOX-05** — ブロックされた送信者が同じ inbox に送信しようとするとフォーム上でエラー表示される(「このユーザーには送信できません」)
 - [ ] **INBOX-06** — 受け手の SNS handle 改名時に inbox の slug と display_name が自動追従する。tamabox 単独で slug / display_name を変更する機能はない(Phase 3 改定: 元は『受け手は slug / display_name を後から変更できる』だったが、SNS identity 連動方針に変更)
@@ -36,8 +36,8 @@ PROJECT.md の Active 要件を REQ-ID 付きで正規化したもの。ROADMAP 
 - [x] **MSG-03** — `ssr_seed = sha256(server_secret + message_id + created_at)` を格納し、監査可能性(F2 仮説)を担保する
 - [x] **MSG-04** — 送信者の handle / avatar / profile_url を送信時点の値でメッセージ行にスナップショット保存する
 - [x] **MSG-05** — 送信フォームに「確率で名前がバレる可能性がある」旨の同意 UI を明示し、同意なしでは送信できない(E1 仮説 / 法的合意)
-- [ ] **MSG-06** — 受け手が未開封メッセージを「開封」する操作で `opened_at` が記録され、SSR 露出情報がフロントに開示される
-- [ ] **MSG-07** — 開封前・開封済みは一覧上で視覚的に区別される(ガチャ演出の土台)
+- [x] **MSG-06** — 受け手が未開封メッセージを「開封」する操作で `opened_at` が記録され、SSR 露出情報がフロントに開示される
+- [x] **MSG-07** — 開封前・開封済みは一覧上で視覚的に区別される(ガチャ演出の土台)
 - [ ] **MSG-08** — 受け手はメッセージを論理削除(`deleted_at` セット)できる
 
 ### 通報 / モデレーション (MOD)
@@ -93,8 +93,8 @@ PROJECT.md の Active 要件を REQ-ID 付きで正規化したもの。ROADMAP 
 | AUTH-08 | Phase 2: Bluesky OAuth & Identity | Shipped 2026-04-23 (Plan 02-01 鍵 + Plan 02-03 /oauth/jwks.json + /oauth/client-metadata.json endpoints) |
 | AUTH-09 | Phase 2: Bluesky OAuth & Identity | Shipped 2026-04-24 (Plan 02-04: AuthController::logout POST-only + CSRF + session destroy) |
 | INBOX-01 | Phase 3: Inbox, Message & SSR Reveal | Pending |
-| INBOX-02 | Phase 3: Inbox, Message & SSR Reveal | Pending |
-| INBOX-03 | Phase 3: Inbox, Message & SSR Reveal | Pending |
+| INBOX-02 | Phase 3: Inbox, Message & SSR Reveal | Complete |
+| INBOX-03 | Phase 3: Inbox, Message & SSR Reveal | Complete |
 | INBOX-04 | Phase 4: Moderation & Production Launch | Pending |
 | INBOX-05 | Phase 4: Moderation & Production Launch | Pending |
 | INBOX-06 | Phase 3: Inbox, Message & SSR Reveal | Pending |
@@ -103,8 +103,8 @@ PROJECT.md の Active 要件を REQ-ID 付きで正規化したもの。ROADMAP 
 | MSG-03 | Phase 3: Inbox, Message & SSR Reveal | Complete |
 | MSG-04 | Phase 3: Inbox, Message & SSR Reveal | Complete |
 | MSG-05 | Phase 3: Inbox, Message & SSR Reveal | Complete |
-| MSG-06 | Phase 3: Inbox, Message & SSR Reveal | Pending |
-| MSG-07 | Phase 3: Inbox, Message & SSR Reveal | Pending |
+| MSG-06 | Phase 3: Inbox, Message & SSR Reveal | Complete |
+| MSG-07 | Phase 3: Inbox, Message & SSR Reveal | Complete |
 | MSG-08 | Phase 4: Moderation & Production Launch | Pending |
 | MOD-01 | Phase 4: Moderation & Production Launch | Pending |
 | MOD-02 | Phase 4: Moderation & Production Launch | Pending |

@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v0.2
 milestone_name: milestone
 status: Phase complete — ready for verification
-last_updated: "2026-04-26T10:04:24.592Z"
+last_updated: "2026-04-26T10:22:21.549Z"
 progress:
   total_phases: 4
   completed_phases: 2
   total_plans: 12
-  completed_plans: 10
-  percent: 83
+  completed_plans: 11
+  percent: 92
 ---
 
 # tamabox — STATE
@@ -57,6 +57,7 @@ Overall: Phases 2/4 verified — plans 8/8 done (of originally planned; Phase 3+
 | Requirements shipped | 13/34 (INFRA-02, -03, -04, -05, -07; AUTH-01, AUTH-02, AUTH-04, AUTH-05, AUTH-06, AUTH-07, AUTH-08, AUTH-09) |
 | Requirements partial | なし (Phase 2 で AUTH-06 concrete impl 完成、全 AUTH シリーズ closed) |
 | Phase 03-inbox-message-ssr-reveal P02 | 90min | 4 tasks | 12 files |
+| Phase 03-inbox-message-ssr-reveal P03a | 30m | - tasks | - files |
 
 ### Plan Duration Log
 
@@ -112,6 +113,13 @@ Overall: Phases 2/4 verified — plans 8/8 done (of originally planned; Phase 3+
 - **`$request->getQuery()` return type `array|string|null` breaks phpstan level 8** (Plan 02-04 Task 3 deviation Rule 1): naive `(string)$this->request->getQuery('k')` is flagged. Introduced `queryString(string $key): string` + `sessionString(string $key): string` private helpers on OauthController that `is_string()`-guard the value. Phase 3+ controllers consuming query params should use the same pattern.
 - **Plan 02-04 replaced `templates/Pages/home.php`** — old CakePHP skeleton welcome page is gone; new version shows 'Bluesky でログイン' CTA. `PagesControllerTest::testDisplay` was updated accordingly. **D-DEF-01 verified resolved 2026-04-24.**
 
+### Executor-discovered decisions (Phase 3 — Plan 03-03a)
+
+- **Controller::paginate() re-throws PageOutOfBoundsException as NotFoundException** (Plan 03-03a deviation Rule 1): `Cake\Controller\Controller::paginate()` internally catches `Cake\Datasource\Paging\Exception\PageOutOfBoundsException` and re-throws it as `Cake\Http\Exception\NotFoundException`. Controllers must catch `NotFoundException` for out-of-range page handling — catching `PageOutOfBoundsException` directly never fires.
+- **IntegrationTestTrait._session persists between requests in same test** (Plan 03-03a deviation Rule 1): `$this->session()` accumulates in `$this->_session` and is re-written to the session before every request. Custom session data set via `session()` (e.g., `Flash.slug_collision_suffix`) must be manually cleared via `$this->session(['Flash' => []])` before subsequent GET requests that should NOT see that data — controller-side `session->delete()` does not affect `_session`.
+- **`public array $paginate` causes PHP Fatal error in Controller subclass** (Plan 03-03a deviation Rule 1): Parent `Cake\Controller\Controller::$paginate` is untyped (`public $paginate = []`). Redeclaring with `public array $paginate` causes PHP fatal "Type of X::$paginate must not be defined". Always use untyped declaration with `@var array<string, mixed>` phpdoc.
+- **body_length CHECK constraint must be kept in sync when patching message body in tests** (Plan 03-03a deviation Rule 1): DB has `CHECK (body_length = LENGTH(body))`. When patching `body` in tests, always also patch `body_length` with `mb_strlen($newBody)`.
+
 ### Executor-discovered decisions (Phase 3 — Plan 03-02)
 
 - **Authentication.Session identify=false is required for OAuth-only apps** (Plan 03-02 deviation Rule 1): CakePHP `Authentication.Password` identifier's `_checkPassword` calls `password_verify($input, $storedHash)` where storedHash resolves to `$user[null]` (no password column), causing silent auth failure. Setting `identify => false` on the Session authenticator tells it to trust session data as-is. Safe because `setIdentity()` in OauthController already ORM-validates the user before writing to session. Future plans: never use `identify => true` with a passwordless user model.
@@ -151,8 +159,8 @@ None currently. Resolved blockers:
 
 ## Session Continuity
 
-**Last Agent Run**: execute-phase 3 plan 03-02 @ 2026-04-26 — MessagesController (send/open-stub/report-stub) + send.php + send_done.php + MessagesTable::sendMessage (SSR seed bake + sender snapshot) + D-13 pending body restoration + SlugCollisionSuffixApplied listener in bootstrap(). 133 tests / 365 assertions / 0 failures. phpstan level 8 [OK] / phpcs clean. 4 commits (d4b4732 / e459980 / fa05888 / 7cf1d89).
-**Next Action**: 03-03a (dashboard — Wave 3) を `/gsd-execute-phase 3` で実行。03-02 依存: MessagesController::send / sendMessage / send.php / send_done.php / D-13 flow すべて利用可能。open() stub (d4b4732) を 03-03a で差し替え。
+**Last Agent Run**: execute-phase 3 plan 03-03a @ 2026-04-26 — MessagesTable::markOpened + MessagesController::open (501→real impl) + InboxesController::settings + UsersController::dashboard (paginated 20/page + collision flash + SSR reveal) + dashboard.php + inbox_settings_form.php + 27 new tests. 160 tests / 433 assertions / 0 failures. phpstan level 8 [OK] / phpcs clean. 3 commits (bd56563 / 4cd4fc0 / cabf293).
+**Next Action**: 03-03b (UI polish — Wave 3 parallel) を `/gsd-execute-phase 3` で実行。03-03a 依存: dashboard全機能 + markOpened + settings すべて利用可能。
 **Context Notes**: Phase 2 VERIFIED の上に Phase 3 CONTEXT が乗った状態。Phase 2 sticky note 5 (`refreshTokenIfExpired()`) は Phase 3 D-30 で Phase 4 へ defer 確定(Phase 3 は cached snapshot のみで成立)。Phase 3 の追加 sticky notes: (1) slug 衝突は `-2`/`-3` suffix で吸収、planner は `inboxes.slug_previous` 1 列 or `inbox_slug_history` 薄テーブルどちらかを判断して 1 件 migration 追加、(2) `MessagesController::report()` と `BlocksController::create()` は Phase 3 で 501 stub controller として実装、Phase 4 で本体置換、(3) SSR 判定アルゴリズムは `hexdec(substr(ssr_seed, 0, 8)) / 0xFFFFFFFF < ssr_probability`(F2 監査性のため deterministic)、(4) 送り手は SSR 結果を永遠に知らない(D-19、通知系も Phase 3 範囲外)、(5) Phase 3 verify-phase は Phase 2 と同様 live-AS E2E は human-needed として Phase 4 デプロイ後に持ち越し。
 
 ---
