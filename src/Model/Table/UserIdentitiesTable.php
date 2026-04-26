@@ -4,11 +4,14 @@ declare(strict_types=1);
 namespace App\Model\Table;
 
 use App\Model\Entity\User;
+use App\Service\Inbox\SlugDeriver;
 use App\Service\OAuth\TokenEncryptionService;
 use Cake\Database\Exception\DatabaseException;
+use Cake\Event\Event;
 use Cake\I18n\FrozenTime;
 use Cake\ORM\Exception\PersistenceFailedException;
 use Cake\ORM\Table;
+use Cake\ORM\TableRegistry;
 use Cake\Utility\Text;
 use Cake\Validation\Validator;
 use RuntimeException;
@@ -219,6 +222,26 @@ class UserIdentitiesTable extends Table
                             ->where(['Users.id' => $patched->user_id])
                             ->firstOrFail();
 
+                        // Phase 3 D-03: re-derive slug on handle change.
+                        $slugDeriver = new SlugDeriver();
+                        $derivedBase = $slugDeriver->deriveFromHandle($handle, $did);
+                        /** @var \App\Model\Table\InboxesTable $inboxesTable */
+                        $inboxesTable = TableRegistry::getTableLocator()->get('Inboxes');
+                        $slugResult = $inboxesTable->assignSlugForUser(
+                            (string)$user->id,
+                            $derivedBase,
+                            $did
+                        );
+                        if ($slugResult['suffix_applied']) {
+                            $this->getEventManager()->dispatch(
+                                new Event('SlugCollisionSuffixApplied', $this, [
+                                    'user_id' => (string)$user->id,
+                                    'slug' => $slugResult['slug'],
+                                    'base' => $derivedBase,
+                                ])
+                            );
+                        }
+
                         return $user;
                     }
 
@@ -262,6 +285,26 @@ class UserIdentitiesTable extends Table
                         'is_primary' => true,
                     ]]);
                     $this->saveOrFail($newIdentity);
+
+                    // Phase 3 D-03: assign slug for newly created user.
+                    $slugDeriver = new SlugDeriver();
+                    $derivedBase = $slugDeriver->deriveFromHandle($handle, $did);
+                    /** @var \App\Model\Table\InboxesTable $inboxesTable */
+                    $inboxesTable = TableRegistry::getTableLocator()->get('Inboxes');
+                    $slugResult = $inboxesTable->assignSlugForUser(
+                        (string)$newUser->id,
+                        $derivedBase,
+                        $did
+                    );
+                    if ($slugResult['suffix_applied']) {
+                        $this->getEventManager()->dispatch(
+                            new Event('SlugCollisionSuffixApplied', $this, [
+                                'user_id' => (string)$newUser->id,
+                                'slug' => $slugResult['slug'],
+                                'base' => $derivedBase,
+                            ])
+                        );
+                    }
 
                     return $newUser;
                 }

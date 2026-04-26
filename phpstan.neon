@@ -9,3 +9,10 @@ parameters:
         - src/
     excludePaths:
         - src/Console/Installer.php
+    ignoreErrors:
+        # saveOrFail() throws PersistenceFailedException at runtime but PHPStan cannot
+        # infer this from the @method docblock return type. Suppress dead-catch false positives.
+        - identifier: deadCode.unreachable
+          path: src/Model/Table/InboxesTable.php
+        - identifier: catch.neverThrown
+          path: src/Model/Table/InboxesTable.php

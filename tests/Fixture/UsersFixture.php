@@ -32,6 +32,13 @@ class UsersFixture extends TestFixture
                 'updated_at' => '2026-04-22 12:00:00',
                 'deleted_at' => null,
             ],
+            [
+                'id' => '33333333-3333-3333-3333-333333333333',
+                'display_name' => 'Charlie Example',
+                'created_at' => '2026-04-22 12:00:00',
+                'updated_at' => '2026-04-22 12:00:00',
+                'deleted_at' => null,
+            ],
         ];
         parent::init();
     }
