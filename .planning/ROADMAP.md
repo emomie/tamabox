@@ -68,7 +68,7 @@
   6. 受け手のダッシュボードで自分の inbox の受信一覧が見え、未開封/開封済みが視覚的に区別される
   7. 未開封メッセージを「開封」操作すると `opened_at` が記録され、`is_ssr=true` のときだけ送信者 identity(handle / avatar / profile_url)が露出表示される
 **Plans**: 4 plans (3 waves)
-  - [ ] 03-01-slug-foundation-PLAN.md — SlugDeriver + SsrJudge + slug_previous migration + InboxesTable findBySlug/assignSlugForUser + UserIdentitiesTable rename hook + fixtures (INBOX-01, INBOX-06, MSG-03 algorithm) [wave 1]
+  - [x] 03-01-slug-foundation-PLAN.md — SlugDeriver + SsrJudge + slug_previous migration + InboxesTable findBySlug/assignSlugForUser + UserIdentitiesTable rename hook + fixtures (INBOX-01, INBOX-06, MSG-03 algorithm) [wave 1] ✓ 2026-04-26
   - [ ] 03-02-send-flow-PLAN.md — MessagesController send GET/POST + MessagesTable sendMessage + AuthController/OauthController D-13 pending body restoration + send.php / send_done.php templates + 4 routes (AUTH-03, MSG-01..05) [wave 2]
   - [ ] 03-03a-dashboard-reveal-PLAN.md — UsersController dashboard expansion + InboxesController settings + MessagesController open + dashboard.php (paginated <details> receive list + SSR reveal + settings element) (INBOX-02, INBOX-03, MSG-06, MSG-07) [wave 3]
   - [ ] 03-03b-stubs-styles-asset-PLAN.md — BlocksController 501 stub + default-avatar.svg + tamabox.css Phase 3 extension (~200 lines) + flash/info element + home.php Phase 3 minor copy (D-35 hand-off contract + visual layer) [wave 3, parallel with 03-03a]

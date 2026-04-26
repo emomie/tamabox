@@ -33,7 +33,7 @@ Plan: 4 of 4 complete (02-01 foundation ✓ 2026-04-23; 02-02 crypto ✓ 2026-04
 **Milestone**: v1 launch
 **Phase**: Phase 2 — Bluesky OAuth & Identity (**VERIFICATION PASSED at code level**; human gate for live-AS smoke test deferred to tamabox.emomie.com deployment in Phase 4)
 **Plan**: 4 plans in 3 waves — all shipped and verified. 02-01 foundation ✓ / 02-02 crypto ✓ / 02-03 metadata+DID ✓ / 02-04 oauth-flow ✓ / VERIFICATION.md ✓
-**Next Plan**: `/gsd-plan-phase 3` to start Inbox / Message / SSR Reveal planning (Phase 3 scope: AUTH-03 + INBOX-01/02/03/06 + MSG-01..07)
+**Next Plan**: 03-02 (send flow) — Wave 2 start
 **Status**: Phase 2 verification complete. All 8 requirements AUTH-01/02/04/05/06/07/08/09 satisfied at code level (Reflection + Configure smoke + ORM data-flow trace + QA gates all green). Full OAuth handshake wired end-to-end (PKCE + PAR + DPoP + private_key_jwt + nonce retry + DID→PDS → getProfile → UPSERT → setIdentity → /dashboard). 6 Phase-2 routes all live. D-DEF-01 resolved as a side effect of Plan 02-04's home.php rewrite. Zero anti-patterns in Phase 2 artifacts. composer test 85 tests / 221 assertions / 0 failures. phpstan level 8 [OK] / phpcs 54/54.
 **Resume file**: `.planning/phases/02-bluesky-oauth-identity/VERIFICATION.md` (verification report, 2026-04-24)
 
@@ -44,7 +44,7 @@ Overall: Phases 2/4 verified — plans 8/8 done (of originally planned; Phase 3+
 
 - [x] **Phase 1: Foundation & Schema** — Complete (4/4 plans done: 01-01 ✓, 01-02a ✓, 01-02b ✓, 01-03 ✓); awaits verifier
 - [x] **Phase 2: Bluesky OAuth & Identity** — **VERIFIED 2026-04-24** (4/4 plans: 02-01 ✓, 02-02 ✓, 02-03 ✓, 02-04 ✓; VERIFICATION.md status=human_needed for live-AS happy path only — code-level 7/7 PASS)
-- [ ] **Phase 3: Inbox, Message & SSR Reveal** — PLANNED (4/0 plans done; 03-01 / 03-02 / 03-03a / 03-03b ready for execute)
+- [ ] **Phase 3: Inbox, Message & SSR Reveal** — IN PROGRESS (4/1 plans done; 03-01 slug-foundation ✓ 2026-04-26)
 - [ ] **Phase 4: Moderation & Production Launch** — Not started
 
 ## Performance Metrics
@@ -141,8 +141,8 @@ None currently. Resolved blockers:
 
 ## Session Continuity
 
-**Last Agent Run**: plan-phase 3 @ 2026-04-26 — gsd-pattern-mapper(03-PATTERNS.md、25 files / 24 analog)→ gsd-planner(opus、4 plans / 3 waves)→ gsd-plan-checker iter #1(1 BLOCKER + 5 WARN + 2 INFO)→ planner 修正(allowUnauthenticated for 501 stubs / PageOutOfBoundsException catch type / +XSS test / +self-send POST test / listener を Application::bootstrap へ移動)→ checker iter #2(1 残 BLOCKER は pre-existing YAML indent bug、03-03a line 82 を直接 re-indent で修正)→ python YAML parse 確認 (4 key_links + 6 artifacts、structured dict 維持)。Coverage 12/12 REQ + 40/40 D-XX。commit `403cc95`。
-**Next Action**: `/gsd-execute-phase 3` で実装着手。Phase 3 wave plan: Wave 1 = 03-01(slug + ssr foundation)、Wave 2 = 03-02(send flow、深度 03-01)、Wave 3 = 03-03a(dashboard、深度 03-01+02)∥ 03-03b(stubs/styles/asset、深度 03-02、parallel-safe)。execute 開始前に /clear 推奨(context 圧迫回避)。
+**Last Agent Run**: execute-phase 3 plan 03-01 @ 2026-04-26 — SlugDeriver(10 tests) + SsrJudge(9 tests) + migration AddSlugPreviousToInboxes + InboxesTable拡張(findBySlugOrPrevious/assignSlugForUser) + UserIdentitiesTable slug hook + fixtures 3 inboxes/3 messages + InboxesTableTest(8 tests). 111 tests / 301 assertions / 0 failures. phpstan level 8 [OK] / phpcs clean. 4 commits (b888382 / 3bb0598 / 24b2153 / f6e8af6).
+**Next Action**: 03-02 (send flow — Wave 2) を `/gsd-execute-phase 3` で実行。03-01 依存: SlugDeriver / SsrJudge / InboxesTable::findBySlugOrPrevious / assignSlugForUser がすべて利用可能。
 **Context Notes**: Phase 2 VERIFIED の上に Phase 3 CONTEXT が乗った状態。Phase 2 sticky note 5 (`refreshTokenIfExpired()`) は Phase 3 D-30 で Phase 4 へ defer 確定(Phase 3 は cached snapshot のみで成立)。Phase 3 の追加 sticky notes: (1) slug 衝突は `-2`/`-3` suffix で吸収、planner は `inboxes.slug_previous` 1 列 or `inbox_slug_history` 薄テーブルどちらかを判断して 1 件 migration 追加、(2) `MessagesController::report()` と `BlocksController::create()` は Phase 3 で 501 stub controller として実装、Phase 4 で本体置換、(3) SSR 判定アルゴリズムは `hexdec(substr(ssr_seed, 0, 8)) / 0xFFFFFFFF < ssr_probability`(F2 監査性のため deterministic)、(4) 送り手は SSR 結果を永遠に知らない(D-19、通知系も Phase 3 範囲外)、(5) Phase 3 verify-phase は Phase 2 と同様 live-AS E2E は human-needed として Phase 4 デプロイ後に持ち越し。
 
 ---
