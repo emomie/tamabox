@@ -3,8 +3,13 @@ declare(strict_types=1);
 
 namespace App\Model\Table;
 
+use App\Service\Message\SsrJudge;
+use Cake\I18n\FrozenTime;
 use Cake\ORM\Table;
+use Cake\ORM\TableRegistry;
+use Cake\Utility\Text;
 use Cake\Validation\Validator;
+use RuntimeException;
 
 /**
  * Messages Model
@@ -75,20 +80,28 @@ class MessagesTable extends Table
     public function validationDefault(Validator $validator): Validator
     {
         $validator
-            ->uuid('inbox_id')
+            ->scalar('inbox_id')
             ->notEmptyString('inbox_id');
 
         $validator
-            ->uuid('sender_user_id')
+            ->scalar('sender_user_id')
             ->notEmptyString('sender_user_id');
 
         $validator
             ->scalar('body')
             ->requirePresence('body', 'create')
-            ->notEmptyString('body');
+            ->notEmptyString('body', '本文を入力してください。')
+            ->add('body', 'mbLength', [
+                'rule' => function ($value): bool {
+                    return is_string($value) && mb_strlen($value) <= 2000;
+                },
+                'message' => '本文は 2000 文字以内で入力してください。',
+            ]);
 
         $validator
             ->integer('body_length')
+            ->greaterThanOrEqual('body_length', 1)
+            ->lessThanOrEqual('body_length', 2000)
             ->requirePresence('body_length', 'create')
             ->notEmptyString('body_length');
 
@@ -106,7 +119,11 @@ class MessagesTable extends Table
             ->scalar('ssr_seed')
             ->maxLength('ssr_seed', 64)
             ->requirePresence('ssr_seed', 'create')
-            ->notEmptyString('ssr_seed');
+            ->notEmptyString('ssr_seed')
+            ->add('ssr_seed', 'hex64', [
+                'rule' => ['custom', '/^[0-9a-f]{64}$/'],
+                'message' => 'ssr_seed must be a 64-char lowercase hex string.',
+            ]);
 
         $validator
             ->scalar('sender_provider')
@@ -147,5 +164,106 @@ class MessagesTable extends Table
             ->notEmptyDateTime('created_at');
 
         return $validator;
+    }
+
+    /**
+     * Insert a message with SSR judgement + sender snapshot bake (D-09 + D-29 + MSG-04).
+     *
+     * The judgement is computed from (Configure.serverSecret, message_id, created_at_micro)
+     * via SsrJudge; the snapshot is copied from $senderUser->user_identities cached fields.
+     *
+     * @param \App\Model\Entity\Inbox $inbox The receiver's inbox (already loaded).
+     * @param string $senderUserId UUID of the authenticated sender.
+     * @param string $body Message text (validated upstream + here for defense in depth).
+     * @return \App\Model\Entity\Message The persisted message entity (with ssr_seed + is_ssr).
+     * @throws \RuntimeException If sender's identity lacks cached handle (data inconsistency)
+     *   OR if Configure.serverSecret missing (SsrJudge rejects).
+     * @throws \Cake\ORM\Exception\PersistenceFailedException On validation/save failure.
+     */
+    public function sendMessage(
+        \App\Model\Entity\Inbox $inbox,
+        string $senderUserId,
+        string $body
+    ): \App\Model\Entity\Message {
+        if ($body === '') {
+            throw new RuntimeException('sendMessage: body is empty.');
+        }
+        if (mb_strlen($body) > 2000) {
+            throw new RuntimeException('sendMessage: body exceeds 2000 chars.');
+        }
+        if (!(bool)$inbox->is_accepting) {
+            throw new RuntimeException('sendMessage: inbox is not accepting.');
+        }
+
+        /** @var \App\Model\Table\UsersTable $usersTable */
+        $usersTable = TableRegistry::getTableLocator()->get('Users');
+        /** @var \App\Model\Entity\User|null $senderUser */
+        $senderUser = $usersTable->find()
+            ->where(['Users.id' => $senderUserId])
+            ->contain(['UserIdentities'])
+            ->first();
+        if ($senderUser === null) {
+            throw new RuntimeException('sendMessage: sender user not found.');
+        }
+
+        /** @var \App\Model\Entity\UserIdentity|null $identity */
+        $identity = null;
+        // UsersTable::hasOne('UserIdentities') — ORM stores result as 'user_identity' (singular).
+        $rawIdentity = $senderUser->get('user_identity');
+        if ($rawIdentity instanceof \App\Model\Entity\UserIdentity) {
+            $identity = $rawIdentity;
+        }
+        if ($identity === null) {
+            throw new RuntimeException('sendMessage: sender has no user_identity.');
+        }
+
+        // === Compute deterministic SSR seed BEFORE INSERT (MSG-02 + MSG-03 + D-12 contract) ===
+        $messageId = Text::uuid();
+        $createdAt = FrozenTime::now();
+        $createdAtMicro = $createdAt->format('Y-m-d H:i:s.u');
+        $probability = (string)$inbox->ssr_probability; // DECIMAL(4,3) → '0.100' etc.
+
+        $judge = new SsrJudge();
+        $verdict = $judge->judge($messageId, $createdAtMicro, $probability);
+
+        // === Sender snapshot (D-29 / D-32 / D-34 — frozen at SEND time) ===
+        $entity = $this->newEntity([
+            'id' => $messageId,
+            'inbox_id' => (string)$inbox->id,
+            'sender_user_id' => $senderUserId,
+            'body' => $body,
+            'body_length' => mb_strlen($body),
+            'is_ssr' => $verdict['is_ssr'],
+            'ssr_probability_at_send' => $verdict['ssr_probability_at_send'],
+            'ssr_seed' => $verdict['ssr_seed'],
+            'sender_provider' => 'bluesky',
+            'sender_handle_snapshot' => (string)$identity->handle_cached,
+            'sender_avatar_url_snapshot' => $identity->avatar_url_cached !== null
+                ? (string)$identity->avatar_url_cached
+                : null,
+            'sender_profile_url_snapshot' => $identity->profile_url_cached !== null
+                ? (string)$identity->profile_url_cached
+                : null,
+            'created_at' => $createdAt,
+        ], ['accessibleFields' => [
+            'id' => true,
+            'inbox_id' => true,
+            'sender_user_id' => true,
+            'body' => true,
+            'body_length' => true,
+            'is_ssr' => true,
+            'ssr_probability_at_send' => true,
+            'ssr_seed' => true,
+            'sender_provider' => true,
+            'sender_handle_snapshot' => true,
+            'sender_avatar_url_snapshot' => true,
+            'sender_profile_url_snapshot' => true,
+            'created_at' => true,
+        ]]);
+
+        /** @var \App\Model\Entity\Message $saved */
+        $saved = $this->saveOrFail($entity);
+
+        return $saved;
     }
 }

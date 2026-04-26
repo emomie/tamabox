@@ -148,6 +148,7 @@ class InboxesTable extends Table
     {
         /** @var \App\Model\Entity\Inbox|null $inbox */
         $inbox = $this->find()
+            ->contain(['Users'])
             ->where([$this->aliasField('slug') => $slug])
             ->first();
         if ($inbox !== null) {
@@ -156,6 +157,7 @@ class InboxesTable extends Table
 
         /** @var \App\Model\Entity\Inbox|null $prev */
         $prev = $this->find()
+            ->contain(['Users'])
             ->where([$this->aliasField('slug_previous') => $slug])
             ->first();
         if ($prev !== null) {
