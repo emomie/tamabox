@@ -113,4 +113,17 @@ class PagesControllerTest extends TestCase
         $this->assertThat(403, $this->logicalNot(new StatusCode($this->_response)));
         $this->assertResponseNotContains('CSRF');
     }
+
+    /**
+     * Test that Phase 3 explainer paragraph is present and CTA is preserved.
+     *
+     * @return void
+     */
+    public function testHomePageContainsPhase3Explainer(): void
+    {
+        $this->get('/');
+        $this->assertResponseOk();
+        $this->assertResponseContains('確率で送信者の名前がバレる');
+        $this->assertResponseContains('Bluesky でログイン');
+    }
 }
