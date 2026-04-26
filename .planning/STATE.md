@@ -2,8 +2,8 @@
 gsd_state_version: 1.0
 milestone: v0.2
 milestone_name: milestone
-status: Phase 3 CONTEXT captured + scope rewrite (slug = SNS handle auto-derive). Ready for /gsd-plan-phase 3 (UI hint yes — /gsd-ui-phase 3 recommended first).
-last_updated: "2026-04-26T00:00:00Z"
+status: Phase 3 CONTEXT + UI-SPEC ready. /gsd-ui-phase 3 完了 (UI-SPEC verified 6/6 dimensions PASS、commit `fd10239`)。次は /gsd-plan-phase 3。
+last_updated: "2026-04-26T00:01:00Z"
 progress:
   total_phases: 4
   completed_phases: 2
@@ -141,9 +141,9 @@ None currently. Resolved blockers:
 
 ## Session Continuity
 
-**Last Agent Run**: discuss-phase 3 @ 2026-04-26 — interactive Discord session, 6 gray areas / 40 decisions captured into 03-CONTEXT.md + 03-DISCUSSION-LOG.md. Scope rewrite committed in same commit (`3863f7e`): INBOX-01 / INBOX-06 / PROJECT.md「安定 slug」/ ROADMAP Phase 3 Success #1 を「SNS handle 由来 slug 自動付与・改名追従・tamabox 単独変更不可」に改定。
-**Next Action**: `/gsd-ui-phase 3` (UI hint yes、ui_safety_gate true で plan-phase が要求してくる前段) → `/gsd-plan-phase 3` で本番計画。Phase 3 plan 候補は 03-CONTEXT.md `<code_context>` の Integration Points セクション参照(7 routes、4 controllers、4 templates、1 migration、1 SVG asset、CSS 拡張)。
+**Last Agent Run**: ui-phase 3 @ 2026-04-26 — gsd-ui-researcher が 03-UI-SPEC.md を 525 行で生成(95% を 03-CONTEXT.md からプリ充填、追加質問 0 件)、gsd-ui-checker が 6 dimensions(Copywriting / Visuals / Color / Typography / Spacing / Registry Safety)を全て PASS で承認、FLAG なし。commit `fd10239`。13 component contracts、13 fixed copy strings、4 typography sizes / 2 weights、Phase 2 8-point spacing scale 継続、`<details>` 段階開示で JS なし動作可能。
+**Next Action**: `/gsd-plan-phase 3` で本番計画。03-CONTEXT.md(40 D-XX)+ 03-UI-SPEC.md(13 components)が planner 入力。Phase 3 plan 候補は 03-CONTEXT.md `<code_context>` の Integration Points セクション参照(7 routes、4 controllers、4 templates、1 migration、1 SVG asset、CSS 拡張)。
 **Context Notes**: Phase 2 VERIFIED の上に Phase 3 CONTEXT が乗った状態。Phase 2 sticky note 5 (`refreshTokenIfExpired()`) は Phase 3 D-30 で Phase 4 へ defer 確定(Phase 3 は cached snapshot のみで成立)。Phase 3 の追加 sticky notes: (1) slug 衝突は `-2`/`-3` suffix で吸収、planner は `inboxes.slug_previous` 1 列 or `inbox_slug_history` 薄テーブルどちらかを判断して 1 件 migration 追加、(2) `MessagesController::report()` と `BlocksController::create()` は Phase 3 で 501 stub controller として実装、Phase 4 で本体置換、(3) SSR 判定アルゴリズムは `hexdec(substr(ssr_seed, 0, 8)) / 0xFFFFFFFF < ssr_probability`(F2 監査性のため deterministic)、(4) 送り手は SSR 結果を永遠に知らない(D-19、通知系も Phase 3 範囲外)、(5) Phase 3 verify-phase は Phase 2 と同様 live-AS E2E は human-needed として Phase 4 デプロイ後に持ち越し。
 
 ---
-*Last updated: 2026-04-26 (Phase 3 CONTEXT captured + scope rewrite committed `3863f7e`; ready for /gsd-ui-phase 3 → /gsd-plan-phase 3)*
+*Last updated: 2026-04-26 (Phase 3 UI-SPEC committed `fd10239` 6/6 dimensions PASS; ready for /gsd-plan-phase 3)*
