@@ -99,14 +99,66 @@ class MessagesControllerTest extends TestCase
     /**
      * @return void
      */
-    public function testOpenReturns501Placeholder(): void
+    public function testOpenAuthenticatedSetsOpenedAt(): void
+    {
+        $this->enableCsrfToken();
+        $this->loginAsAlice(); // alice owns inbox 11111111-...; aaaa1111-... message is unread
+        $this->post('/dashboard/messages/aaaa1111-aaaa-aaaa-aaaa-aaaaaaaaaaaa/open');
+        $this->assertResponseCode(302);
+        /** @var \App\Model\Entity\Message $msg */
+        $msg = $this->fetchTable('Messages')->get('aaaa1111-aaaa-aaaa-aaaa-aaaaaaaaaaaa');
+        $this->assertNotNull($msg->opened_at);
+    }
+
+    /**
+     * @return void
+     */
+    public function testOpenAlreadyOpenedDoesNotUpdateTimestamp(): void
+    {
+        $this->enableCsrfToken();
+        $this->loginAsAlice();
+        /** @var \App\Model\Entity\Message $before */
+        $before = $this->fetchTable('Messages')->get('aaaa2222-aaaa-aaaa-aaaa-aaaaaaaaaaaa'); // already opened in fixture
+        $beforeTs = $before->opened_at !== null ? $before->opened_at->format('Y-m-d H:i:s.u') : null;
+        $this->post('/dashboard/messages/aaaa2222-aaaa-aaaa-aaaa-aaaaaaaaaaaa/open');
+        $this->assertResponseCode(302);
+        /** @var \App\Model\Entity\Message $after */
+        $after = $this->fetchTable('Messages')->get('aaaa2222-aaaa-aaaa-aaaa-aaaaaaaaaaaa');
+        $afterTs = $after->opened_at !== null ? $after->opened_at->format('Y-m-d H:i:s.u') : null;
+        $this->assertSame($beforeTs, $afterTs);
+    }
+
+    /**
+     * @return void
+     */
+    public function testOpenOtherUsersMessageReturns403(): void
+    {
+        $this->enableCsrfToken();
+        $this->loginAsBob(); // bob does NOT own alice's inbox
+        $this->post('/dashboard/messages/aaaa1111-aaaa-aaaa-aaaa-aaaaaaaaaaaa/open');
+        $this->assertResponseCode(403);
+    }
+
+    /**
+     * @return void
+     */
+    public function testOpenUnknownMessageReturns404(): void
+    {
+        $this->enableCsrfToken();
+        $this->loginAsAlice();
+        $this->post('/dashboard/messages/00000000-0000-0000-0000-000000000000/open');
+        $this->assertResponseCode(404);
+    }
+
+    /**
+     * @return void
+     */
+    public function testOpenUnauthenticatedRedirects(): void
     {
         $this->enableCsrfToken();
         $this->post('/dashboard/messages/aaaa1111-aaaa-aaaa-aaaa-aaaaaaaaaaaa/open');
-        // Wave 3a Task 1 replaces this body. Until then, 501 OR 302 (auth redirect)
-        // depending on identity. Without identity, AuthenticationMiddleware redirects → 302.
-        $code = $this->_response->getStatusCode();
-        $this->assertContains($code, [302, 501], "Expected 302 (auth redirect) or 501 (stub), got $code");
+        // AuthenticationMiddleware redirects unauthenticated → /
+        $this->assertResponseCode(302);
     }
 
     // === POST tests (added in Task 4) ===

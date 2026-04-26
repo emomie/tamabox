@@ -266,4 +266,46 @@ class MessagesTable extends Table
 
         return $saved;
     }
+
+    /**
+     * Mark a message opened (D-25 / D-27 / MSG-06).
+     *
+     * - Verifies ownership: message.inbox.user_id MUST equal $ownerUserId.
+     * - If opened_at is already set, returns the entity without modification (idempotent — D-27).
+     * - Else sets opened_at = FrozenTime::now() and saves.
+     *
+     * @param string $messageId UUID of the message.
+     * @param string $ownerUserId UUID of the receiver (current authenticated user).
+     * @return \App\Model\Entity\Message
+     * @throws \Cake\Http\Exception\NotFoundException If message not found.
+     * @throws \Cake\Http\Exception\ForbiddenException If message's inbox is not owned by $ownerUserId.
+     */
+    public function markOpened(string $messageId, string $ownerUserId): \App\Model\Entity\Message
+    {
+        /** @var \App\Model\Entity\Message|null $msg */
+        $msg = $this->find()
+            ->where([$this->aliasField('id') => $messageId])
+            ->contain(['Inboxes'])
+            ->first();
+        if ($msg === null) {
+            throw new \Cake\Http\Exception\NotFoundException(__('メッセージが見つかりませんでした。'));
+        }
+
+        $inbox = $msg->inbox ?? null;
+        if ($inbox === null || (string)$inbox->user_id !== $ownerUserId) {
+            throw new \Cake\Http\Exception\ForbiddenException(__('このメッセージを開く権限がありません。'));
+        }
+
+        if ($msg->opened_at !== null) {
+            return $msg; // D-27 idempotent — re-open does NOT update timestamp
+        }
+
+        $patched = $this->patchEntity($msg, [
+            'opened_at' => FrozenTime::now(),
+        ], ['accessibleFields' => ['opened_at' => true]]);
+        /** @var \App\Model\Entity\Message $saved */
+        $saved = $this->saveOrFail($patched);
+
+        return $saved;
+    }
 }

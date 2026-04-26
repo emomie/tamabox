@@ -104,19 +104,31 @@ class MessagesController extends AppController
     }
 
     /**
-     * POST /dashboard/messages/{id}/open — receiver opens a message.
-     * Wave 3a fills in the body. For Plan 03-02 this is a placeholder
-     * that returns 501 so the route resolves. Wave 3a Task 1 replaces it.
+     * POST /dashboard/messages/{id}/open — receiver opens a message (D-25 / MSG-06).
      *
      * @param string $id Message UUID.
-     * @return \Cake\Http\Response
+     * @return \Cake\Http\Response|null
      */
-    public function open(string $id): Response
+    public function open(string $id): ?Response
     {
         $this->request->allowMethod(['post']);
-        // Plan 03-03a Task 1 replaces this body with the real implementation.
-        // Until then, return 501 so the route is testable and the contract is locked.
-        return $this->response->withStatus(501)->withStringBody('Not Implemented');
+        $identity = $this->Authentication->getIdentity();
+        if ($identity === null) {
+            return $this->redirect('/');
+        }
+        $identifier = $identity->getIdentifier();
+        $userId = is_scalar($identifier) ? (string)$identifier : '';
+        if ($userId === '') {
+            return $this->redirect('/');
+        }
+
+        /** @var \App\Model\Table\MessagesTable $messagesTable */
+        $messagesTable = $this->fetchTable('Messages');
+        // markOpened throws NotFoundException / ForbiddenException — let CakePHP error handler render.
+        $messagesTable->markOpened($id, $userId);
+
+        // Anchor the redirect so the browser scrolls to the just-opened row.
+        return $this->redirect('/dashboard#msg-' . $id);
     }
 
     /**
