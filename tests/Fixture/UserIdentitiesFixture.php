@@ -34,6 +34,23 @@ class UserIdentitiesFixture extends TestFixture
                 'created_at' => '2026-04-22 12:00:00',
                 'updated_at' => '2026-04-22 12:00:00',
             ],
+            // Bob — sender who sends messages to Alice's inbox in integration tests.
+            [
+                'id' => '2c2636e6-2472-48d7-86fa-f19541829b93',
+                'user_id' => '22222222-2222-2222-2222-222222222222',
+                'provider' => 'bluesky',
+                'provider_account_id' => 'did:plc:bob456',
+                'handle_cached' => 'bob.bsky.social',
+                'avatar_url_cached' => 'https://example.com/bob.jpg',
+                'profile_url_cached' => 'https://bsky.app/profile/bob.bsky.social',
+                'access_token_enc' => null,
+                'refresh_token_enc' => null,
+                'token_expires_at' => null,
+                'last_synced_at' => null,
+                'is_primary' => 1,
+                'created_at' => '2026-04-22 12:00:00',
+                'updated_at' => '2026-04-22 12:00:00',
+            ],
         ];
         parent::init();
     }

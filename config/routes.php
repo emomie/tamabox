@@ -92,6 +92,44 @@ return function (RouteBuilder $routes): void {
         $builder->connect('/dashboard', ['controller' => 'Users', 'action' => 'dashboard'])
             ->setMethods(['GET']);
 
+        // === Phase 3 routes (03-02 / 03-03) ===
+        // Note: specific routes placed BEFORE /{slug} catch-all to avoid shadowing.
+
+        // POST /dashboard/messages/{id}/open — receiver opens a message (Wave 3a body).
+        $builder->connect(
+            '/dashboard/messages/{id}/open',
+            ['controller' => 'Messages', 'action' => 'open'],
+            ['pass' => ['id'], 'id' => '[0-9a-f-]{36}']
+        )->setMethods(['POST']);
+
+        // GET|POST /dashboard/settings — receiver updates inbox settings (Wave 3a body).
+        $builder->connect(
+            '/dashboard/settings',
+            ['controller' => 'Inboxes', 'action' => 'settings']
+        )->setMethods(['GET', 'POST']);
+
+        // POST /report/{id} — Phase 4 stub (501 in Phase 3).
+        $builder->connect(
+            '/report/{id}',
+            ['controller' => 'Messages', 'action' => 'report'],
+            ['pass' => ['id'], 'id' => '[0-9a-f-]{36}']
+        )->setMethods(['POST']);
+
+        // POST /block/{senderUserId} — Phase 4 stub (Wave 3b BlocksController, 501 stub).
+        $builder->connect(
+            '/block/{senderUserId}',
+            ['controller' => 'Blocks', 'action' => 'create'],
+            ['pass' => ['senderUserId'], 'senderUserId' => '[0-9a-f-]{36}']
+        )->setMethods(['POST']);
+
+        // GET|POST /{slug} — public inbox page / send form (D-13 unauth + D-38 self).
+        // Slug regex matches inboxes.slug CHECK constraint — 3..32 chars, [a-zA-Z0-9_-].
+        $builder->connect(
+            '/{slug}',
+            ['controller' => 'Messages', 'action' => 'send'],
+            ['pass' => ['slug'], 'slug' => '[a-zA-Z0-9_-]{3,32}']
+        )->setMethods(['GET', 'POST']);
+
         /*
          * Connect catchall routes for all controllers.
          *

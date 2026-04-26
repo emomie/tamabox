@@ -145,6 +145,11 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
             'unauthenticatedRedirect' => '/',
             'queryParam' => 'redirect',
         ]);
+        // OAuth-only: identify solely by the session-stored user id.
+        // identify=false: session data is used as-is without re-querying the ORM.
+        // setIdentity() (OauthController::callback) persists the full User entity to
+        // session; subsequent requests read it back directly. This avoids the
+        // PasswordIdentifier _checkPassword path that breaks with no password column.
         $service->loadIdentifier('Authentication.Password', [
             'resolver' => [
                 'className' => 'Authentication.Orm',
@@ -152,14 +157,12 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
                 'finder' => 'all',
             ],
             'fields' => [
-                // OAuth-only: no password field; identify solely by session-stored id.
                 'username' => 'id',
-                'password' => null,
+                'password' => 'id',
             ],
-            'passwordHasher' => null,
         ]);
         $service->loadAuthenticator('Authentication.Session', [
-            'identify' => true,
+            'identify' => false,
         ]);
 
         return $service;
