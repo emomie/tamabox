@@ -69,7 +69,7 @@
   7. 未開封メッセージを「開封」操作すると `opened_at` が記録され、`is_ssr=true` のときだけ送信者 identity(handle / avatar / profile_url)が露出表示される
 **Plans**: 4 plans (3 waves)
   - [x] 03-01-slug-foundation-PLAN.md — SlugDeriver + SsrJudge + slug_previous migration + InboxesTable findBySlug/assignSlugForUser + UserIdentitiesTable rename hook + fixtures (INBOX-01, INBOX-06, MSG-03 algorithm) [wave 1] ✓ 2026-04-26
-  - [ ] 03-02-send-flow-PLAN.md — MessagesController send GET/POST + MessagesTable sendMessage + AuthController/OauthController D-13 pending body restoration + send.php / send_done.php templates + 4 routes (AUTH-03, MSG-01..05) [wave 2]
+  - [x] 03-02-send-flow-PLAN.md — MessagesController send GET/POST + MessagesTable sendMessage + AuthController/OauthController D-13 pending body restoration + send.php / send_done.php templates + 4 routes (AUTH-03, MSG-01..05) [wave 2]
   - [ ] 03-03a-dashboard-reveal-PLAN.md — UsersController dashboard expansion + InboxesController settings + MessagesController open + dashboard.php (paginated <details> receive list + SSR reveal + settings element) (INBOX-02, INBOX-03, MSG-06, MSG-07) [wave 3]
   - [ ] 03-03b-stubs-styles-asset-PLAN.md — BlocksController 501 stub + default-avatar.svg + tamabox.css Phase 3 extension (~200 lines) + flash/info element + home.php Phase 3 minor copy (D-35 hand-off contract + visual layer) [wave 3, parallel with 03-03a]
 **UI hint**: yes
@@ -87,7 +87,7 @@
   5. 通報された送信者でも、受け手側のブロックがない限り、別 inbox への送信は拒否されない(グローバル BAN は発生しない)
   6. `tamabox.emomie.com` で実サイトが稼働し、`debug=false` 固定 / DebugKit 無効化 / webroot 外 config / ES256 鍵は `config/keys/` に配置された状態で OAuth・送信・開封が本番から通る
 **Plans**: 4 plans (3 waves)
-  - [ ] 03-01-slug-foundation-PLAN.md — SlugDeriver + SsrJudge + slug_previous migration + InboxesTable findBySlug/assignSlugForUser + UserIdentitiesTable rename hook + fixtures (INBOX-01, INBOX-06, MSG-03 algorithm) [wave 1]
+  - [x] 03-01-slug-foundation-PLAN.md — SlugDeriver + SsrJudge + slug_previous migration + InboxesTable findBySlug/assignSlugForUser + UserIdentitiesTable rename hook + fixtures (INBOX-01, INBOX-06, MSG-03 algorithm) [wave 1]
   - [ ] 03-02-send-flow-PLAN.md — MessagesController send GET/POST + MessagesTable sendMessage + AuthController/OauthController D-13 pending body restoration + send.php / send_done.php templates + 4 routes (AUTH-03, MSG-01..05) [wave 2]
   - [ ] 03-03a-dashboard-reveal-PLAN.md — UsersController dashboard expansion + InboxesController settings + MessagesController open + dashboard.php (paginated <details> receive list + SSR reveal + settings element) (INBOX-02, INBOX-03, MSG-06, MSG-07) [wave 3]
   - [ ] 03-03b-stubs-styles-asset-PLAN.md — BlocksController 501 stub + default-avatar.svg + tamabox.css Phase 3 extension (~200 lines) + flash/info element + home.php Phase 3 minor copy (D-35 hand-off contract + visual layer) [wave 3, parallel with 03-03a]
@@ -99,7 +99,7 @@
 |-------|----------------|--------|-----------|
 | 1. Foundation & Schema | 4/4 | Complete (01-01 ✓, 01-02a ✓, 01-02b ✓, 01-03 ✓); awaits verifier | 2026-04-22 |
 | 2. Bluesky OAuth & Identity | 4/4 | Complete (02-01 ✓, 02-02 ✓, 02-03 ✓ 2026-04-23; 02-04 ✓ 2026-04-24); awaits verifier | 2026-04-24 |
-| 3. Inbox, Message & SSR Reveal | 0/? | Not started | - |
+| 3. Inbox, Message & SSR Reveal | 2/4 | In Progress|  |
 | 4. Moderation & Production Launch | 0/? | Not started | - |
 
 ## Coverage Summary

@@ -12,7 +12,7 @@ PROJECT.md の Active 要件を REQ-ID 付きで正規化したもの。ROADMAP 
 
 - [x] **AUTH-01** — 受け手は Bluesky OAuth (AT Protocol, ES256 confidential client, PAR + DPoP + PKCE 必須) でサインアップできる _(Plan 02-04: BlueskyOAuthClient PAR+PKCE+DPoP → OauthController::callback upsert 新規 user + identity)_
 - [x] **AUTH-02** — 既存ユーザーは Bluesky OAuth でログインでき、セッションが確立する _(Plan 02-04: upsertBlueskyIdentity existing-user path + Authentication->setIdentity)_
-- [ ] **AUTH-03** — 送り手は Bluesky OAuth を完了していないとメッセージ送信フォームから送信できない
+- [x] **AUTH-03** — 送り手は Bluesky OAuth を完了していないとメッセージ送信フォームから送信できない
 - [x] **AUTH-04** — `users` テーブルと `user_identities` テーブルで 1 ユーザー = 1 SNS アカウント (1:1) を DB 制約で担保する _(Phase 1 uk_user_identities_provider_account UNIQUE 制約 + Plan 02-04 DatabaseException catch の race 対応)_
 - [x] **AUTH-05** — ユーザーログイン時に SNS handle / avatar / profile_url を最新取得して DB に同期する _(Plan 02-04: upsertBlueskyIdentity が毎ログイン時に handle_cached / avatar_url_cached / profile_url_cached / last_synced_at を更新)_
 - [x] **AUTH-06** — OAuth プロバイダインタフェースを抽象化し、将来 X (Twitter) を追加できる構造にする(Bluesky 実装は具体クラス) _(Plan 02-01 interface shell + Plan 02-04 BlueskyOAuthClient が 5 methods concrete impl)_
@@ -31,11 +31,11 @@ PROJECT.md の Active 要件を REQ-ID 付きで正規化したもの。ROADMAP 
 
 ### メッセージ / SSR メカニクス (MSG)
 
-- [ ] **MSG-01** — 送り手は送信フォームにメッセージ本文を入力して送信できる(絵文字対応: `utf8mb4_0900_ai_ci`)
-- [ ] **MSG-02** — SSR 判定(`is_ssr`)は送信時に確定して `messages` 行に刻まれる(開封時には変更されない)
-- [ ] **MSG-03** — `ssr_seed = sha256(server_secret + message_id + created_at)` を格納し、監査可能性(F2 仮説)を担保する
-- [ ] **MSG-04** — 送信者の handle / avatar / profile_url を送信時点の値でメッセージ行にスナップショット保存する
-- [ ] **MSG-05** — 送信フォームに「確率で名前がバレる可能性がある」旨の同意 UI を明示し、同意なしでは送信できない(E1 仮説 / 法的合意)
+- [x] **MSG-01** — 送り手は送信フォームにメッセージ本文を入力して送信できる(絵文字対応: `utf8mb4_0900_ai_ci`)
+- [x] **MSG-02** — SSR 判定(`is_ssr`)は送信時に確定して `messages` 行に刻まれる(開封時には変更されない)
+- [x] **MSG-03** — `ssr_seed = sha256(server_secret + message_id + created_at)` を格納し、監査可能性(F2 仮説)を担保する
+- [x] **MSG-04** — 送信者の handle / avatar / profile_url を送信時点の値でメッセージ行にスナップショット保存する
+- [x] **MSG-05** — 送信フォームに「確率で名前がバレる可能性がある」旨の同意 UI を明示し、同意なしでは送信できない(E1 仮説 / 法的合意)
 - [ ] **MSG-06** — 受け手が未開封メッセージを「開封」する操作で `opened_at` が記録され、SSR 露出情報がフロントに開示される
 - [ ] **MSG-07** — 開封前・開封済みは一覧上で視覚的に区別される(ガチャ演出の土台)
 - [ ] **MSG-08** — 受け手はメッセージを論理削除(`deleted_at` セット)できる
@@ -85,7 +85,7 @@ PROJECT.md の Active 要件を REQ-ID 付きで正規化したもの。ROADMAP 
 |--------|-------|--------|
 | AUTH-01 | Phase 2: Bluesky OAuth & Identity | Shipped 2026-04-24 (Plan 02-04: BlueskyOAuthClient PAR+PKCE+DPoP + OauthController::callback new-user path) |
 | AUTH-02 | Phase 2: Bluesky OAuth & Identity | Shipped 2026-04-24 (Plan 02-04: upsertBlueskyIdentity existing-user path + setIdentity) |
-| AUTH-03 | Phase 3: Inbox, Message & SSR Reveal | Pending |
+| AUTH-03 | Phase 3: Inbox, Message & SSR Reveal | Complete |
 | AUTH-04 | Phase 2: Bluesky OAuth & Identity | Shipped 2026-04-24 (Phase 1 UNIQUE 制約 + Plan 02-04 DatabaseException catch) |
 | AUTH-05 | Phase 2: Bluesky OAuth & Identity | Shipped 2026-04-24 (Plan 02-04: upsertBlueskyIdentity が毎ログイン時に handle/avatar/profile/last_synced_at 更新) |
 | AUTH-06 | Phase 2: Bluesky OAuth & Identity | Shipped 2026-04-24 (Plan 02-01 interface + Plan 02-04 BlueskyOAuthClient concrete impl) |
@@ -98,11 +98,11 @@ PROJECT.md の Active 要件を REQ-ID 付きで正規化したもの。ROADMAP 
 | INBOX-04 | Phase 4: Moderation & Production Launch | Pending |
 | INBOX-05 | Phase 4: Moderation & Production Launch | Pending |
 | INBOX-06 | Phase 3: Inbox, Message & SSR Reveal | Pending |
-| MSG-01 | Phase 3: Inbox, Message & SSR Reveal | Pending |
-| MSG-02 | Phase 3: Inbox, Message & SSR Reveal | Pending |
-| MSG-03 | Phase 3: Inbox, Message & SSR Reveal | Pending |
-| MSG-04 | Phase 3: Inbox, Message & SSR Reveal | Pending |
-| MSG-05 | Phase 3: Inbox, Message & SSR Reveal | Pending |
+| MSG-01 | Phase 3: Inbox, Message & SSR Reveal | Complete |
+| MSG-02 | Phase 3: Inbox, Message & SSR Reveal | Complete |
+| MSG-03 | Phase 3: Inbox, Message & SSR Reveal | Complete |
+| MSG-04 | Phase 3: Inbox, Message & SSR Reveal | Complete |
+| MSG-05 | Phase 3: Inbox, Message & SSR Reveal | Complete |
 | MSG-06 | Phase 3: Inbox, Message & SSR Reveal | Pending |
 | MSG-07 | Phase 3: Inbox, Message & SSR Reveal | Pending |
 | MSG-08 | Phase 4: Moderation & Production Launch | Pending |

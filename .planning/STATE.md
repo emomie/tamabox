@@ -2,14 +2,14 @@
 gsd_state_version: 1.0
 milestone: v0.2
 milestone_name: milestone
-status: Phase 3 PLANNED — 4 plans / 3 waves ready for execution. plan-checker iter #2 PASS (BLOCKER + 5 WARN → 0 after revision)、commit `403cc95`。次は /gsd-execute-phase 3。
-last_updated: "2026-04-26T00:30:00Z"
+status: Phase complete — ready for verification
+last_updated: "2026-04-26T10:04:24.592Z"
 progress:
   total_phases: 4
   completed_phases: 2
   total_plans: 12
-  completed_plans: 8
-  percent: 50
+  completed_plans: 10
+  percent: 83
 ---
 
 # tamabox — STATE
@@ -33,7 +33,7 @@ Plan: 4 of 4 complete (02-01 foundation ✓ 2026-04-23; 02-02 crypto ✓ 2026-04
 **Milestone**: v1 launch
 **Phase**: Phase 2 — Bluesky OAuth & Identity (**VERIFICATION PASSED at code level**; human gate for live-AS smoke test deferred to tamabox.emomie.com deployment in Phase 4)
 **Plan**: 4 plans in 3 waves — all shipped and verified. 02-01 foundation ✓ / 02-02 crypto ✓ / 02-03 metadata+DID ✓ / 02-04 oauth-flow ✓ / VERIFICATION.md ✓
-**Next Plan**: 03-02 (send flow) — Wave 2 start
+**Next Plan**: 03-03a (dashboard — open action; slug collision flash) — Wave 3 start
 **Status**: Phase 2 verification complete. All 8 requirements AUTH-01/02/04/05/06/07/08/09 satisfied at code level (Reflection + Configure smoke + ORM data-flow trace + QA gates all green). Full OAuth handshake wired end-to-end (PKCE + PAR + DPoP + private_key_jwt + nonce retry + DID→PDS → getProfile → UPSERT → setIdentity → /dashboard). 6 Phase-2 routes all live. D-DEF-01 resolved as a side effect of Plan 02-04's home.php rewrite. Zero anti-patterns in Phase 2 artifacts. composer test 85 tests / 221 assertions / 0 failures. phpstan level 8 [OK] / phpcs 54/54.
 **Resume file**: `.planning/phases/02-bluesky-oauth-identity/VERIFICATION.md` (verification report, 2026-04-24)
 
@@ -56,6 +56,7 @@ Overall: Phases 2/4 verified — plans 8/8 done (of originally planned; Phase 3+
 | Nodes completed | 28 tasks across 8 plans (+3 Phase 2-04: BlueskyOAuthClient / DB upsert / controllers+templates+tests) |
 | Requirements shipped | 13/34 (INFRA-02, -03, -04, -05, -07; AUTH-01, AUTH-02, AUTH-04, AUTH-05, AUTH-06, AUTH-07, AUTH-08, AUTH-09) |
 | Requirements partial | なし (Phase 2 で AUTH-06 concrete impl 完成、全 AUTH シリーズ closed) |
+| Phase 03-inbox-message-ssr-reveal P02 | 90min | 4 tasks | 12 files |
 
 ### Plan Duration Log
 
@@ -111,6 +112,15 @@ Overall: Phases 2/4 verified — plans 8/8 done (of originally planned; Phase 3+
 - **`$request->getQuery()` return type `array|string|null` breaks phpstan level 8** (Plan 02-04 Task 3 deviation Rule 1): naive `(string)$this->request->getQuery('k')` is flagged. Introduced `queryString(string $key): string` + `sessionString(string $key): string` private helpers on OauthController that `is_string()`-guard the value. Phase 3+ controllers consuming query params should use the same pattern.
 - **Plan 02-04 replaced `templates/Pages/home.php`** — old CakePHP skeleton welcome page is gone; new version shows 'Bluesky でログイン' CTA. `PagesControllerTest::testDisplay` was updated accordingly. **D-DEF-01 verified resolved 2026-04-24.**
 
+### Executor-discovered decisions (Phase 3 — Plan 03-02)
+
+- **Authentication.Session identify=false is required for OAuth-only apps** (Plan 03-02 deviation Rule 1): CakePHP `Authentication.Password` identifier's `_checkPassword` calls `password_verify($input, $storedHash)` where storedHash resolves to `$user[null]` (no password column), causing silent auth failure. Setting `identify => false` on the Session authenticator tells it to trust session data as-is. Safe because `setIdentity()` in OauthController already ORM-validates the user before writing to session. Future plans: never use `identify => true` with a passwordless user model.
+- **->scalar() instead of ->uuid() for FK fields when test fixtures use sequential IDs** (Plan 03-02 deviation Rule 1): CakePHP's `->uuid()` validator enforces RFC 4122 variant bits; test fixture IDs like `11111111-1111-1111-1111-111111111111` have variant=0 and fail. Using `->scalar()` for FK validation columns (inbox_id, sender_user_id) avoids mass-fixture rewrites. Production IDs from `Text::uuid()` are always RFC 4122 compliant, so no production risk.
+- **hasOne ORM result is accessible as singular key** (Plan 03-02 deviation Rule 1): UserIdentities is a `hasOne` association on Users; ORM hydrates result as `$user->user_identity` (singular), NOT `$user->user_identities`. Use `$entity->get('user_identity')` to avoid phpstan level 8 undefined-property error.
+- **SlugCollisionSuffixApplied listener in bootstrap() not in controller action** (Plan 03-02): EventManager listener registered in `Application::bootstrap()` rather than OauthController::callback(). Per-request registration is order-sensitive (listener must be registered BEFORE the event fires in the same request). Bootstrap-time binding is process-lifetime and avoids this ordering hazard entirely.
+- **CakePHP render() auto-prepends controller name** (Plan 03-02 deviation Rule 1): `$this->render('Messages/send_done')` from MessagesController resolves to `templates/Messages/Messages/send_done.php` (double prefix). Always use bare template name: `$this->render('send_done')`.
+- **postString() helper pattern extends queryString() to POST data** (Plan 03-02): MessagesController adds `postString(string $key): string` analogous to OauthController's `queryString()` for phpstan-level-8-safe POST data reads. Pattern: `$v = $this->request->getData($key); return is_string($v) ? $v : '';`
+
 ### Verifier-discovered decisions (Phase 2)
 
 - **Live-AS OAuth happy-path is out of automated verification scope** (recorded 2026-04-24 by `/gsd-verify-phase 2`): BlueskyOAuthClient integration tests use `Client::addMockResponse()` stubs for PAR / token / profile endpoints. The actual AS + PDS handshake (production Bluesky) can only be observed from a real browser against `tamabox.emomie.com`. Verifier returned `status: human_needed` with 3 human items (live signup / logout cookie-destroy / handle-change sync). Phase 2 goal is achieved at code level; production smoke test is a Phase 4 launch gate.
@@ -141,8 +151,8 @@ None currently. Resolved blockers:
 
 ## Session Continuity
 
-**Last Agent Run**: execute-phase 3 plan 03-01 @ 2026-04-26 — SlugDeriver(10 tests) + SsrJudge(9 tests) + migration AddSlugPreviousToInboxes + InboxesTable拡張(findBySlugOrPrevious/assignSlugForUser) + UserIdentitiesTable slug hook + fixtures 3 inboxes/3 messages + InboxesTableTest(8 tests). 111 tests / 301 assertions / 0 failures. phpstan level 8 [OK] / phpcs clean. 4 commits (b888382 / 3bb0598 / 24b2153 / f6e8af6).
-**Next Action**: 03-02 (send flow — Wave 2) を `/gsd-execute-phase 3` で実行。03-01 依存: SlugDeriver / SsrJudge / InboxesTable::findBySlugOrPrevious / assignSlugForUser がすべて利用可能。
+**Last Agent Run**: execute-phase 3 plan 03-02 @ 2026-04-26 — MessagesController (send/open-stub/report-stub) + send.php + send_done.php + MessagesTable::sendMessage (SSR seed bake + sender snapshot) + D-13 pending body restoration + SlugCollisionSuffixApplied listener in bootstrap(). 133 tests / 365 assertions / 0 failures. phpstan level 8 [OK] / phpcs clean. 4 commits (d4b4732 / e459980 / fa05888 / 7cf1d89).
+**Next Action**: 03-03a (dashboard — Wave 3) を `/gsd-execute-phase 3` で実行。03-02 依存: MessagesController::send / sendMessage / send.php / send_done.php / D-13 flow すべて利用可能。open() stub (d4b4732) を 03-03a で差し替え。
 **Context Notes**: Phase 2 VERIFIED の上に Phase 3 CONTEXT が乗った状態。Phase 2 sticky note 5 (`refreshTokenIfExpired()`) は Phase 3 D-30 で Phase 4 へ defer 確定(Phase 3 は cached snapshot のみで成立)。Phase 3 の追加 sticky notes: (1) slug 衝突は `-2`/`-3` suffix で吸収、planner は `inboxes.slug_previous` 1 列 or `inbox_slug_history` 薄テーブルどちらかを判断して 1 件 migration 追加、(2) `MessagesController::report()` と `BlocksController::create()` は Phase 3 で 501 stub controller として実装、Phase 4 で本体置換、(3) SSR 判定アルゴリズムは `hexdec(substr(ssr_seed, 0, 8)) / 0xFFFFFFFF < ssr_probability`(F2 監査性のため deterministic)、(4) 送り手は SSR 結果を永遠に知らない(D-19、通知系も Phase 3 範囲外)、(5) Phase 3 verify-phase は Phase 2 と同様 live-AS E2E は human-needed として Phase 4 デプロイ後に持ち越し。
 
 ---
