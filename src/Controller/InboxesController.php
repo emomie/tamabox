@@ -78,7 +78,10 @@ class InboxesController extends AppController
 
         // === is_accepting (D-28, checkbox) ===
         $isAcceptingRaw = $this->request->getData('is_accepting');
-        $isAccepting = $isAcceptingRaw !== null && $isAcceptingRaw !== '' && $isAcceptingRaw !== '0' && $isAcceptingRaw !== false;
+        $isAccepting = $isAcceptingRaw !== null
+            && $isAcceptingRaw !== ''
+            && $isAcceptingRaw !== '0'
+            && $isAcceptingRaw !== false;
 
         $patched = $inboxesTable->patchEntity($inbox, [
             'ssr_probability' => $probabilityDecimal,
