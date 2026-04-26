@@ -24,6 +24,8 @@ use Cake\Core\Configure;
 use Cake\Core\ContainerInterface;
 use Cake\Datasource\FactoryLocator;
 use Cake\Error\Middleware\ErrorHandlerMiddleware;
+use Cake\Event\Event;
+use Cake\Event\EventManager;
 use Cake\Http\BaseApplication;
 use Cake\Http\Middleware\BodyParserMiddleware;
 use Cake\Http\Middleware\CsrfProtectionMiddleware;
@@ -31,6 +33,7 @@ use Cake\Http\MiddlewareQueue;
 use Cake\ORM\Locator\TableLocator;
 use Cake\Routing\Middleware\AssetMiddleware;
 use Cake\Routing\Middleware\RoutingMiddleware;
+use Cake\Routing\Router;
 use Psr\Http\Message\ServerRequestInterface;
 
 /**
@@ -69,6 +72,37 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
         }
 
         $this->addPlugin('Authentication');
+
+        // Phase 3 D-06: bind slug-collision listener globally — fires from
+        // UserIdentitiesTable::upsertBlueskyIdentity (Plan 03-01 Task 4) inside the
+        // OAuth callback transactional path. Writing to Flash.slug_collision_suffix
+        // here surfaces a one-shot info banner on the next /dashboard render
+        // (consumed-and-cleared by UsersController::dashboard, Plan 03-03a Task 3).
+        //
+        // Why bootstrap() instead of OauthController::callback(): per-request binding
+        // is order-sensitive (listener must register BEFORE upsert dispatches the
+        // event in the same request). Bootstrap-time binding is hands-off — the
+        // listener exists for the lifetime of the PHP process, so timing is moot.
+        EventManager::instance()->on(
+            'SlugCollisionSuffixApplied',
+            function (Event $e): void {
+                $data = $e->getData();
+                if (!is_array($data) || !isset($data['slug'], $data['base'])) {
+                    return;
+                }
+                // Pull the active request session lazily (the listener fires from inside
+                // a controller action, so a request is in flight). Router::getRequest()
+                // returns the active ServerRequest.
+                $request = Router::getRequest();
+                if ($request === null) {
+                    return;
+                }
+                $request->getSession()->write('Flash.slug_collision_suffix', [
+                    'slug' => (string)$data['slug'],
+                    'base' => (string)$data['base'],
+                ]);
+            }
+        );
 
         // Load more plugins here
     }

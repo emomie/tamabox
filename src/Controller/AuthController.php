@@ -46,6 +46,23 @@ class AuthController extends AppController
             $this->request->getSession()->write('Oauth.pkce_verifier', $verifier);
             $this->request->getSession()->write('Oauth.state', $state);
 
+            // Phase 3 D-13: persist pending send body + inbox id before PAR redirect.
+            // Two paths arrive here:
+            //   (a) Direct POST from /login/bluesky form (rare) — body in POST data.
+            //   (b) Redirect from MessagesController::stashAndRedirectToLogin — body
+            //       already in session (written by that helper before redirecting here).
+            // For path (b) the session write below is a no-op (values already set).
+            // For path (a) the POST data is written into session now for callback consumption.
+            $session = $this->request->getSession();
+            $pendingBody = $this->request->getData('pending_message_body');
+            $pendingInbox = $this->request->getData('pending_message_inbox_id');
+            if (is_string($pendingBody) && $pendingBody !== '') {
+                $session->write('pending_message_body', $pendingBody);
+            }
+            if (is_string($pendingInbox) && $pendingInbox !== '') {
+                $session->write('pending_message_inbox_id', $pendingInbox);
+            }
+
             $client = $this->buildOAuthClient();
             $par = $client->executeParRequest($challenge, $state);
 

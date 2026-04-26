@@ -136,4 +136,34 @@ class AuthControllerTest extends TestCase
         $this->assertResponseCode(302);
         $this->assertRedirectContains('request_uri=urn%3Apar%3Atest');
     }
+
+    /**
+     * D-13: POST data pending_message_body + pending_message_inbox_id are stashed to session.
+     *
+     * @return void
+     */
+    public function testStartBlueskyPersistsPendingMessageBodyToSession(): void
+    {
+        Client::addMockResponse(
+            'POST',
+            'https://bsky.social/oauth/par',
+            new \Cake\Http\Client\Response(
+                ['HTTP/1.1 201 Created', 'Content-Type: application/json'],
+                (string)json_encode([
+                    'request_uri' => 'urn:ietf:params:oauth:request_uri:TEST',
+                    'expires_in' => 60,
+                ])
+            )
+        );
+
+        $this->enableCsrfToken();
+        $this->post('/login/bluesky', [
+            'pending_message_body' => 'メッセージ復元テスト',
+            'pending_message_inbox_id' => '11111111-1111-1111-1111-111111111111',
+        ]);
+
+        $this->assertResponseCode(302);
+        $this->assertSession('メッセージ復元テスト', 'pending_message_body');
+        $this->assertSession('11111111-1111-1111-1111-111111111111', 'pending_message_inbox_id');
+    }
 }

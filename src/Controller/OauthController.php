@@ -197,6 +197,23 @@ class OauthController extends AppController
             // setIdentity regenerates the session ID (T-02-04-05).
             $this->Authentication->setIdentity($user);
 
+            // Phase 3 D-13: if a pending send was stashed before login, return to it.
+            $session = $this->request->getSession();
+            $pendingInboxId = $session->read('pending_message_inbox_id');
+            if (is_string($pendingInboxId) && $pendingInboxId !== '') {
+                /** @var \App\Model\Table\InboxesTable $inboxesTable */
+                $inboxesTable = $this->fetchTable('Inboxes');
+                /** @var \App\Model\Entity\Inbox|null $pendingInbox */
+                $pendingInbox = $inboxesTable->find()
+                    ->where(['Inboxes.id' => $pendingInboxId])
+                    ->first();
+                // consume inbox_id — body is kept until the send form reads it on ?restored=1
+                $session->delete('pending_message_inbox_id');
+                if ($pendingInbox !== null) {
+                    return $this->redirect('/' . $pendingInbox->slug . '?restored=1');
+                }
+            }
+
             return $this->redirect('/dashboard');
         } catch (RuntimeException $e) {
             $this->clearOauthSession();
