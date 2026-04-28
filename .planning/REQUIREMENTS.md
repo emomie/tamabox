@@ -49,12 +49,12 @@ PROJECT.md の Active 要件を REQ-ID 付きで正規化したもの。ROADMAP 
 
 ### インフラ / 運用 (INFRA)
 
-- [ ] **INFRA-01** — 本番ドメイン `tamabox.emomie.com` で動作し、ロリポップの webroot 制約(`webroot/` のみ公開)に準拠する
+- [x] **INFRA-01** — 本番ドメイン `tamabox.emomie.com` で動作し、ロリポップの webroot 制約(`webroot/` のみ公開)に準拠する
 - [x] **INFRA-02** — `.env` ローダ(`config/.env`)を有効化し、秘匿値(DB認証情報 / server_secret / OAuth 関連キー)を環境変数経由で注入する
 - [x] **INFRA-03** — `composer.json` の PHP 要件を `^8.0` に整合させ、本番 Lolipop PHP 8.0+ と合わせる
 - [x] **INFRA-04** — `bin/cake migrations migrate` で MySQL 8.0 向けスキーマ(users / user_identities / inboxes / messages / reports / blocks)を適用できる
 - [x] **INFRA-05** — `.htaccess` の httpoxy ブロックを有効化する(現在コメントアウト)
-- [ ] **INFRA-06** — 本番は `debug=false` 固定で DebugKit 無効化、ステージ/開発時のみ true
+- [x] **INFRA-06** — 本番は `debug=false` 固定で DebugKit 無効化、ステージ/開発時のみ true
 - [x] **INFRA-07** — CakePHP `TableLocator::allowFallbackClass(false)` は維持、全テーブルに明示 Table クラスを作成する
 
 ---
@@ -110,12 +110,12 @@ PROJECT.md の Active 要件を REQ-ID 付きで正規化したもの。ROADMAP 
 | MOD-02 | Phase 4: Moderation & Production Launch | Pending |
 | MOD-03 | Phase 4: Moderation & Production Launch | Pending |
 | MOD-04 | Phase 4: Moderation & Production Launch | Shipped 2026-04-28 (Plan 04-01: dual-gate block check は inbox.user_id × current sender の組のみ参照、testSendPostUnrelatedInboxIgnoresUnrelatedBlocks sentinel が確認済) |
-| INFRA-01 | Phase 4: Moderation & Production Launch | Pending |
+| INFRA-01 | Phase 4: Moderation & Production Launch | Complete |
 | INFRA-02 | Phase 1: Foundation & Schema | Shipped (01-01) |
 | INFRA-03 | Phase 1: Foundation & Schema | Shipped (01-01) |
 | INFRA-04 | Phase 1: Foundation & Schema | Shipped (01-02a + 01-02b) |
 | INFRA-05 | Phase 1: Foundation & Schema | Shipped (01-01) |
-| INFRA-06 | Phase 4: Moderation & Production Launch | Pending |
+| INFRA-06 | Phase 4: Moderation & Production Launch | Complete |
 | INFRA-07 | Phase 1: Foundation & Schema | Shipped (01-03) |
 
 **Coverage**: 34/34 v1 requirements mapped to exactly one phase. No orphans, no duplicates.

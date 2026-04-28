@@ -2,14 +2,14 @@
 gsd_state_version: 1.0
 milestone: v0.2
 milestone_name: milestone
-status: Phase 4 in progress — Plan 04-01 complete (4 commits, INBOX-04/05/MSG-08/MOD-04 closed)
-last_updated: "2026-04-28T04:10:00.000Z"
+status: Ready to execute
+last_updated: "2026-04-28T04:20:56.750Z"
 progress:
   total_phases: 4
   completed_phases: 3
   total_plans: 15
-  completed_plans: 13
-  percent: 86
+  completed_plans: 14
+  percent: 93
 ---
 
 # tamabox — STATE
@@ -29,7 +29,7 @@ Project memory. Updated by every gsd-* command.
 ## Current Position
 
 Phase: 04 (moderation-production-launch) — **in progress** (Plan 04-01 ✓ 2026-04-28; 04-02 / 04-03 pending)
-Plan: 1 of 3 complete in Phase 4 (04-01 wave 1 ✓; 04-02 wave 2 / 04-03 wave 1-parallel pending)
+Plan: 2 of 3 complete in Phase 4 (04-01 wave 1 ✓; 04-02 wave 2 / 04-03 wave 1-parallel pending)
 **Milestone**: v1 launch
 **Phase**: Phase 4 — Moderation & Production Launch (Plan 04-01 ships block CRUD + send-form block-check + soft-delete + dashboard 削除 footer / ブロック中ユーザー section)
 **Next Plan**: 04-03 (LAUNCH-RUNBOOK + MANUAL-SMOKE-CHECKLIST + DEBUG=false guidance) — wave 1 parallel; or 04-02 (Reports + AccountController + retired-user filter) — wave 2 sequential
@@ -58,6 +58,7 @@ Overall: Phases 1-3 done + Phase 4 04-01 done — plans 13/15 done — `[██�
 | Phase 03-inbox-message-ssr-reveal P02 | 90min | 4 tasks | 12 files |
 | Phase 03-inbox-message-ssr-reveal P03a | 30m | - tasks | - files |
 | Phase 04-moderation-production-launch P01 | ~14m 38s | 4 tasks | 17 files (16 modified + 1 created) |
+| Phase 04-moderation-production-launch PP03 | 5m 24s | 4 tasks | 4 files |
 
 ### Plan Duration Log
 
@@ -177,6 +178,7 @@ None currently. Resolved blockers:
 **Last Agent Run**: execute-phase 4 plan 04-01 @ 2026-04-28 — BlocksController 501 stub → real impl (create + delete) / MessagesController::send dual-gate block check + delete action (report action 削除) / UsersController::dashboard messages.deleted_at IS NULL filter + $blocks/$reportedSet view-vars / BlocksTable::isBlocked finder / MessagesTable::softDeleteByReceiver method + DELETED_REASON_USER/ADMIN const / templates/element/block_list.php 新規 / templates/Users/dashboard.php に message-row__footer 追加 / templates/Messages/send.php に error-banner + disabled form / webroot/css/tamabox.css に §1/§3/§5/§6/§9 (+108 行) / config/routes.php に 2 ルート (/dashboard/messages/{id}/delete + /dashboard/blocks/{id}/delete) 追加 / Test fixtures 4 改修 + 4 テスト class 編集。Phase 3 baseline 163 → 177 tests / 485 assertions / 0 failures。phpstan level 8 [OK] / phpcs 65/65。4 commits (32b8da6 / c95ff1d / f8f77f7 / 51e0d53)。
 **Next Action**: Phase 4 Plan 04-02 (Reports + Account deletion + retired-user filter) または並行 Plan 04-03 (LAUNCH-RUNBOOK)。04-01 既知の orphan route `/report/{id}` (Missing Action) は 04-02 で解消する。
 **Context Notes**: Phase 4 04-01 完了。INBOX-04 / INBOX-05 / MSG-08 / MOD-04 が closed。Plan 04-02 着手時の前提:
+
 - `dave` test user (id=44444444-...) が UsersFixture / UserIdentitiesFixture に追加済み — alice にブロックされていない sender
 - `aaaa4444-...` soft-deleted message が MessagesFixture に追加済み — 04-02 でも filter sentinel として再利用可能
 - `MessagesTable::DELETED_REASON_USER` / `DELETED_REASON_ADMIN` const が利用可能 — 04-02 運営側削除 path で `DELETED_REASON_ADMIN` を使う

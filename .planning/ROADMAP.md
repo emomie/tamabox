@@ -89,7 +89,7 @@
 **Plans**: 3 plans (2 waves)
   - [x] 04-01-PLAN.md — Block CRUD (BlocksController create/delete + isBlocked finder) + send-form block error banner + soft-delete (MessagesController delete + softDeleteByReceiver) + dashboard deleted_at filter + block-list element + 通報済 view-var (INBOX-04, INBOX-05, MSG-08, MOD-04) [wave 1] **✓ 2026-04-28**
   - [ ] 04-02-PLAN.md — Report flow (ReportsController + uk_reports_reporter_message UNIQUE migration + Reports/create.php) + Account deletion (AccountController + Account/delete.php + danger-zone) + InboxesTable REV-01 retired-user filter + dashboard 通報する link replacement + tamabox.css §2/§4/§7 append (MOD-01, MOD-02, MOD-03) [wave 2]
-  - [ ] 04-03-PLAN.md — config/.env.example DEBUG=false guidance + LAUNCH-RUNBOOK.md (D-37 6 steps + Lolipop quirks + rollback) + MANUAL-SMOKE-CHECKLIST.md (12 items: 9 Phase 4 + 3 carry-over) + STATE.md REV-03 propagation (INFRA-01, INFRA-06) [wave 1, parallel with 04-01]
+  - [x] 04-03-PLAN.md — config/.env.example DEBUG=false guidance + LAUNCH-RUNBOOK.md (D-37 6 steps + Lolipop quirks + rollback) + MANUAL-SMOKE-CHECKLIST.md (12 items: 9 Phase 4 + 3 carry-over) + STATE.md REV-03 propagation (INFRA-01, INFRA-06) [wave 1, parallel with 04-01]
 **UI hint**: yes
 
 ## Progress
@@ -99,7 +99,7 @@
 | 1. Foundation & Schema | 4/4 | Complete (01-01 ✓, 01-02a ✓, 01-02b ✓, 01-03 ✓); awaits verifier | 2026-04-22 |
 | 2. Bluesky OAuth & Identity | 4/4 | Complete (02-01 ✓, 02-02 ✓, 02-03 ✓ 2026-04-23; 02-04 ✓ 2026-04-24); awaits verifier | 2026-04-24 |
 | 3. Inbox, Message & SSR Reveal | 4/4 | **VERIFIED 2026-04-26** (human_needed — 7/7 code-level, 3 human items for live-AS deferred to Phase 4) | 2026-04-26 |
-| 4. Moderation & Production Launch | 1/3 | In progress (04-01 ✓ 2026-04-28: block CRUD + send block-check + soft-delete; 04-02 / 04-03 pending) | - |
+| 4. Moderation & Production Launch | 2/3 | In Progress|  |
 
 ## Coverage Summary
 
