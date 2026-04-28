@@ -44,7 +44,7 @@ Overall: Phases 1-3 done + Phase 4 04-01 done — plans 13/15 done — `[██�
 - [x] **Phase 1: Foundation & Schema** — Complete (4/4 plans done: 01-01 ✓, 01-02a ✓, 01-02b ✓, 01-03 ✓); awaits verifier
 - [x] **Phase 2: Bluesky OAuth & Identity** — **VERIFIED 2026-04-24** (4/4 plans: 02-01 ✓, 02-02 ✓, 02-03 ✓, 02-04 ✓; VERIFICATION.md status=human_needed for live-AS happy path only — code-level 7/7 PASS)
 - [x] **Phase 3: Inbox, Message & SSR Reveal** — **VERIFIED 2026-04-26** (4/4 plans done; 03-01 ✓ / 03-02 ✓ / 03-03a ✓ / 03-03b ✓; VERIFICATION.md status=human_needed — code-level 7/7 PASS, 3 human items for live-AS / browser deferred to Phase 4 deploy)
-- [ ] **Phase 4: Moderation & Production Launch** — In progress (1/3 plans complete; 04-01 ✓ 2026-04-28)
+- [ ] **Phase 4: Moderation & Production Launch** — PLANNED (3 plans / 2 waves: 04-01 moderation+block+soft-delete + 04-02 report+account-deletion + 04-03 launch-runbook; ready for `/gsd-execute-phase 4`)
 
 ## Performance Metrics
 
@@ -157,6 +157,7 @@ Overall: Phases 1-3 done + Phase 4 04-01 done — plans 13/15 done — `[██�
 - [x] Phase 4 Plan 04-01 done 2026-04-28 — block CRUD + send block-check + soft-delete + dashboard footer / block_list + tamabox.css §1/§3/§5/§6/§9。INBOX-04 / INBOX-05 / MSG-08 / MOD-04 closed。4 commits 32b8da6 → 51e0d53、177 tests / 485 assertions / 0 failures。
 - [ ] Phase 4 Plan 04-02 next — Reports + AccountController + retired-user filter (MOD-01 / MOD-02 / MOD-03)。`/report/{id}` route は今 Missing Action 状態 (04-01 で `MessagesController::report` 削除、04-02 で `ReportsController::create` に re-point 予定) — 04-02 着手時に解消。
 - [ ] Phase 4 Plan 04-03 — LAUNCH-RUNBOOK + MANUAL-SMOKE-CHECKLIST + DEBUG=false guidance (INFRA-01 / INFRA-06)。04-01 と並行可 (wave 1 parallel) だが現状 04-01 完了後の sequential 実行も可。
+- [x] **Phase 2 sticky #5 — `BlueskyOAuthClient::refreshToken()` call-site defer** = `resolved-as-not-needed-for-MVP` (Phase 4 04-CONTEXT.md REV-03, 2026-04-28 03:10 JST user confirmation). The method body itself remains in `src/Service/OAuth/Bluesky/BlueskyOAuthClient.php:156-187` for future PDS-API phases (e.g., AUTH-06 X provider extension or post-MVP eager refresh middleware). Phase 4 ships moderation + 退会 + production launch only; **no live PDS call site exists in the MVP**, so refresh integration would be 100% dead code. Phase 4 verify-phase will confirm: (a) `BlueskyOAuthClient::refreshToken()` is unreachable from any controller flow; (b) the existing tests for `refreshToken()` (Phase 2 unit tests) still pass even though the method is unused.
 
 ### Blockers
 
