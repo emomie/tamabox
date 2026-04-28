@@ -6,8 +6,11 @@
  * @var \Cake\Datasource\ResultSetInterface|array $messages
  * @var bool $pageOutOfRange
  * @var array{slug: string, base: string}|null $collisionFlash
+ * @var array<int, \App\Model\Entity\Block> $blocks
+ * @var array<string, bool> $reportedSet
  *
  * UI-SPEC §2 receive list + §3 settings + §5 empty + §10 paginator + §11 flash + D-06 collision.
+ * Phase 4 04-01: + ブロック中ユーザー section (§3) + message-row footer (§6) with 削除 + 通報済 badge.
  */
 $this->assign('title', 'ダッシュボード');
 
@@ -118,6 +121,19 @@ $slug = (string)$inbox->slug;
                             <?php else: ?>
                                 <p class="ssr-reveal__miss text-secondary">★ 抽選 miss(送信者は匿名のまま)</p>
                             <?php endif; ?>
+                            <div class="message-row__footer">
+                                <?= $this->Form->create(null, [
+                                    'url' => '/dashboard/messages/' . h((string)$msg->id) . '/delete',
+                                    'type' => 'post',
+                                    'class' => 'inline',
+                                    'onsubmit' => "return confirm('このメッセージを削除しますか?(削除後は元に戻せません)');",
+                                ]) ?>
+                                    <button type="submit" class="button button-clear button-destructive">削除</button>
+                                <?= $this->Form->end() ?>
+                                <?php if (isset($reportedSet[(string)$msg->id])): ?>
+                                    <span class="report-badge" aria-label="このメッセージは通報済みです">通報済</span>
+                                <?php endif; ?>
+                            </div>
                         <?php endif; ?>
                     </div>
                 </details>
@@ -133,4 +149,6 @@ $slug = (string)$inbox->slug;
         <h2>受信箱設定</h2>
         <?= $this->element('inbox_settings_form', ['inbox' => $inbox]) ?>
     </aside>
+
+    <?= $this->element('block_list', ['blocks' => $blocks]) ?>
 </div>
