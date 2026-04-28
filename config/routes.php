@@ -108,12 +108,12 @@ return function (RouteBuilder $routes): void {
             ['controller' => 'Inboxes', 'action' => 'settings']
         )->setMethods(['GET', 'POST']);
 
-        // POST /report/{id} — Phase 4 stub (501 in Phase 3).
+        // GET|POST /report/{id} — Phase 4 ReportsController::create (Phase 3 routed Messages::report which is now removed).
         $builder->connect(
             '/report/{id}',
-            ['controller' => 'Messages', 'action' => 'report'],
+            ['controller' => 'Reports', 'action' => 'create'],
             ['pass' => ['id'], 'id' => '[0-9a-f-]{36}']
-        )->setMethods(['POST']);
+        )->setMethods(['GET', 'POST']);
 
         // POST /block/{senderUserId} — Phase 4 stub (Wave 3b BlocksController, 501 stub).
         $builder->connect(
@@ -136,6 +136,12 @@ return function (RouteBuilder $routes): void {
             ['controller' => 'Blocks', 'action' => 'delete'],
             ['pass' => ['id'], 'id' => '[0-9a-f-]{36}']
         )->setMethods(['POST']);
+
+        // GET|POST /account/delete — 退会 (D-23 / MOD-03).
+        $builder->connect(
+            '/account/delete',
+            ['controller' => 'Account', 'action' => 'delete']
+        )->setMethods(['GET', 'POST']);
 
         // GET|POST /{slug} — public inbox page / send form (D-13 unauth + D-38 self).
         // Slug regex matches inboxes.slug CHECK constraint — 3..32 chars, [a-zA-Z0-9_-].

@@ -149,7 +149,10 @@ class InboxesTable extends Table
         /** @var \App\Model\Entity\Inbox|null $inbox */
         $inbox = $this->find()
             ->contain(['Users'])
-            ->where([$this->aliasField('slug') => $slug])
+            ->where([
+                $this->aliasField('slug') => $slug,
+                'Users.deleted_at IS' => null, // Phase 4 REV-01 / D-25 — retired user → 404
+            ])
             ->first();
         if ($inbox !== null) {
             return ['inbox' => $inbox, 'redirect' => false];
@@ -158,7 +161,10 @@ class InboxesTable extends Table
         /** @var \App\Model\Entity\Inbox|null $prev */
         $prev = $this->find()
             ->contain(['Users'])
-            ->where([$this->aliasField('slug_previous') => $slug])
+            ->where([
+                $this->aliasField('slug_previous') => $slug,
+                'Users.deleted_at IS' => null, // Phase 4 REV-01 / D-25
+            ])
             ->first();
         if ($prev !== null) {
             return ['inbox' => $prev, 'redirect' => true];
