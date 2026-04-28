@@ -47,14 +47,8 @@ class MessagesController extends AppController
         parent::initialize();
         // D-13: send page is reachable by unauthenticated users so they can compose
         // before logging in. POST is gated separately inside the action body.
-        //
-        // Blocker fix: 'report' is a 501 stub (D-35 Phase 4 hand-off contract). Without
-        // allowUnauthenticated, AuthenticationMiddleware (Application.php unauthenticatedRedirect=>'/')
-        // returns 302 BEFORE the action runs, breaking the strict assertResponseCode(501) test.
-        // 501 is a content-negotiation early-return with no DB/auth context — auth gate is
-        // irrelevant for the stub. Phase 4 plan-phase MUST remove 'report' from this list when
-        // replacing the body with real reporting logic.
-        $this->Authentication->allowUnauthenticated(['send', 'report']);
+        // Phase 4 04-01: 'report' removed — report action is moved to ReportsController in 04-02.
+        $this->Authentication->allowUnauthenticated(['send']);
     }
 
     /**
@@ -88,9 +82,17 @@ class MessagesController extends AppController
         }
         $isOwnInbox = $isAuthenticated && $currentUserId !== '' && $currentUserId === (string)$inbox->user_id;
 
+        // Phase 4 D-05/D-06 — block check (dual gate: GET shows banner, POST rejects).
+        $isBlocked = false;
+        if ($isAuthenticated && $currentUserId !== '' && !$isOwnInbox) {
+            /** @var \App\Model\Table\BlocksTable $blocksTable */
+            $blocksTable = $this->fetchTable('Blocks');
+            $isBlocked = $blocksTable->isBlocked((string)$inbox->user_id, $currentUserId);
+        }
+
         // GET handling — render form.
         if ($this->request->is('get')) {
-            $this->renderSendForm($inbox, $isAuthenticated, $isOwnInbox);
+            $this->renderSendForm($inbox, $isAuthenticated, $isOwnInbox, $isBlocked);
 
             return null;
         }
@@ -98,6 +100,12 @@ class MessagesController extends AppController
         // POST — branch on authentication.
         if (!$isAuthenticated) {
             return $this->stashAndRedirectToLogin($slug, (string)$inbox->id);
+        }
+
+        if ($isBlocked) {
+            $this->Flash->error(__('この受信箱には送信できません。'));
+
+            return $this->redirect('/' . $inbox->slug);
         }
 
         return $this->processSend($inbox, $currentUserId);
@@ -132,16 +140,32 @@ class MessagesController extends AppController
     }
 
     /**
-     * POST /report/{id} — Phase 4 stub (D-35).
+     * POST /dashboard/messages/{id}/delete — receiver soft-deletes a message (Phase 4 MSG-08 / D-18..D-22).
      *
      * @param string $id Message UUID.
-     * @return \Cake\Http\Response
+     * @return \Cake\Http\Response|null
      */
-    public function report(string $id): Response
+    public function delete(string $id): ?Response
     {
         $this->request->allowMethod(['post']);
+        $identity = $this->Authentication->getIdentity();
+        if ($identity === null) {
+            return $this->redirect('/');
+        }
+        $identifier = $identity->getIdentifier();
+        $userId = is_scalar($identifier) ? (string)$identifier : '';
+        if ($userId === '') {
+            return $this->redirect('/');
+        }
 
-        return $this->response->withStatus(501)->withStringBody('Not Implemented');
+        /** @var \App\Model\Table\MessagesTable $messagesTable */
+        $messagesTable = $this->fetchTable('Messages');
+        // softDeleteByReceiver throws NotFoundException / ForbiddenException — let CakePHP error handler render.
+        $messagesTable->softDeleteByReceiver($id, $userId);
+
+        $this->Flash->success(__('メッセージを削除しました'));
+
+        return $this->redirect('/dashboard');
     }
 
     // === private helpers ===
@@ -152,10 +176,15 @@ class MessagesController extends AppController
      * @param \App\Model\Entity\Inbox $inbox The resolved inbox entity.
      * @param bool $isAuthenticated Whether the current visitor is authenticated.
      * @param bool $isOwnInbox Whether the current visitor owns this inbox.
+     * @param bool $isBlocked Whether the current authenticated visitor is blocked from sending (Phase 4 D-05/D-06).
      * @return void
      */
-    private function renderSendForm(\App\Model\Entity\Inbox $inbox, bool $isAuthenticated, bool $isOwnInbox): void
-    {
+    private function renderSendForm(
+        \App\Model\Entity\Inbox $inbox,
+        bool $isAuthenticated,
+        bool $isOwnInbox,
+        bool $isBlocked = false
+    ): void {
         $session = $this->request->getSession();
         // D-13: if redirected back from OAuth callback (?restored=1), restore body once.
         $restoredBody = '';
@@ -173,6 +202,7 @@ class MessagesController extends AppController
             'inbox' => $inbox,
             'isAuthenticated' => $isAuthenticated,
             'isOwnInbox' => $isOwnInbox,
+            'isBlocked' => $isBlocked,
             'restoredBody' => $restoredBody,
         ]);
     }

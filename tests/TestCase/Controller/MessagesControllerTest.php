@@ -89,16 +89,6 @@ class MessagesControllerTest extends TestCase
     /**
      * @return void
      */
-    public function testReportReturns501Stub(): void
-    {
-        $this->enableCsrfToken();
-        $this->post('/report/aaaa1111-aaaa-aaaa-aaaa-aaaaaaaaaaaa');
-        $this->assertResponseCode(501);
-    }
-
-    /**
-     * @return void
-     */
     public function testOpenAuthenticatedSetsOpenedAt(): void
     {
         $this->enableCsrfToken();
@@ -185,7 +175,8 @@ class MessagesControllerTest extends TestCase
     public function testSendPostAuthenticatedHappyPathInsertsMessage(): void
     {
         $this->enableCsrfToken();
-        $this->loginAsBob();
+        // Phase 4 04-01: bob is blocked by alice (fixture); use dave (non-blocked sender) instead.
+        $this->loginAsDave();
         $countBefore = $this->fetchTable('Messages')
             ->find()
             ->where(['inbox_id' => '11111111-1111-1111-1111-111111111111'])
@@ -217,7 +208,8 @@ class MessagesControllerTest extends TestCase
     public function testSendPostConsentMissingRedirectsWithError(): void
     {
         $this->enableCsrfToken();
-        $this->loginAsBob();
+        // Phase 4 04-01: bob is blocked by alice (fixture); use dave (non-blocked sender) instead.
+        $this->loginAsDave();
         $this->post('/alice', ['body' => 'no consent']);
         $this->assertResponseCode(302);
         $this->assertRedirectContains('/alice');
@@ -232,7 +224,8 @@ class MessagesControllerTest extends TestCase
     public function testSendPostBodyTooLongRedirectsWithError(): void
     {
         $this->enableCsrfToken();
-        $this->loginAsBob();
+        // Phase 4 04-01: bob is blocked by alice (fixture); use dave (non-blocked sender) instead.
+        $this->loginAsDave();
         $this->post('/alice', [
             'body' => str_repeat('a', 2001),
             'consent' => '1',
@@ -248,7 +241,8 @@ class MessagesControllerTest extends TestCase
     public function testSendPostBodyEmptyRedirectsWithError(): void
     {
         $this->enableCsrfToken();
-        $this->loginAsBob();
+        // Phase 4 04-01: bob is blocked by alice (fixture); use dave (non-blocked sender) instead.
+        $this->loginAsDave();
         $this->post('/alice', [
             'body' => '',
             'consent' => '1',
@@ -280,7 +274,8 @@ class MessagesControllerTest extends TestCase
     public function testSendDoneOmitsSsrResult(): void
     {
         $this->enableCsrfToken();
-        $this->loginAsBob();
+        // Phase 4 04-01: bob is blocked by alice (fixture); use dave (non-blocked sender) instead.
+        $this->loginAsDave();
         $this->post('/alice', [
             'body' => 'check no ssr leak',
             'consent' => '1',
@@ -403,5 +398,17 @@ class MessagesControllerTest extends TestCase
     private function loginAsAlice(): void
     {
         $this->session(['Auth' => ['id' => '11111111-1111-1111-1111-111111111111']]);
+    }
+
+    /**
+     * Log in as Dave (44444444-...) — Phase 4 04-01: a sender NOT blocked by alice.
+     * Required because Phase 4 added dual-gate block check; bob is in the alice→bob block fixture
+     * and would be intercepted by the new block check before reaching consent/body validators.
+     *
+     * @return void
+     */
+    private function loginAsDave(): void
+    {
+        $this->session(['Auth' => ['id' => '44444444-4444-4444-4444-444444444444']]);
     }
 }

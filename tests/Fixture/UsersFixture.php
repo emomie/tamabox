@@ -39,6 +39,15 @@ class UsersFixture extends TestFixture
                 'updated_at' => '2026-04-22 12:00:00',
                 'deleted_at' => null,
             ],
+            // Dave — Phase 4 04-01: non-blocked sender used by send-flow happy/validation tests
+            // (alice→bob and alice→charlie blocks make those users unsuitable as senders to alice).
+            [
+                'id' => '44444444-4444-4444-4444-444444444444',
+                'display_name' => 'Dave Example',
+                'created_at' => '2026-04-22 12:00:00',
+                'updated_at' => '2026-04-22 12:00:00',
+                'deleted_at' => null,
+            ],
         ];
         parent::init();
     }

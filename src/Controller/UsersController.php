@@ -80,7 +80,10 @@ class UsersController extends AppController
             $messages = $this->paginate(
                 $messagesTable
                     ->find()
-                    ->where(['Messages.inbox_id' => $inbox->id])
+                    ->where([
+                        'Messages.inbox_id' => $inbox->id,
+                        'Messages.deleted_at IS' => null,
+                    ])
                     ->order(['Messages.created_at' => 'DESC'])
             );
         } catch (NotFoundException $e) {
@@ -93,9 +96,41 @@ class UsersController extends AppController
                 'messages' => [],
                 'pageOutOfRange' => true,
                 'collisionFlash' => null,
+                'blocks' => [],
+                'reportedSet' => [],
             ]);
 
             return null;
+        }
+
+        // Phase 4 D-04 — block list for "ブロック中ユーザー" section.
+        /** @var \App\Model\Table\BlocksTable $blocksTable */
+        $blocksTable = $this->fetchTable('Blocks');
+        $blocks = $blocksTable->find()
+            ->where(['Blocks.blocker_user_id' => $userId])
+            ->contain(['BlockedUsers' => ['UserIdentities']])
+            ->order(['Blocks.created_at' => 'DESC'])
+            ->toArray();
+
+        // 通報済 badge map (Phase 4 D-16) — keys=message_id, vals=true. Used by 04-02 once /report exists,
+        // but the data is fetched here so 04-01 dashboard re-render exposes the structure.
+        /** @var \App\Model\Table\ReportsTable $reportsTable */
+        $reportsTable = $this->fetchTable('Reports');
+        $messageIds = [];
+        foreach ($messages as $m) {
+            $messageIds[] = (string)$m->id;
+        }
+        $reportedSet = [];
+        if ($messageIds !== []) {
+            $rows = $reportsTable->find()
+                ->where([
+                    'Reports.reporter_user_id' => $userId,
+                    'Reports.message_id IN' => $messageIds,
+                ])
+                ->all();
+            foreach ($rows as $r) {
+                $reportedSet[(string)$r->message_id] = true;
+            }
         }
 
         // === Consume slug-collision flash if present (D-06) ===
@@ -116,6 +151,8 @@ class UsersController extends AppController
             'messages' => $messages,
             'pageOutOfRange' => false,
             'collisionFlash' => $collisionFlash,
+            'blocks' => $blocks,
+            'reportedSet' => $reportedSet,
         ]);
 
         return null;

@@ -122,6 +122,21 @@ return function (RouteBuilder $routes): void {
             ['pass' => ['senderUserId'], 'senderUserId' => '[0-9a-f-]{36}']
         )->setMethods(['POST']);
 
+        // Phase 4 — moderation lifecycle routes (specific routes BEFORE /{slug} catch-all).
+        // POST /dashboard/messages/{id}/delete — receiver soft-deletes a message (D-18 / MSG-08).
+        $builder->connect(
+            '/dashboard/messages/{id}/delete',
+            ['controller' => 'Messages', 'action' => 'delete'],
+            ['pass' => ['id'], 'id' => '[0-9a-f-]{36}']
+        )->setMethods(['POST']);
+
+        // POST /dashboard/blocks/{id}/delete — unblock by block-row id (D-04).
+        $builder->connect(
+            '/dashboard/blocks/{id}/delete',
+            ['controller' => 'Blocks', 'action' => 'delete'],
+            ['pass' => ['id'], 'id' => '[0-9a-f-]{36}']
+        )->setMethods(['POST']);
+
         // GET|POST /{slug} — public inbox page / send form (D-13 unauth + D-38 self).
         // Slug regex matches inboxes.slug CHECK constraint — 3..32 chars, [a-zA-Z0-9_-].
         $builder->connect(

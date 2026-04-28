@@ -51,6 +51,23 @@ class UserIdentitiesFixture extends TestFixture
                 'created_at' => '2026-04-22 12:00:00',
                 'updated_at' => '2026-04-22 12:00:00',
             ],
+            // Dave — Phase 4 04-01: non-blocked sender for send-flow tests where bob/charlie are blocked.
+            [
+                'id' => '4d2636e6-2472-48d7-86fa-f19541829b93',
+                'user_id' => '44444444-4444-4444-4444-444444444444',
+                'provider' => 'bluesky',
+                'provider_account_id' => 'did:plc:dave789',
+                'handle_cached' => 'dave.bsky.social',
+                'avatar_url_cached' => 'https://example.com/dave.jpg',
+                'profile_url_cached' => 'https://bsky.app/profile/dave.bsky.social',
+                'access_token_enc' => null,
+                'refresh_token_enc' => null,
+                'token_expires_at' => null,
+                'last_synced_at' => null,
+                'is_primary' => 1,
+                'created_at' => '2026-04-22 12:00:00',
+                'updated_at' => '2026-04-22 12:00:00',
+            ],
         ];
         parent::init();
     }

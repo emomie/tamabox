@@ -330,8 +330,11 @@ class MessagesTable extends Table
      * @throws \Cake\Http\Exception\NotFoundException If message not found.
      * @throws \Cake\Http\Exception\ForbiddenException If message's inbox is not owned by $ownerUserId.
      */
-    public function softDeleteByReceiver(string $messageId, string $ownerUserId, string $reason = self::DELETED_REASON_USER): \App\Model\Entity\Message
-    {
+    public function softDeleteByReceiver(
+        string $messageId,
+        string $ownerUserId,
+        string $reason = self::DELETED_REASON_USER
+    ): \App\Model\Entity\Message {
         /** @var \App\Model\Entity\Message|null $msg */
         $msg = $this->find()
             ->where([$this->aliasField('id') => $messageId])
