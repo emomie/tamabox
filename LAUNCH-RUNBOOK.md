@@ -51,24 +51,46 @@ curl -sS https://getcomposer.org/installer | /usr/local/php/8.1/bin/php
 
 ### 2a. Generate ES256 keypair on VPS (local dev environment)
 
+The filenames `private.key` and `public.key` are NOT optional — `KeyManager.php` defaults to those exact paths under `config/keys/`. Do not rename to `.pem` etc.
+
 ```bash
-cd ~/secrets/tamabox-prod    # or any temp directory
-openssl ecparam -name prime256v1 -genkey -noout -out es256-private.pem
-openssl ec -in es256-private.pem -pubout -out es256-public.pem
+mkdir -p ~/secrets/tamabox-prod && chmod 700 ~/secrets/tamabox-prod
+cd ~/secrets/tamabox-prod
+openssl ecparam -name prime256v1 -genkey -noout -out private.key
+openssl ec -in private.key -pubout -out public.key
+chmod 600 private.key
+chmod 644 public.key
 ```
 
 ### 2b. Transfer to Lolipop
 
+On Lolipop SSH first (creates target dir before scp):
+
 ```bash
 mkdir -p ~/web/tamabox.emomie.com/config/keys
-scp -P 2222 es256-private.pem es256-public.pem <lolipop-account>@<lolipop-ssh-host>:~/web/tamabox.emomie.com/config/keys/
 ```
 
-On Lolipop SSH:
+Back on the VPS:
 
 ```bash
-chmod 600 ~/web/tamabox.emomie.com/config/keys/es256-private.pem
-chmod 644 ~/web/tamabox.emomie.com/config/keys/es256-public.pem
+scp -P 2222 ~/secrets/tamabox-prod/private.key <lolipop-account>@<lolipop-ssh-host>:~/web/tamabox.emomie.com/config/keys/private.key
+scp -P 2222 ~/secrets/tamabox-prod/public.key  <lolipop-account>@<lolipop-ssh-host>:~/web/tamabox.emomie.com/config/keys/public.key
+```
+
+Re-assert permissions on Lolipop SSH (scp may not preserve mode):
+
+```bash
+chmod 600 ~/web/tamabox.emomie.com/config/keys/private.key
+chmod 644 ~/web/tamabox.emomie.com/config/keys/public.key
+ls -la ~/web/tamabox.emomie.com/config/keys/
+```
+
+Verify JWKS picks them up after Step 3 deploy completes:
+
+```bash
+curl -s https://tamabox.emomie.com/oauth/jwks.json
+# Expect: {"keys":[{"kty":"EC","crv":"P-256","kid":"ssr-box-key-1","use":"sig","alg":"ES256",...}]}
+# Failure mode: {"error":"key_not_available"} → KeyManager couldn't read config/keys/*.key — re-check filenames + perms
 ```
 
 ### 2c. Place production .env
