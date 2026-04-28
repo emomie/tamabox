@@ -42,9 +42,9 @@ PROJECT.md の Active 要件を REQ-ID 付きで正規化したもの。ROADMAP 
 
 ### 通報 / モデレーション (MOD)
 
-- [ ] **MOD-01** — 受け手は任意のメッセージを 4 カテゴリ(`harassment` / `spam` / `illegal` / `other`)で通報でき、`reports` 行に記録される
-- [ ] **MOD-02** — 通報はあくまで事後レビュー方式で、送信時点で AI 検閲や NG ワードフィルターは実施しない
-- [ ] **MOD-03** — 退会(ユーザー削除)時も過去メッセージの送信者 snapshot(handle / avatar / profile_url)は保持する(V1 仮説補強)
+- [x] **MOD-01** — 受け手は任意のメッセージを 4 カテゴリ(`harassment` / `spam` / `illegal` / `other`)で通報でき、`reports` 行に記録される _(Plan 04-02: ReportsController::create GET+POST + uk_reports_reporter_message UNIQUE migration + DatabaseException|PDOException catch idempotent)_
+- [x] **MOD-02** — 通報はあくまで事後レビュー方式で、送信時点で AI 検閲や NG ワードフィルターは実施しない _(Plan 04-02: ReportsController は INSERT-only、AI/NG フィルタ呼び出しなし; PROJECT.md Out-of-Scope に明記)_
+- [x] **MOD-03** — 退会(ユーザー削除)時も過去メッセージの送信者 snapshot(handle / avatar / profile_url)は保持する(V1 仮説補強) _(Plan 04-02: AccountController::delete は users.deleted_at のみ UPDATE、messages.sender_*_snapshot は不変; testDeletePostPreservesSenderSnapshots で sentinel)_
 - [x] **MOD-04** — 通報された送信者でも、受け手側のブロック操作がない限り、他 inbox への送信は妨げない(グローバル BAN は MVP 範囲外)
 
 ### インフラ / 運用 (INFRA)
@@ -106,9 +106,9 @@ PROJECT.md の Active 要件を REQ-ID 付きで正規化したもの。ROADMAP 
 | MSG-06 | Phase 3: Inbox, Message & SSR Reveal | Complete |
 | MSG-07 | Phase 3: Inbox, Message & SSR Reveal | Complete |
 | MSG-08 | Phase 4: Moderation & Production Launch | Shipped 2026-04-28 (Plan 04-01: MessagesController::delete + MessagesTable::softDeleteByReceiver + dashboard message-row__footer + UsersController::dashboard messages.deleted_at IS NULL filter) |
-| MOD-01 | Phase 4: Moderation & Production Launch | Pending |
-| MOD-02 | Phase 4: Moderation & Production Launch | Pending |
-| MOD-03 | Phase 4: Moderation & Production Launch | Pending |
+| MOD-01 | Phase 4: Moderation & Production Launch | Shipped 2026-04-28 (Plan 04-02: ReportsController::create GET+POST + uk_reports_reporter_message UNIQUE migration + 4 reason ENUM 検証 + 1000 char detail 上限) |
+| MOD-02 | Phase 4: Moderation & Production Launch | Shipped 2026-04-28 (Plan 04-02: AI/NG フィルタなし INSERT-only ポリシー + PROJECT.md Out-of-Scope) |
+| MOD-03 | Phase 4: Moderation & Production Launch | Shipped 2026-04-28 (Plan 04-02: AccountController::delete users.deleted_at のみ UPDATE + sender snapshot 不変 + InboxesTable retired-user 404 REV-01) |
 | MOD-04 | Phase 4: Moderation & Production Launch | Shipped 2026-04-28 (Plan 04-01: dual-gate block check は inbox.user_id × current sender の組のみ参照、testSendPostUnrelatedInboxIgnoresUnrelatedBlocks sentinel が確認済) |
 | INFRA-01 | Phase 4: Moderation & Production Launch | Complete |
 | INFRA-02 | Phase 1: Foundation & Schema | Shipped (01-01) |

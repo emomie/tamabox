@@ -13,7 +13,7 @@
 - [ ] **Phase 1: Foundation & Schema** — CakePHP skeleton 衛生化、`.env` ローダ有効化、PHP 8.0 整合、httpoxy 対策、MySQL 8.0 スキーマ migration 一式
 - [ ] **Phase 2: Bluesky OAuth & Identity** — ES256 confidential client で PAR+DPoP+PKCE の OAuth 認証フロー、マルチプロバイダ抽象化、token 暗号化
 - [x] **Phase 3: Inbox, Message & SSR Reveal** — inbox 作成/設定、送信フォーム(OAuth 必須 + 同意 UI)、SSR 送信時確定、開封ガチャ演出
-- [ ] **Phase 4: Moderation & Production Launch** — ブロック、通報、論理削除、退会時 snapshot 保持、本番デプロイ (`tamabox.emomie.com` + debug=false)
+- [x] **Phase 4: Moderation & Production Launch** — ブロック、通報、論理削除、退会時 snapshot 保持、本番デプロイ (`tamabox.emomie.com` + debug=false) — code-level complete 2026-04-28; awaits verifier
 
 ## Phase Details
 
@@ -99,7 +99,7 @@
 | 1. Foundation & Schema | 4/4 | Complete (01-01 ✓, 01-02a ✓, 01-02b ✓, 01-03 ✓); awaits verifier | 2026-04-22 |
 | 2. Bluesky OAuth & Identity | 4/4 | Complete (02-01 ✓, 02-02 ✓, 02-03 ✓ 2026-04-23; 02-04 ✓ 2026-04-24); awaits verifier | 2026-04-24 |
 | 3. Inbox, Message & SSR Reveal | 4/4 | **VERIFIED 2026-04-26** (human_needed — 7/7 code-level, 3 human items for live-AS deferred to Phase 4) | 2026-04-26 |
-| 4. Moderation & Production Launch | 2/3 | In Progress|  |
+| 4. Moderation & Production Launch | 3/3 | Code-level complete; awaits `/gsd-verify-phase 4` | 2026-04-28 |
 
 ## Coverage Summary
 
@@ -114,4 +114,4 @@
 **Total**: 34/34 v1 requirements mapped, no orphans, no duplicates.
 
 ---
-*Last updated: 2026-04-28 (Phase 4 04-01 complete — INBOX-04 / INBOX-05 / MSG-08 / MOD-04 closed; 4 commits 32b8da6 → 51e0d53; 177 tests / 485 assertions / 0 failures)*
+*Last updated: 2026-04-28 (Phase 4 全 3 plan code-level complete — 04-02 で MOD-01 / MOD-02 / MOD-03 closed → Phase 4 全 9 件 closed; 5 commits ddbf21c → 5c77681; 195 tests / 546 assertions / 0 failures; awaits `/gsd-verify-phase 4`)*

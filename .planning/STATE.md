@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v0.2
 milestone_name: milestone
 status: Ready to execute
-last_updated: "2026-04-28T04:20:56.750Z"
+last_updated: "2026-04-28T05:00:00.000Z"
 progress:
   total_phases: 4
   completed_phases: 3
   total_plans: 15
-  completed_plans: 14
-  percent: 93
+  completed_plans: 15
+  percent: 100
 ---
 
 # tamabox — STATE
@@ -28,32 +28,32 @@ Project memory. Updated by every gsd-* command.
 
 ## Current Position
 
-Phase: 04 (moderation-production-launch) — **in progress** (Plan 04-01 ✓ 2026-04-28; 04-02 / 04-03 pending)
-Plan: 2 of 3 complete in Phase 4 (04-01 wave 1 ✓; 04-02 wave 2 / 04-03 wave 1-parallel pending)
+Phase: 04 (moderation-production-launch) — **CODE-LEVEL COMPLETE** (3/3 plans shipped 2026-04-28; awaits `/gsd-verify-phase 4`)
+Plan: 3 of 3 complete in Phase 4 (04-01 ✓ wave 1 / 04-02 ✓ wave 2 / 04-03 ✓ wave 1-parallel)
 **Milestone**: v1 launch
-**Phase**: Phase 4 — Moderation & Production Launch (Plan 04-01 ships block CRUD + send-form block-check + soft-delete + dashboard 削除 footer / ブロック中ユーザー section)
-**Next Plan**: 04-03 (LAUNCH-RUNBOOK + MANUAL-SMOKE-CHECKLIST + DEBUG=false guidance) — wave 1 parallel; or 04-02 (Reports + AccountController + retired-user filter) — wave 2 sequential
-**Status**: Plan 04-01 完了 2026-04-28 — 4 commits (32b8da6 / c95ff1d / f8f77f7 / 51e0d53) で INBOX-04 / INBOX-05 / MSG-08 / MOD-04 を closed。BlocksController の 501 stub を本実装 (create + delete) に差し替え、MessagesController::send に dual-gate ブロック判定 + delete action 追加、UsersController::dashboard に messages.deleted_at IS NULL filter + $blocks / $reportedSet view-vars、templates/element/block_list.php 新規 + dashboard.php に削除 footer + 通報済 badge slot、tamabox.css に §1/§3/§5/§6/§9 (+108 行) 追加。phpstan level 8 [OK] / phpcs 65/65 / composer test 177 tests / 485 assertions / 0 failures。Plan 構造のため Task 4 (a) BlocksControllerTest 全置換を Task 2 commit に前倒し (各 commit を独立 green に保つ Rule 3)。
-**Resume file**: `.planning/phases/04-moderation-production-launch/04-01-SUMMARY.md`
+**Phase**: Phase 4 — Moderation & Production Launch (全 3 plan code-level 完了、verifier 待ち)
+**Next Plan**: なし — `/gsd-verify-phase 4` で manual smoke walkthrough (Phase 4 9 件 + Phase 2/3 carry-over 3 件) を実施
+**Status**: Plan 04-02 完了 2026-04-28 — 5 commits (ddbf21c / ea8dfa7 / 2312845 / b810c2c / 5c77681) で MOD-01 / MOD-02 / MOD-03 を closed。ReportsController::create (GET+POST 4 カテゴリ通報) + AccountController::delete (users.deleted_at + logout) + InboxesTable::findBySlugOrPrevious の REV-01 retired-user 404 フィルタ + Phinx migration `uk_reports_reporter_message` UNIQUE 制約 + Reports/create.php + Account/delete.php template + dashboard 通報 form 削除 + footer リンク化 + inbox_settings_form.php danger-zone + tamabox.css §2/§4/§7/§Layouts (+162 行)。phpstan level 8 [OK] / phpcs 69/69 / composer test 195 tests / 546 assertions / 0 failures。Auto-fix: ReportsTable validator uuid()→scalar() (fixture compat) + DatabaseException|PDOException union catch + SQLSTATE 23000 マッチング (CakePHP 5 raw PDOException 漏れ対策)。
+**Resume file**: `.planning/phases/04-moderation-production-launch/04-02-SUMMARY.md`
 
-**Progress**: Phase 4 at 1/3 plans — `[██████░░░░░░░░░░░░░░] 33%` (Phase 4 internal)
-Overall: Phases 1-3 done + Phase 4 04-01 done — plans 13/15 done — `[█████████████████░░░] 87%` (plan-completion)
+**Progress**: Phase 4 at 3/3 plans — `[████████████████████] 100%` (Phase 4 internal)
+Overall: Phase 1-3 done + Phase 4 03-of-3 done — plans 15/15 done — `[████████████████████] 100%` (plan-completion, awaits Phase 4 verifier)
 
 ## Phase Status
 
 - [x] **Phase 1: Foundation & Schema** — Complete (4/4 plans done: 01-01 ✓, 01-02a ✓, 01-02b ✓, 01-03 ✓); awaits verifier
 - [x] **Phase 2: Bluesky OAuth & Identity** — **VERIFIED 2026-04-24** (4/4 plans: 02-01 ✓, 02-02 ✓, 02-03 ✓, 02-04 ✓; VERIFICATION.md status=human_needed for live-AS happy path only — code-level 7/7 PASS)
 - [x] **Phase 3: Inbox, Message & SSR Reveal** — **VERIFIED 2026-04-26** (4/4 plans done; 03-01 ✓ / 03-02 ✓ / 03-03a ✓ / 03-03b ✓; VERIFICATION.md status=human_needed — code-level 7/7 PASS, 3 human items for live-AS / browser deferred to Phase 4 deploy)
-- [ ] **Phase 4: Moderation & Production Launch** — PLANNED (3 plans / 2 waves: 04-01 moderation+block+soft-delete + 04-02 report+account-deletion + 04-03 launch-runbook; ready for `/gsd-execute-phase 4`)
+- [x] **Phase 4: Moderation & Production Launch** — CODE-LEVEL COMPLETE 2026-04-28 (3/3 plans done: 04-01 ✓ block+soft-delete / 04-02 ✓ report+退会+REV-01 / 04-03 ✓ runbook+smoke checklist; awaits `/gsd-verify-phase 4`)
 
 ## Performance Metrics
 
 | Metric | Value |
 |--------|-------|
-| Phases completed | 2/4 certified (Phase 2 VERIFIED 2026-04-24, Phase 3 VERIFIED 2026-04-26; Phase 1 pending verify) |
-| Plans completed | 13/15 (Phase 1: 4 / Phase 2: 4 / Phase 3: 4 / Phase 4: 1 [04-01]) |
-| Nodes completed | ~32 tasks across 13 plans (+4 Phase 4-01: model layer / controllers + routes / templates + CSS / tests) |
-| Requirements shipped | 29/34 (Phases 1-3 の 25 件 + Phase 4-01 の INBOX-04, INBOX-05, MSG-08, MOD-04) |
+| Phases completed | 2/4 certified (Phase 2 VERIFIED 2026-04-24, Phase 3 VERIFIED 2026-04-26; Phase 1 + Phase 4 pending verify) |
+| Plans completed | 15/15 (Phase 1: 4 / Phase 2: 4 / Phase 3: 4 / Phase 4: 3 [04-01 + 04-02 + 04-03]) |
+| Nodes completed | ~41 tasks across 15 plans (+5 Phase 4-02: migration / controllers+routes / templates / CSS / tests) |
+| Requirements shipped | 34/34 (Phases 1-3 の 25 件 + Phase 4 全 9 件 INBOX-04, INBOX-05, MSG-08, MOD-01..04, INFRA-01, INFRA-06) |
 | Requirements partial | なし |
 | Phase 03-inbox-message-ssr-reveal P02 | 90min | 4 tasks | 12 files |
 | Phase 03-inbox-message-ssr-reveal P03a | 30m | - tasks | - files |
@@ -74,6 +74,8 @@ Overall: Phases 1-3 done + Phase 4 04-01 done — plans 13/15 done — `[██�
 | 02-04 oauth-flow | 3 | 3 | ~17m 29s | 2026-04-24 |
 | 02-verify | — | — | ~9m | 2026-04-24 |
 | 04-01 moderation-block-soft-delete | 1 | 4 | ~14m 38s | 2026-04-28 |
+| 04-03 launch-runbook | 1 (parallel) | 4 | ~5m 24s | 2026-04-28 |
+| 04-02 report-account-deletion-retired | 2 | 5 | ~25m | 2026-04-28 |
 
 ## Accumulated Context
 
@@ -156,8 +158,9 @@ Overall: Phases 1-3 done + Phase 4 04-01 done — plans 13/15 done — `[██�
 - [x] `/gsd-verify-phase 2` complete 2026-04-24 — VERIFICATION.md written. 7/7 ROADMAP Success Criteria verified at code level (truths + artifacts + key links + data-flow trace + spot-checks all green). phpcs 54/54 / phpstan level 8 [OK] / composer test 85/221/0-failure re-confirmed live. D-DEF-01 resolved as a side effect of Plan 02-04 home.php rewrite. Zero anti-patterns found. status=human_needed with 3 inherent human items (live Bluesky AS signup / browser cookie destroy / handle-change sync) deferred to tamabox.emomie.com launch.
 - [x] `/gsd-plan-phase 3` complete — see Phase 3 verifier-discovered decisions section.
 - [x] Phase 4 Plan 04-01 done 2026-04-28 — block CRUD + send block-check + soft-delete + dashboard footer / block_list + tamabox.css §1/§3/§5/§6/§9。INBOX-04 / INBOX-05 / MSG-08 / MOD-04 closed。4 commits 32b8da6 → 51e0d53、177 tests / 485 assertions / 0 failures。
-- [ ] Phase 4 Plan 04-02 next — Reports + AccountController + retired-user filter (MOD-01 / MOD-02 / MOD-03)。`/report/{id}` route は今 Missing Action 状態 (04-01 で `MessagesController::report` 削除、04-02 で `ReportsController::create` に re-point 予定) — 04-02 着手時に解消。
-- [ ] Phase 4 Plan 04-03 — LAUNCH-RUNBOOK + MANUAL-SMOKE-CHECKLIST + DEBUG=false guidance (INFRA-01 / INFRA-06)。04-01 と並行可 (wave 1 parallel) だが現状 04-01 完了後の sequential 実行も可。
+- [x] Phase 4 Plan 04-02 done 2026-04-28 — Reports + AccountController + retired-user filter (MOD-01 / MOD-02 / MOD-03)。5 commits (ddbf21c / ea8dfa7 / 2312845 / b810c2c / 5c77681)、195 tests / 546 assertions / 0 failures。`/report/{id}` route が `Reports::create` に re-point され、`/account/delete` route 新設。Auto-fix 2 件 (ReportsTable validator uuid()→scalar() + DatabaseException|PDOException union catch)。
+- [x] Phase 4 Plan 04-03 done 2026-04-28 — LAUNCH-RUNBOOK + MANUAL-SMOKE-CHECKLIST + DEBUG=false guidance (INFRA-01 / INFRA-06)。4 commits (6ecdd0c / bc22dd0 / 84d8281 / a4715a5 → 9b8db14)。
+- [ ] `/gsd-verify-phase 4` 次 — Phase 4 全 3 plan code-level 完了、manual smoke walkthrough (12 items) と code-level success criteria 確認を verifier 視点で実施。Phase 2/3 carry-over の 3 human items も同セッションで消化予定。
 - [x] **Phase 2 sticky #5 — `BlueskyOAuthClient::refreshToken()` call-site defer** = `resolved-as-not-needed-for-MVP` (Phase 4 04-CONTEXT.md REV-03, 2026-04-28 03:10 JST user confirmation). The method body itself remains in `src/Service/OAuth/Bluesky/BlueskyOAuthClient.php:156-187` for future PDS-API phases (e.g., AUTH-06 X provider extension or post-MVP eager refresh middleware). Phase 4 ships moderation + 退会 + production launch only; **no live PDS call site exists in the MVP**, so refresh integration would be 100% dead code. Phase 4 verify-phase will confirm: (a) `BlueskyOAuthClient::refreshToken()` is unreachable from any controller flow; (b) the existing tests for `refreshToken()` (Phase 2 unit tests) still pass even though the method is unused.
 
 ### Blockers
@@ -175,18 +178,23 @@ None currently. Resolved blockers:
 
 ## Session Continuity
 
-**Last Agent Run**: execute-phase 4 plan 04-01 @ 2026-04-28 — BlocksController 501 stub → real impl (create + delete) / MessagesController::send dual-gate block check + delete action (report action 削除) / UsersController::dashboard messages.deleted_at IS NULL filter + $blocks/$reportedSet view-vars / BlocksTable::isBlocked finder / MessagesTable::softDeleteByReceiver method + DELETED_REASON_USER/ADMIN const / templates/element/block_list.php 新規 / templates/Users/dashboard.php に message-row__footer 追加 / templates/Messages/send.php に error-banner + disabled form / webroot/css/tamabox.css に §1/§3/§5/§6/§9 (+108 行) / config/routes.php に 2 ルート (/dashboard/messages/{id}/delete + /dashboard/blocks/{id}/delete) 追加 / Test fixtures 4 改修 + 4 テスト class 編集。Phase 3 baseline 163 → 177 tests / 485 assertions / 0 failures。phpstan level 8 [OK] / phpcs 65/65。4 commits (32b8da6 / c95ff1d / f8f77f7 / 51e0d53)。
-**Next Action**: Phase 4 Plan 04-02 (Reports + Account deletion + retired-user filter) または並行 Plan 04-03 (LAUNCH-RUNBOOK)。04-01 既知の orphan route `/report/{id}` (Missing Action) は 04-02 で解消する。
-**Context Notes**: Phase 4 04-01 完了。INBOX-04 / INBOX-05 / MSG-08 / MOD-04 が closed。Plan 04-02 着手時の前提:
+**Last Agent Run**: execute-phase 4 plan 04-02 @ 2026-04-28 — ReportsController::create (4 カテゴリ通報 GET+POST、UNIQUE collision dedupe) + AccountController::delete (users.deleted_at + logout + redirect /) + InboxesTable::findBySlugOrPrevious REV-01 retired-user 404 フィルタ + Phinx migration `uk_reports_reporter_message` UNIQUE (reporter_user_id + message_id) + ReportsFixture +1 row / config/routes.php /report/{id} を `Messages::report` から `Reports::create` に re-point + `/account/delete` 新設 / templates/Reports/create.php + templates/Account/delete.php 新規 / templates/element/inbox_settings_form.php danger-zone fieldset / templates/Users/dashboard.php SSR-hit sender card 内 inline 通報 form 削除 + footer に <a href> 通報リンク追加 / webroot/css/tamabox.css §2/§4/§7/§Layouts danger-zone (+162 行) / ReportsControllerTest (11) + AccountControllerTest (5) + REV-01 sentinels (Messages +1 / Inboxes +1)。Phase 4 04-01 baseline 177 → 195 tests / 546 assertions / 0 failures。phpstan level 8 [OK] / phpcs 69/69。5 commits (ddbf21c / ea8dfa7 / 2312845 / b810c2c / 5c77681)。Auto-fixed: (1) ReportsTable.validationDefault の uuid() を scalar() に格下げ (fixture non-versioned UUID 互換)、(2) UNIQUE collision catch を `DatabaseException | PDOException` 化 + SQLSTATE 23000 / 'Duplicate entry' / index 名 マッチング (CakePHP 5 raw PDOException 漏れ対策)。
+**Next Action**: `/gsd-verify-phase 4` — Phase 4 全 3 plan code-level 完了、verifier に渡す。Manual smoke walkthrough (Phase 4 9 + Phase 2/3 carry-over 3 = 12 items) を verifier セッションで実施。
+**Context Notes**: Phase 4 全 3 plan (04-01 / 04-02 / 04-03) 完了。9/9 Phase 4 要件 (INBOX-04, INBOX-05, MSG-08, MOD-01, MOD-02, MOD-03, MOD-04, INFRA-01, INFRA-06) closed。Verifier 着手時の前提:
 
-- `dave` test user (id=44444444-...) が UsersFixture / UserIdentitiesFixture に追加済み — alice にブロックされていない sender
-- `aaaa4444-...` soft-deleted message が MessagesFixture に追加済み — 04-02 でも filter sentinel として再利用可能
-- `MessagesTable::DELETED_REASON_USER` / `DELETED_REASON_ADMIN` const が利用可能 — 04-02 運営側削除 path で `DELETED_REASON_ADMIN` を使う
-- `BlocksTable::isBlocked` finder が利用可能 — 04-02 の Reports 経路でも将来 ブロック中送信者通報拒否ポリシーが入った場合は再利用可能
-- `BlocksController` の DatabaseException catch idempotent パターン — 04-02 の uk_reports_reporter_message UNIQUE 衝突 catch で同パターンを使う
-- `templates/element/block_list.php` の partial パターン — 04-02 で danger-zone partial 等を切り出す参考
-- tamabox.css に §2 / §4 / §7 / Layouts danger-zone を 04-02 で追加予定 (04-01 は §1/§3/§5/§6/§9 のみ append、token は既存のみ参照)
-- routes.php の `/report/{id}` route は `Messages::report` を指したまま orphan 状態。04-02 で `Reports::create` に re-point + `/account/delete` を追加する。
+- 195 tests / 546 assertions / 0 failures (`composer test`)
+- phpstan level 8 [OK] / phpcs 69/69 clean
+- bin/cake migrations status → 8 migrations 全 up (Phase 4 で 1 追加: AddReporterMessageUniqueToReports)
+- routes.php: /report/{id} (Reports::create GET+POST), /account/delete (Account::delete GET+POST), /dashboard/messages/{id}/delete, /dashboard/blocks/{id}/delete, /block/{senderUserId}, /dashboard/messages/{id}/open など Phase 4 の全 route 結線済
+- LAUNCH-RUNBOOK.md (D-37 6 step) + MANUAL-SMOKE-CHECKLIST.md (12 items) は repo root 直下
+- REV-01 (inboxes.deleted_at 不存在) / REV-03 (token refresh descope) は 04-CONTEXT.md に記録、影響範囲は plan 全体に伝播済
+- 退会済 user の slug GET は 404 (`testSendReturns404WhenInboxOwnerRetired` で sentinel)
+- 退会後 messages.sender_*_snapshot は不変 (`testDeletePostPreservesSenderSnapshots` で MOD-03 sentinel)
+
+### Executor-discovered decisions (Phase 4 — Plan 04-02)
+
+- **ReportsTable::validationDefault の `->uuid()` を `->scalar()` に格下げ** (Plan 04-02 Task 5 deviation Rule 1): Phase 1 で bake された validator は `message_id` / `reporter_user_id` に CakePHP の strict UUID rule を付けていたが、これは RFC-4122 versioned UUID (v1〜v5) のみ受理。test fixture が読みやすさのため使う `aaaa1111-aaaa-aaaa-aaaa-aaaaaaaaaaaa` のような non-versioned CHAR(36) 値は invalid 判定され `saveOrFail` が PersistenceFailedException を throw。MessagesTable / BlocksTable は scalar() を使って同問題を回避済。Phase 4 で同 convention に揃えた。Phase 5 以降の新規 Table validator も `->scalar('xxx_id') ->notEmptyString` を default に、`->uuid()` は production-only テーブル (将来) に限定する。
+- **UNIQUE collision catch は `DatabaseException | PDOException` union + SQLSTATE 23000 マッチング** (Plan 04-02 Task 5 deviation Rule 1): 研究フェーズ Pattern 4 / Plan 04-01 BlocksController 実装は `DatabaseException` のみ catch だったが、CakePHP 5 / MySQL driver では UNIQUE 衝突を raw PDOException で throw する場合があった。Phase 4 後続あるいは新 phase で同 pattern を使う場合は同様に union 化推奨。判定は `$e->getCode() === '23000'` または `str_contains($e->getMessage(), '<index 名>')` または `str_contains($e->getMessage(), 'Duplicate entry')` の OR 条件で。
 
 ---
-*Last updated: 2026-04-28 (Phase 4 04-01 EXECUTED — 4 commits 32b8da6 → 51e0d53、INBOX-04/05/MSG-08/MOD-04 closed、177 tests / 485 assertions / 0 failures)*
+*Last updated: 2026-04-28 (Phase 4 04-02 EXECUTED — 5 commits ddbf21c → 5c77681、MOD-01/02/03 closed、Phase 4 全 9 要件 closed、195 tests / 546 assertions / 0 failures、`/gsd-verify-phase 4` 待ち)*
