@@ -75,6 +75,25 @@ class MessagesFixture extends TestFixture
                 'deleted_reason' => null,
                 'created_at' => '2026-04-23 10:45:00.000000',
             ],
+            // Phase 4 Plan 04-01: soft-deleted message (filter sentinel).
+            [
+                'id' => 'aaaa4444-aaaa-aaaa-aaaa-aaaaaaaaaaaa',
+                'inbox_id' => '11111111-1111-1111-1111-111111111111',
+                'sender_user_id' => '22222222-2222-2222-2222-222222222222',
+                'body' => '削除済テストメッセージ',
+                'body_length' => 11,
+                'is_ssr' => 0,
+                'ssr_probability_at_send' => '0.100',
+                'ssr_seed' => str_repeat('d', 64),
+                'sender_provider' => 'bluesky',
+                'sender_handle_snapshot' => 'bob-2.bsky.social',
+                'sender_avatar_url_snapshot' => 'https://example.com/bob.jpg',
+                'sender_profile_url_snapshot' => 'https://bsky.app/profile/bob-2.bsky.social',
+                'opened_at' => '2026-04-23 12:00:00.000000',
+                'deleted_at' => '2026-04-23 12:30:00.000000',
+                'deleted_reason' => 'user_deleted',
+                'created_at' => '2026-04-23 11:00:00.000000',
+            ],
         ];
         parent::init();
     }

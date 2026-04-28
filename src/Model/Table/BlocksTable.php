@@ -90,4 +90,22 @@ class BlocksTable extends Table
 
         return $validator;
     }
+
+    /**
+     * Phase 4 D-05 / INBOX-05 — boolean check whether $blockerId has blocked $blockedId.
+     *
+     * Direction: blocker_user_id is the receiver who created the block (= inbox.user_id);
+     * blocked_user_id is the sender being blocked. RESEARCH Pitfall 4 names this pairing.
+     *
+     * @param string $blockerId UUID of the receiver who may have created the block.
+     * @param string $blockedId UUID of the sender who may be blocked.
+     * @return bool true if a blocks row exists for this directional pair.
+     */
+    public function isBlocked(string $blockerId, string $blockedId): bool
+    {
+        return $this->exists([
+            'blocker_user_id' => $blockerId,
+            'blocked_user_id' => $blockedId,
+        ]);
+    }
 }

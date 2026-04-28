@@ -25,6 +25,13 @@ class BlocksFixture extends TestFixture
                 'reason' => 'spam',
                 'created_at' => '2026-04-22 12:00:00',
             ],
+            [
+                'id' => 'b10c1c1c-aaaa-bbbb-cccc-111122223333',
+                'blocker_user_id' => '11111111-1111-1111-1111-111111111111',
+                'blocked_user_id' => '33333333-3333-3333-3333-333333333333',
+                'reason' => null,
+                'created_at' => '2026-04-22 12:30:00',
+            ],
         ];
         parent::init();
     }

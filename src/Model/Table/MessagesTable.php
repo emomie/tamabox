@@ -33,6 +33,9 @@ use RuntimeException;
  */
 class MessagesTable extends Table
 {
+    public const DELETED_REASON_USER = 'user_deleted';
+    public const DELETED_REASON_ADMIN = 'admin_action';
+
     /**
      * Initialize method
      *
@@ -303,6 +306,54 @@ class MessagesTable extends Table
         $patched = $this->patchEntity($msg, [
             'opened_at' => FrozenTime::now(),
         ], ['accessibleFields' => ['opened_at' => true]]);
+        /** @var \App\Model\Entity\Message $saved */
+        $saved = $this->saveOrFail($patched);
+
+        return $saved;
+    }
+
+    /**
+     * Phase 4 MSG-08 / D-18 — soft-delete a message by its receiver.
+     *
+     * Mirrors markOpened() shape: ownership-checked, idempotent, single-table-row UPDATE.
+     * D-20 list filter (WHERE deleted_at IS NULL) is applied at the controller paginate query;
+     * this method is unconditional given valid ownership.
+     *
+     * RESEARCH Pitfall 5: DO NOT touch body / body_length — body_length CHECK constraint
+     * (CHECK (body_length = CHAR_LENGTH(body))) breaks if body is repatched without
+     * recomputing body_length. accessibleFields whitelist enforces this.
+     *
+     * @param string $messageId UUID of the message.
+     * @param string $ownerUserId UUID of the receiver (current authenticated user).
+     * @param string $reason Free-form reason literal — D-22 'user_deleted' for receiver delete.
+     * @return \App\Model\Entity\Message
+     * @throws \Cake\Http\Exception\NotFoundException If message not found.
+     * @throws \Cake\Http\Exception\ForbiddenException If message's inbox is not owned by $ownerUserId.
+     */
+    public function softDeleteByReceiver(string $messageId, string $ownerUserId, string $reason = self::DELETED_REASON_USER): \App\Model\Entity\Message
+    {
+        /** @var \App\Model\Entity\Message|null $msg */
+        $msg = $this->find()
+            ->where([$this->aliasField('id') => $messageId])
+            ->contain(['Inboxes'])
+            ->first();
+        if ($msg === null) {
+            throw new \Cake\Http\Exception\NotFoundException(__('メッセージが見つかりませんでした。'));
+        }
+        $inbox = $msg->inbox ?? null;
+        if ($inbox === null || (string)$inbox->user_id !== $ownerUserId) {
+            throw new \Cake\Http\Exception\ForbiddenException(__('このメッセージを削除する権限がありません。'));
+        }
+        if ($msg->deleted_at !== null) {
+            return $msg; // idempotent — re-delete does NOT update timestamp
+        }
+        $patched = $this->patchEntity($msg, [
+            'deleted_at' => FrozenTime::now(),
+            'deleted_reason' => $reason,
+        ], ['accessibleFields' => [
+            'deleted_at' => true,
+            'deleted_reason' => true,
+        ]]);
         /** @var \App\Model\Entity\Message $saved */
         $saved = $this->saveOrFail($patched);
 
