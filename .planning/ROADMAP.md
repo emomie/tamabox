@@ -87,7 +87,7 @@
   5. 通報された送信者でも、受け手側のブロックがない限り、別 inbox への送信は拒否されない(グローバル BAN は発生しない)
   6. `tamabox.emomie.com` で実サイトが稼働し、`debug=false` 固定 / DebugKit 無効化 / webroot 外 config / ES256 鍵は `config/keys/` に配置された状態で OAuth・送信・開封が本番から通る
 **Plans**: 3 plans (2 waves)
-  - [ ] 04-01-PLAN.md — Block CRUD (BlocksController create/delete + isBlocked finder) + send-form block error banner + soft-delete (MessagesController delete + softDeleteByReceiver) + dashboard deleted_at filter + block-list element + 通報済 view-var (INBOX-04, INBOX-05, MSG-08, MOD-04) [wave 1]
+  - [x] 04-01-PLAN.md — Block CRUD (BlocksController create/delete + isBlocked finder) + send-form block error banner + soft-delete (MessagesController delete + softDeleteByReceiver) + dashboard deleted_at filter + block-list element + 通報済 view-var (INBOX-04, INBOX-05, MSG-08, MOD-04) [wave 1] **✓ 2026-04-28**
   - [ ] 04-02-PLAN.md — Report flow (ReportsController + uk_reports_reporter_message UNIQUE migration + Reports/create.php) + Account deletion (AccountController + Account/delete.php + danger-zone) + InboxesTable REV-01 retired-user filter + dashboard 通報する link replacement + tamabox.css §2/§4/§7 append (MOD-01, MOD-02, MOD-03) [wave 2]
   - [ ] 04-03-PLAN.md — config/.env.example DEBUG=false guidance + LAUNCH-RUNBOOK.md (D-37 6 steps + Lolipop quirks + rollback) + MANUAL-SMOKE-CHECKLIST.md (12 items: 9 Phase 4 + 3 carry-over) + STATE.md REV-03 propagation (INFRA-01, INFRA-06) [wave 1, parallel with 04-01]
 **UI hint**: yes
@@ -99,7 +99,7 @@
 | 1. Foundation & Schema | 4/4 | Complete (01-01 ✓, 01-02a ✓, 01-02b ✓, 01-03 ✓); awaits verifier | 2026-04-22 |
 | 2. Bluesky OAuth & Identity | 4/4 | Complete (02-01 ✓, 02-02 ✓, 02-03 ✓ 2026-04-23; 02-04 ✓ 2026-04-24); awaits verifier | 2026-04-24 |
 | 3. Inbox, Message & SSR Reveal | 4/4 | **VERIFIED 2026-04-26** (human_needed — 7/7 code-level, 3 human items for live-AS deferred to Phase 4) | 2026-04-26 |
-| 4. Moderation & Production Launch | 0/3 | PLANNED 2026-04-28 (3 plans / 2 waves: 04-01 moderation+block+soft-delete / 04-02 report+account-deletion / 04-03 launch-runbook) | - |
+| 4. Moderation & Production Launch | 1/3 | In progress (04-01 ✓ 2026-04-28: block CRUD + send block-check + soft-delete; 04-02 / 04-03 pending) | - |
 
 ## Coverage Summary
 
@@ -114,4 +114,4 @@
 **Total**: 34/34 v1 requirements mapped, no orphans, no duplicates.
 
 ---
-*Last updated: 2026-04-24 (Phase 2 complete — all 4 plans shipped, 8 requirements AUTH-01/02/04/05/06/07/08/09 closed, awaits /gsd-verify-phase 2)*
+*Last updated: 2026-04-28 (Phase 4 04-01 complete — INBOX-04 / INBOX-05 / MSG-08 / MOD-04 closed; 4 commits 32b8da6 → 51e0d53; 177 tests / 485 assertions / 0 failures)*

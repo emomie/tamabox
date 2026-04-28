@@ -2,14 +2,14 @@
 gsd_state_version: 1.0
 milestone: v0.2
 milestone_name: milestone
-status: Phase 3 VERIFIED (human_needed — 7/7 code-level, 3 human items for live-AS / browser)
-last_updated: "2026-04-26T20:00:00.000Z"
+status: Phase 4 in progress — Plan 04-01 complete (4 commits, INBOX-04/05/MSG-08/MOD-04 closed)
+last_updated: "2026-04-28T04:10:00.000Z"
 progress:
   total_phases: 4
   completed_phases: 3
-  total_plans: 12
-  completed_plans: 12
-  percent: 100
+  total_plans: 15
+  completed_plans: 13
+  percent: 86
 ---
 
 # tamabox — STATE
@@ -28,36 +28,36 @@ Project memory. Updated by every gsd-* command.
 
 ## Current Position
 
-Phase: 02 (bluesky-oauth-identity) — **VERIFIED 2026-04-24** (7/7 observable truths; 3 human items for live Bluesky AS / browser cookie-destroy / handle-change sync — inherent to external-OAuth-provider contract)
-Plan: 4 of 4 complete (02-01 foundation ✓ 2026-04-23; 02-02 crypto ✓ 2026-04-23; 02-03 metadata+DID ✓ 2026-04-23; 02-04 oauth-flow ✓ 2026-04-24)
+Phase: 04 (moderation-production-launch) — **in progress** (Plan 04-01 ✓ 2026-04-28; 04-02 / 04-03 pending)
+Plan: 1 of 3 complete in Phase 4 (04-01 wave 1 ✓; 04-02 wave 2 / 04-03 wave 1-parallel pending)
 **Milestone**: v1 launch
-**Phase**: Phase 2 — Bluesky OAuth & Identity (**VERIFICATION PASSED at code level**; human gate for live-AS smoke test deferred to tamabox.emomie.com deployment in Phase 4)
-**Plan**: 4 plans in 3 waves — all shipped and verified. 02-01 foundation ✓ / 02-02 crypto ✓ / 02-03 metadata+DID ✓ / 02-04 oauth-flow ✓ / VERIFICATION.md ✓
-**Next Plan**: 03-03a (dashboard — open action; slug collision flash) — Wave 3 start
-**Status**: Phase 2 verification complete. All 8 requirements AUTH-01/02/04/05/06/07/08/09 satisfied at code level (Reflection + Configure smoke + ORM data-flow trace + QA gates all green). Full OAuth handshake wired end-to-end (PKCE + PAR + DPoP + private_key_jwt + nonce retry + DID→PDS → getProfile → UPSERT → setIdentity → /dashboard). 6 Phase-2 routes all live. D-DEF-01 resolved as a side effect of Plan 02-04's home.php rewrite. Zero anti-patterns in Phase 2 artifacts. composer test 85 tests / 221 assertions / 0 failures. phpstan level 8 [OK] / phpcs 54/54.
-**Resume file**: `.planning/phases/02-bluesky-oauth-identity/VERIFICATION.md` (verification report, 2026-04-24)
+**Phase**: Phase 4 — Moderation & Production Launch (Plan 04-01 ships block CRUD + send-form block-check + soft-delete + dashboard 削除 footer / ブロック中ユーザー section)
+**Next Plan**: 04-03 (LAUNCH-RUNBOOK + MANUAL-SMOKE-CHECKLIST + DEBUG=false guidance) — wave 1 parallel; or 04-02 (Reports + AccountController + retired-user filter) — wave 2 sequential
+**Status**: Plan 04-01 完了 2026-04-28 — 4 commits (32b8da6 / c95ff1d / f8f77f7 / 51e0d53) で INBOX-04 / INBOX-05 / MSG-08 / MOD-04 を closed。BlocksController の 501 stub を本実装 (create + delete) に差し替え、MessagesController::send に dual-gate ブロック判定 + delete action 追加、UsersController::dashboard に messages.deleted_at IS NULL filter + $blocks / $reportedSet view-vars、templates/element/block_list.php 新規 + dashboard.php に削除 footer + 通報済 badge slot、tamabox.css に §1/§3/§5/§6/§9 (+108 行) 追加。phpstan level 8 [OK] / phpcs 65/65 / composer test 177 tests / 485 assertions / 0 failures。Plan 構造のため Task 4 (a) BlocksControllerTest 全置換を Task 2 commit に前倒し (各 commit を独立 green に保つ Rule 3)。
+**Resume file**: `.planning/phases/04-moderation-production-launch/04-01-SUMMARY.md`
 
-**Progress**: Phase 2 at 4/4 plans + verified — `[████████████████████] 100%` (Phase 2 internal)
-Overall: Phases 2/4 verified — plans 8/8 done (of originally planned; Phase 3+4 plans not yet generated) — `[██████████░░░░░░░░░░] 50%` (phase-completion)
+**Progress**: Phase 4 at 1/3 plans — `[██████░░░░░░░░░░░░░░] 33%` (Phase 4 internal)
+Overall: Phases 1-3 done + Phase 4 04-01 done — plans 13/15 done — `[█████████████████░░░] 87%` (plan-completion)
 
 ## Phase Status
 
 - [x] **Phase 1: Foundation & Schema** — Complete (4/4 plans done: 01-01 ✓, 01-02a ✓, 01-02b ✓, 01-03 ✓); awaits verifier
 - [x] **Phase 2: Bluesky OAuth & Identity** — **VERIFIED 2026-04-24** (4/4 plans: 02-01 ✓, 02-02 ✓, 02-03 ✓, 02-04 ✓; VERIFICATION.md status=human_needed for live-AS happy path only — code-level 7/7 PASS)
 - [x] **Phase 3: Inbox, Message & SSR Reveal** — **VERIFIED 2026-04-26** (4/4 plans done; 03-01 ✓ / 03-02 ✓ / 03-03a ✓ / 03-03b ✓; VERIFICATION.md status=human_needed — code-level 7/7 PASS, 3 human items for live-AS / browser deferred to Phase 4 deploy)
-- [ ] **Phase 4: Moderation & Production Launch** — Not started
+- [ ] **Phase 4: Moderation & Production Launch** — In progress (1/3 plans complete; 04-01 ✓ 2026-04-28)
 
 ## Performance Metrics
 
 | Metric | Value |
 |--------|-------|
-| Phases completed | 1/4 certified (Phase 2 VERIFIED 2026-04-24; Phase 1 pending verify) |
-| Plans completed | 8/8 (Phase 1: 01-01, 01-02a, 01-02b, 01-03; Phase 2: 02-01, 02-02, 02-03, 02-04) |
-| Nodes completed | 28 tasks across 8 plans (+3 Phase 2-04: BlueskyOAuthClient / DB upsert / controllers+templates+tests) |
-| Requirements shipped | 13/34 (INFRA-02, -03, -04, -05, -07; AUTH-01, AUTH-02, AUTH-04, AUTH-05, AUTH-06, AUTH-07, AUTH-08, AUTH-09) |
-| Requirements partial | なし (Phase 2 で AUTH-06 concrete impl 完成、全 AUTH シリーズ closed) |
+| Phases completed | 2/4 certified (Phase 2 VERIFIED 2026-04-24, Phase 3 VERIFIED 2026-04-26; Phase 1 pending verify) |
+| Plans completed | 13/15 (Phase 1: 4 / Phase 2: 4 / Phase 3: 4 / Phase 4: 1 [04-01]) |
+| Nodes completed | ~32 tasks across 13 plans (+4 Phase 4-01: model layer / controllers + routes / templates + CSS / tests) |
+| Requirements shipped | 29/34 (Phases 1-3 の 25 件 + Phase 4-01 の INBOX-04, INBOX-05, MSG-08, MOD-04) |
+| Requirements partial | なし |
 | Phase 03-inbox-message-ssr-reveal P02 | 90min | 4 tasks | 12 files |
 | Phase 03-inbox-message-ssr-reveal P03a | 30m | - tasks | - files |
+| Phase 04-moderation-production-launch P01 | ~14m 38s | 4 tasks | 17 files (16 modified + 1 created) |
 
 ### Plan Duration Log
 
@@ -72,6 +72,7 @@ Overall: Phases 2/4 verified — plans 8/8 done (of originally planned; Phase 3+
 | 02-03 metadata-did | 2 | 2 | ~4m | 2026-04-23 |
 | 02-04 oauth-flow | 3 | 3 | ~17m 29s | 2026-04-24 |
 | 02-verify | — | — | ~9m | 2026-04-24 |
+| 04-01 moderation-block-soft-delete | 1 | 4 | ~14m 38s | 2026-04-28 |
 
 ## Accumulated Context
 
@@ -129,6 +130,16 @@ Overall: Phases 2/4 verified — plans 8/8 done (of originally planned; Phase 3+
 - **CakePHP render() auto-prepends controller name** (Plan 03-02 deviation Rule 1): `$this->render('Messages/send_done')` from MessagesController resolves to `templates/Messages/Messages/send_done.php` (double prefix). Always use bare template name: `$this->render('send_done')`.
 - **postString() helper pattern extends queryString() to POST data** (Plan 03-02): MessagesController adds `postString(string $key): string` analogous to OauthController's `queryString()` for phpstan-level-8-safe POST data reads. Pattern: `$v = $this->request->getData($key); return is_string($v) ? $v : '';`
 
+### Executor-discovered decisions (Phase 4 — Plan 04-01)
+
+- **Plan-provided controller code returned `: Response` but redirect()→Response|null** (Plan 04-01 Task 2 deviation Rule 1): `BlocksController::create` / `delete` の plan body は `: Response` 宣言だったが `$this->redirect()` の戻り値型は `Cake\Http\Response|null` で phpstan level 8 が 8 errors。両 method を `: ?Response` に変更し docblock も `@return \Cake\Http\Response|null` に揃えた。Phase 4 以降の controller method で redirect を返す分岐がある場合は `: ?Response` 必須。
+- **既存 send-flow テスト群の loginAsBob → loginAsDave 切替** (Plan 04-01 Task 2 deviation Rule 1): Phase 3 までは alice→bob block fixture が存在しても `MessagesController::send` がブロック判定を呼んでいなかったため inert だった。Phase 4 04-01 で dual-gate block check を入れた瞬間、`loginAsBob → /alice POST` 系の既存 5 件が consent / body validation に到達する前にブロックされ Flash error 'この受信箱には送信できません。' で fail。dave (44444444-..., handle=`dave.bsky.social`) を UsersFixture / UserIdentitiesFixture に追加し、send-flow テストを `loginAsDave()` に切り替え。bob は `testOpenOtherUsersMessageReturns403` 等で引き続き必要なため `loginAsBob()` ヘルパー温存。
+- **Test fixture に "ブロックされていない sender" を 1 体常備する** (Plan 04-01 deviation Rule 2): Phase 3 fixture には alice / bob / charlie の 3 user しかおらず、charlie は UserIdentities が無いため `MessagesTable::sendMessage` が "sender has no user_identity" で落ちる。bob は alice にブロックされている。Phase 4 でブロック検査が有効化されると send-flow validation テストの validation 検査自体に到達できなかった。dave を追加して解消。Phase 4 後続 plan の test design 時にも「特定の block / report fixture の影響を受けない sender」が必要なら dave を再利用。
+- **Plan 構造由来の Red 期間を回避するため Task 4(a) を Task 2 commit に前倒し** (Plan 04-01 deviation Rule 3): plan は Task 2 で BlocksController body を 501 stub から本実装に差し替え、Task 4 (a) で対応する `testCreateReturns501Stub` を含む BlocksControllerTest 全体を置換する構造。順番通り実行すると Task 2 commit ~ Task 4 commit 間で BlocksControllerTest が必ず failing になる。GSD の atomic-commit-stays-green 不変条件を守るため Task 4 (a) を Task 2 commit に統合。本パターンは「controller body の 501 stub 解消」と「同 controller の 501 stub テスト削除」が分かれた task 間で発生しうる一般則。
+- **`/report/{id}` route は意図的に 04-01 → 04-02 の gap 状態** (Plan 04-01 known stub): config/routes.php の `/report/{id}` は今も `Messages::report` を指すが action は 04-01 で削除済。Plan 04-02 で ReportsController を作成して route を `Reports::create` に re-point する設計。テスト suite はこの経路を踏まないため green を維持しつつ、04-02 までのウィンドウで本番 dashboard SSR-hit カードの「通報する」ボタンは Missing Action になる。同 wave 内で 04-02 が続く前提のリスク許容。
+- **D-22 reason literals を MessagesTable の const 化** (Plan 04-01 implementation choice): `MessagesTable::DELETED_REASON_USER = 'user_deleted'` / `DELETED_REASON_ADMIN = 'admin_action'`。型安全 + 検索容易性 + 04-02 で運営側削除 path が同じ const を再利用できる。Phase 1 の `messages.deleted_reason VARCHAR(64) NULL` の app-layer enforcement として後続 plan も踏襲する。
+- **DatabaseException catch で UNIQUE 衝突を冪等吸収** (Plan 04-01 implementation choice): `BlocksController::create` の uk_blocks_pair UNIQUE 衝突は `try { saveOrFail() } catch (DatabaseException) {}` で完全 silent。Flash success のみ出して `/dashboard` redirect (D-03 idempotent silent success)。`PersistenceFailedException` (validation 失敗) は別 catch で Flash error。Phase 4 後続 plan で同様の UNIQUE 制約付き INSERT を扱う場合 (04-02 の `uk_reports_reporter_message` 等) も同パターンを使う。
+
 ### Verifier-discovered decisions (Phase 2)
 
 - **Live-AS OAuth happy-path is out of automated verification scope** (recorded 2026-04-24 by `/gsd-verify-phase 2`): BlueskyOAuthClient integration tests use `Client::addMockResponse()` stubs for PAR / token / profile endpoints. The actual AS + PDS handshake (production Bluesky) can only be observed from a real browser against `tamabox.emomie.com`. Verifier returned `status: human_needed` with 3 human items (live signup / logout cookie-destroy / handle-change sync). Phase 2 goal is achieved at code level; production smoke test is a Phase 4 launch gate.
@@ -142,7 +153,10 @@ Overall: Phases 2/4 verified — plans 8/8 done (of originally planned; Phase 3+
 - [x] Phase 2 Wave 2 metadata leg done 2026-04-23 — 02-03 metadata+DID shipped (OauthController with clientMetadata/jwks/callback-stub actions + DidResolver for plc.directory DID → PDS lookup; 20 new tests; AUTH-08 closed; callback 501 stub held as hand-off contract for 02-04).
 - [x] Phase 2 Wave 3 oauth-flow done 2026-04-24 — 02-04 shipped (BlueskyOAuthClient 5-method impl + TDD RED/GREEN, UsersTable::findByDid + UserIdentitiesTable::upsertBlueskyIdentity with AES-GCM encrypt & UPSERT-in-txn, AuthController::startBluesky + logout, OauthController::callback full implementation replacing 501 stub, UsersController::dashboard, 5 templates + tamabox.css 218 lines, 10 new integration tests + 13 unit tests = 23 new tests; 85 tests total green). AUTH-01/02/04/05/06/09 closed.
 - [x] `/gsd-verify-phase 2` complete 2026-04-24 — VERIFICATION.md written. 7/7 ROADMAP Success Criteria verified at code level (truths + artifacts + key links + data-flow trace + spot-checks all green). phpcs 54/54 / phpstan level 8 [OK] / composer test 85/221/0-failure re-confirmed live. D-DEF-01 resolved as a side effect of Plan 02-04 home.php rewrite. Zero anti-patterns found. status=human_needed with 3 inherent human items (live Bluesky AS signup / browser cookie destroy / handle-change sync) deferred to tamabox.emomie.com launch.
-- [ ] `/gsd-plan-phase 3` next — Inbox / Message / SSR Reveal (AUTH-03 + INBOX-01/02/03/06 + MSG-01..07). Phase 3 assumes: `$this->Authentication` component always available in any AppController subclass; `BlueskyOAuthClient::refreshToken` is implemented + unit-tested but needs call site added by send flow; `user_identities.last_synced_at` is fresh per login so no TTL check needed; `queryString/sessionString` helper pattern for phpstan-safe query/session reads.
+- [x] `/gsd-plan-phase 3` complete — see Phase 3 verifier-discovered decisions section.
+- [x] Phase 4 Plan 04-01 done 2026-04-28 — block CRUD + send block-check + soft-delete + dashboard footer / block_list + tamabox.css §1/§3/§5/§6/§9。INBOX-04 / INBOX-05 / MSG-08 / MOD-04 closed。4 commits 32b8da6 → 51e0d53、177 tests / 485 assertions / 0 failures。
+- [ ] Phase 4 Plan 04-02 next — Reports + AccountController + retired-user filter (MOD-01 / MOD-02 / MOD-03)。`/report/{id}` route は今 Missing Action 状態 (04-01 で `MessagesController::report` 削除、04-02 で `ReportsController::create` に re-point 予定) — 04-02 着手時に解消。
+- [ ] Phase 4 Plan 04-03 — LAUNCH-RUNBOOK + MANUAL-SMOKE-CHECKLIST + DEBUG=false guidance (INFRA-01 / INFRA-06)。04-01 と並行可 (wave 1 parallel) だが現状 04-01 完了後の sequential 実行も可。
 
 ### Blockers
 
@@ -159,9 +173,17 @@ None currently. Resolved blockers:
 
 ## Session Continuity
 
-**Last Agent Run**: execute-phase 3 plan 03-03b @ 2026-04-26 — BlocksController 501 stub + BlocksControllerTest (D-35 Phase 4 hand-off contract) + default-avatar.svg (UI-SPEC §7) + flash/info.php (UI-SPEC §11) + home.php Phase 3 explainer + PagesControllerTest +1 + tamabox.css Phase 3 extension (~421 lines appended, UI-SPEC §1-§13 full coverage). 163 tests / 439 assertions / 0 failures. phpstan level 8 [OK] / phpcs clean. 3 commits (0707208 / 84d3192 / 4f7a298).
-**Next Action**: Phase 3 ALL 4/4 plans complete. Run `/gsd-verify-phase 3` to verify.
-**Context Notes**: Phase 3 execution complete. All 4 plans shipped: 03-01 slug-foundation / 03-02 send-flow / 03-03a dashboard-reveal / 03-03b stubs-styles-asset. BlocksController 501 stub = Phase 4 hand-off contract (INBOX-04/05). Phase 4 implementer must replace controller body + update test together. Live-AS E2E deferred to Phase 4 deploy (same human_needed precedent as Phase 2).
+**Last Agent Run**: execute-phase 4 plan 04-01 @ 2026-04-28 — BlocksController 501 stub → real impl (create + delete) / MessagesController::send dual-gate block check + delete action (report action 削除) / UsersController::dashboard messages.deleted_at IS NULL filter + $blocks/$reportedSet view-vars / BlocksTable::isBlocked finder / MessagesTable::softDeleteByReceiver method + DELETED_REASON_USER/ADMIN const / templates/element/block_list.php 新規 / templates/Users/dashboard.php に message-row__footer 追加 / templates/Messages/send.php に error-banner + disabled form / webroot/css/tamabox.css に §1/§3/§5/§6/§9 (+108 行) / config/routes.php に 2 ルート (/dashboard/messages/{id}/delete + /dashboard/blocks/{id}/delete) 追加 / Test fixtures 4 改修 + 4 テスト class 編集。Phase 3 baseline 163 → 177 tests / 485 assertions / 0 failures。phpstan level 8 [OK] / phpcs 65/65。4 commits (32b8da6 / c95ff1d / f8f77f7 / 51e0d53)。
+**Next Action**: Phase 4 Plan 04-02 (Reports + Account deletion + retired-user filter) または並行 Plan 04-03 (LAUNCH-RUNBOOK)。04-01 既知の orphan route `/report/{id}` (Missing Action) は 04-02 で解消する。
+**Context Notes**: Phase 4 04-01 完了。INBOX-04 / INBOX-05 / MSG-08 / MOD-04 が closed。Plan 04-02 着手時の前提:
+- `dave` test user (id=44444444-...) が UsersFixture / UserIdentitiesFixture に追加済み — alice にブロックされていない sender
+- `aaaa4444-...` soft-deleted message が MessagesFixture に追加済み — 04-02 でも filter sentinel として再利用可能
+- `MessagesTable::DELETED_REASON_USER` / `DELETED_REASON_ADMIN` const が利用可能 — 04-02 運営側削除 path で `DELETED_REASON_ADMIN` を使う
+- `BlocksTable::isBlocked` finder が利用可能 — 04-02 の Reports 経路でも将来 ブロック中送信者通報拒否ポリシーが入った場合は再利用可能
+- `BlocksController` の DatabaseException catch idempotent パターン — 04-02 の uk_reports_reporter_message UNIQUE 衝突 catch で同パターンを使う
+- `templates/element/block_list.php` の partial パターン — 04-02 で danger-zone partial 等を切り出す参考
+- tamabox.css に §2 / §4 / §7 / Layouts danger-zone を 04-02 で追加予定 (04-01 は §1/§3/§5/§6/§9 のみ append、token は既存のみ参照)
+- routes.php の `/report/{id}` route は `Messages::report` を指したまま orphan 状態。04-02 で `Reports::create` に re-point + `/account/delete` を追加する。
 
 ---
-*Last updated: 2026-04-26 (Phase 3 PLANNED — 4 plans / 3 waves committed `403cc95`、checker iter #2 PASS、12/12 REQ + 40/40 D-XX coverage; ready for /gsd-execute-phase 3 — recommend /clear first)*
+*Last updated: 2026-04-28 (Phase 4 04-01 EXECUTED — 4 commits 32b8da6 → 51e0d53、INBOX-04/05/MSG-08/MOD-04 closed、177 tests / 485 assertions / 0 failures)*

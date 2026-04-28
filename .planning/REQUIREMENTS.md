@@ -25,8 +25,8 @@ PROJECT.md の Active 要件を REQ-ID 付きで正規化したもの。ROADMAP 
 - [x] **INBOX-01** — 受け手のサインアップ時に SNS handle から導出した slug が自動付与され、受け手は inbox URL (`/<slug>`) を持つ。slug 衝突時は `-2` / `-3` の suffix が自動で付く(Phase 3 改定: 元は『カスタム slug を選んで』だったが、receiver と sender の SNS identity 共有を維持するため自動付与方式に変更)
 - [x] **INBOX-02** — 受け手は自分の inbox の SSR 確率を 0〜100% で設定・変更できる(デフォルト 10%)
 - [x] **INBOX-03** — 受け手は自分の inbox の受信メッセージ一覧をダッシュボードで閲覧できる
-- [ ] **INBOX-04** — 受け手は送信者(identity)単位でブロックできる
-- [ ] **INBOX-05** — ブロックされた送信者が同じ inbox に送信しようとするとフォーム上でエラー表示される(「このユーザーには送信できません」)
+- [x] **INBOX-04** — 受け手は送信者(identity)単位でブロックできる
+- [x] **INBOX-05** — ブロックされた送信者が同じ inbox に送信しようとするとフォーム上でエラー表示される(「このユーザーには送信できません」)
 - [x] **INBOX-06** — 受け手の SNS handle 改名時に inbox の slug と display_name が自動追従する。tamabox 単独で slug / display_name を変更する機能はない(Phase 3 改定: 元は『受け手は slug / display_name を後から変更できる』だったが、SNS identity 連動方針に変更)
 
 ### メッセージ / SSR メカニクス (MSG)
@@ -38,14 +38,14 @@ PROJECT.md の Active 要件を REQ-ID 付きで正規化したもの。ROADMAP 
 - [x] **MSG-05** — 送信フォームに「確率で名前がバレる可能性がある」旨の同意 UI を明示し、同意なしでは送信できない(E1 仮説 / 法的合意)
 - [x] **MSG-06** — 受け手が未開封メッセージを「開封」する操作で `opened_at` が記録され、SSR 露出情報がフロントに開示される
 - [x] **MSG-07** — 開封前・開封済みは一覧上で視覚的に区別される(ガチャ演出の土台)
-- [ ] **MSG-08** — 受け手はメッセージを論理削除(`deleted_at` セット)できる
+- [x] **MSG-08** — 受け手はメッセージを論理削除(`deleted_at` セット)できる
 
 ### 通報 / モデレーション (MOD)
 
 - [ ] **MOD-01** — 受け手は任意のメッセージを 4 カテゴリ(`harassment` / `spam` / `illegal` / `other`)で通報でき、`reports` 行に記録される
 - [ ] **MOD-02** — 通報はあくまで事後レビュー方式で、送信時点で AI 検閲や NG ワードフィルターは実施しない
 - [ ] **MOD-03** — 退会(ユーザー削除)時も過去メッセージの送信者 snapshot(handle / avatar / profile_url)は保持する(V1 仮説補強)
-- [ ] **MOD-04** — 通報された送信者でも、受け手側のブロック操作がない限り、他 inbox への送信は妨げない(グローバル BAN は MVP 範囲外)
+- [x] **MOD-04** — 通報された送信者でも、受け手側のブロック操作がない限り、他 inbox への送信は妨げない(グローバル BAN は MVP 範囲外)
 
 ### インフラ / 運用 (INFRA)
 
@@ -95,8 +95,8 @@ PROJECT.md の Active 要件を REQ-ID 付きで正規化したもの。ROADMAP 
 | INBOX-01 | Phase 3: Inbox, Message & SSR Reveal | Shipped 2026-04-26 (Plan 03-01: SlugDeriver + UserIdentitiesTable hook + assignSlugForUser collision retry) |
 | INBOX-02 | Phase 3: Inbox, Message & SSR Reveal | Complete |
 | INBOX-03 | Phase 3: Inbox, Message & SSR Reveal | Complete |
-| INBOX-04 | Phase 4: Moderation & Production Launch | Pending |
-| INBOX-05 | Phase 4: Moderation & Production Launch | Pending |
+| INBOX-04 | Phase 4: Moderation & Production Launch | Shipped 2026-04-28 (Plan 04-01: BlocksController create/delete + isBlocked finder + dashboard block-list section + DatabaseException catch idempotent) |
+| INBOX-05 | Phase 4: Moderation & Production Launch | Shipped 2026-04-28 (Plan 04-01: MessagesController::send dual-gate block check + send.php error-banner + disabled form) |
 | INBOX-06 | Phase 3: Inbox, Message & SSR Reveal | Shipped 2026-04-26 (Plan 03-01: UserIdentitiesTable handle-change hook → slug rotation + slug_previous tracking + SlugCollisionSuffixApplied event) |
 | MSG-01 | Phase 3: Inbox, Message & SSR Reveal | Complete |
 | MSG-02 | Phase 3: Inbox, Message & SSR Reveal | Complete |
@@ -105,11 +105,11 @@ PROJECT.md の Active 要件を REQ-ID 付きで正規化したもの。ROADMAP 
 | MSG-05 | Phase 3: Inbox, Message & SSR Reveal | Complete |
 | MSG-06 | Phase 3: Inbox, Message & SSR Reveal | Complete |
 | MSG-07 | Phase 3: Inbox, Message & SSR Reveal | Complete |
-| MSG-08 | Phase 4: Moderation & Production Launch | Pending |
+| MSG-08 | Phase 4: Moderation & Production Launch | Shipped 2026-04-28 (Plan 04-01: MessagesController::delete + MessagesTable::softDeleteByReceiver + dashboard message-row__footer + UsersController::dashboard messages.deleted_at IS NULL filter) |
 | MOD-01 | Phase 4: Moderation & Production Launch | Pending |
 | MOD-02 | Phase 4: Moderation & Production Launch | Pending |
 | MOD-03 | Phase 4: Moderation & Production Launch | Pending |
-| MOD-04 | Phase 4: Moderation & Production Launch | Pending |
+| MOD-04 | Phase 4: Moderation & Production Launch | Shipped 2026-04-28 (Plan 04-01: dual-gate block check は inbox.user_id × current sender の組のみ参照、testSendPostUnrelatedInboxIgnoresUnrelatedBlocks sentinel が確認済) |
 | INFRA-01 | Phase 4: Moderation & Production Launch | Pending |
 | INFRA-02 | Phase 1: Foundation & Schema | Shipped (01-01) |
 | INFRA-03 | Phase 1: Foundation & Schema | Shipped (01-01) |
@@ -121,4 +121,4 @@ PROJECT.md の Active 要件を REQ-ID 付きで正規化したもの。ROADMAP 
 **Coverage**: 34/34 v1 requirements mapped to exactly one phase. No orphans, no duplicates.
 
 ---
-*Last updated: 2026-04-22 after roadmap creation*
+*Last updated: 2026-04-28 after Phase 4 Plan 04-01 execution (INBOX-04 / INBOX-05 / MSG-08 / MOD-04 closed; 29/34 requirements shipped)*
