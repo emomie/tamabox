@@ -747,3 +747,165 @@ button.button-clear {
     gap: var(--space-3);
     flex-wrap: wrap;
 }
+
+
+/* ============================================================
+ * Phase 4 — moderation UI (Plan 04-02: §2 undo-link / §4 report form / §7 account-delete page / §Layouts danger-zone)
+ * Source: .planning/phases/04-moderation-production-launch/04-UI-SPEC.md
+ * Token reuse only — no new --space-* / --color-* introduced.
+ * Plan 04-01 already appended §1 (error-banner), §3 (block-list), §5 (report-badge),
+ * §6 (message-row__footer), §9 (send-form is-disabled). 04-02 fills the remainder.
+ * ============================================================ */
+
+/* §2 — Block confirmation flash undo link (D-03) */
+.undo-link {
+    color: var(--color-accent);
+    text-decoration: underline;
+    margin-left: var(--space-1);
+}
+
+/* §4 — Report form page (D-09 / D-10 / D-11) */
+.report-page {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: var(--space-6) var(--space-4);
+}
+.report-page__header h1 {
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 1.25;
+    margin: 0 0 var(--space-2) 0;
+}
+.report-page__msg-excerpt {
+    margin: var(--space-4) 0;
+    padding: var(--space-3) var(--space-4);
+    background: var(--color-bg);
+    border-left: 3px solid var(--color-border);
+    border-radius: var(--radius-sm);
+}
+.report-page__msg-excerpt blockquote {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--color-text-secondary);
+    white-space: pre-wrap;
+}
+.report-form fieldset {
+    border: 0;
+    padding: 0;
+    margin: 0 0 var(--space-4) 0;
+}
+.report-form legend {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: var(--space-2);
+    padding: 0;
+}
+.report-form__radio-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-3);
+    margin-bottom: var(--space-1);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-size: 14px;
+}
+.report-form__radio-row:hover {
+    background: var(--color-bg);
+}
+.report-form__radio-row input[type="radio"] {
+    margin: 0;
+}
+.report-form__detail textarea {
+    width: 100%;
+    padding: var(--space-3);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    font-family: inherit;
+    font-size: 16px;
+    line-height: 1.5;
+    resize: vertical;
+}
+.report-form__actions {
+    display: flex;
+    gap: var(--space-3);
+    align-items: center;
+    flex-wrap: wrap;
+    margin-top: var(--space-6);
+}
+.report-form__actions .button-clear {
+    color: var(--color-text-secondary);
+}
+
+/* §7 — Account deletion page (D-23 / D-24 / D-27) */
+.account-delete-page {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: var(--space-12) var(--space-4);
+}
+.account-delete-page__header h1 {
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 1.25;
+    margin: 0 0 var(--space-6) 0;
+}
+.account-delete-page__notice {
+    padding: var(--space-4);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-left: 4px solid var(--color-warning);
+    border-radius: var(--radius-sm);
+    margin-bottom: var(--space-6);
+}
+.account-delete-page__notice p {
+    margin: 0 0 var(--space-3) 0;
+    line-height: 1.5;
+    font-size: 16px;
+}
+.account-delete-page__notice p:last-child {
+    margin-bottom: 0;
+}
+.account-delete-form__consent {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-2);
+    padding: var(--space-3);
+    background: var(--color-bg);
+    border-radius: var(--radius-sm);
+    margin-bottom: var(--space-4);
+    font-size: 14px;
+    line-height: 1.5;
+    cursor: pointer;
+}
+.account-delete-form__consent input[type="checkbox"] {
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+.account-delete-form__actions {
+    display: flex;
+    gap: var(--space-3);
+    align-items: center;
+    flex-wrap: wrap;
+}
+.button-destructive-bg {
+    background-color: var(--color-error);
+    border-color: var(--color-error);
+    color: var(--color-surface);
+}
+.button-destructive-bg:hover {
+    background-color: #B91C1C;
+    border-color: #B91C1C;
+}
+
+/* §Layouts — Settings → 退会 entry point (danger-zone fieldset) */
+.settings-form__danger-zone {
+    border-top: 1px solid var(--color-border);
+    margin-top: var(--space-6);
+    padding-top: var(--space-4);
+}
+.settings-form__danger-zone legend {
+    color: var(--color-error);
+}
