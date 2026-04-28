@@ -1,73 +1,85 @@
-# Phase 4 Manual Smoke Test Checklist
+# Phase 4 手動 smoke テスト チェックリスト
 
-**Trigger**: After LAUNCH-RUNBOOK.md Steps 1-5 complete; this is Step 6 of the runbook.
-**Operator**: solo developer (the user).
-**Devices needed**: 2 separate browsers / devices for accounts A and B (e.g., laptop Firefox + phone Bluesky app, OR two private windows + 2 distinct Bluesky test accounts).
-**Time estimate**: 30-45 min for full walkthrough.
+**実施タイミング**: LAUNCH-RUNBOOK.md の Step 1〜5 完了後。runbook の Step 6 がこれ。
+**実施者**: ソロ開発者(あなた)
+**必要デバイス**: アカウント A / B 用の **2 つの別ブラウザ or 端末** (例: ノート PC の Firefox + スマホの Bluesky アプリ、もしくは 2 つのプライベートウィンドウ + 別々の Bluesky テストアカウント 2 つ)
+**所要時間**: フル消化で 30〜45 分
 
-Fill in metadata + check each box as you go. If a step fails, capture the failure mode + screenshot link inline; afterward summarize in `.planning/phases/04-moderation-production-launch/VERIFICATION.md`.
-
----
-
-**Date**: ____________
-**Operator**: ____________
-**Production URL tested**: https://tamabox.emomie.com
-**Bluesky test account A**: ____________
-**Bluesky test account B**: ____________
+各項目を消化しながらチェックを入れる。失敗したら、その場で失敗内容とスクショリンクをインラインに記録 → 後でまとめて `.planning/phases/04-moderation-production-launch/VERIFICATION.md` に転記。
 
 ---
 
-## Phase 4 new flows (D-35 walkthrough)
-
-- [ ] **(1)** Sign up via real Bluesky account A → after OAuth callback redirects to `/dashboard` → `/<a-slug>` URL is shown in dashboard header → confirm dashboard renders empty receive list with "まだ受信したメッセージはありません" or similar empty state copy.
-
-- [ ] **(2)** Switch to device 2, login via Bluesky account B → navigate to `/<a-slug>` → confirm send form renders → fill body + tick consent checkbox → submit. Expect redirect to send_done page.
-
-- [ ] **(3)** Switch back to device 1 (account A) → `/dashboard` → see B's message in receive list (closed `<details>`) → click to expand → click "開封する" form → confirm SSR hit/miss reveal copy and animation as appropriate (`★ 抽選 hit` with sender card, OR `★ 抽選 miss(送信者は匿名のまま)`). The probability inbox setting governs the actual outcome.
-
-- [ ] **(4)** **(SSR-hit only)** With the sender card visible, click `このユーザーをブロック` button → confirm Flash success message + redirect to `/dashboard` → block list section now shows B's handle. (If outcome was SSR-miss, repeat Step 2-3 with another B-side message until you get a hit, OR temporarily set inbox `ssr_probability_pct` to 100 in `/dashboard/settings` for testing.)
-
-- [ ] **(5)** Switch to device 2 (account B) → re-navigate to `/<a-slug>` → confirm "この受信箱には送信できません" error banner is visible above the send form → form is visibly grayed out (is-disabled) → if you bypass the disabled state via DevTools and POST anyway, server-side defense rejects with Flash error redirect.
-
-- [ ] **(6)** From device 1 (account A), in dashboard message-row footer, click `通報する` link → `/report/<message_id>` page opens → choose `嫌がらせ・誹謗中傷` radio → submit → Flash success "通報を送信しました…" + redirect to `/dashboard` → message-row footer now shows `通報済` badge instead of `通報する` link.
-
-- [ ] **(7)** From device 1 (account A), expand a message → click `削除` button in footer → native `confirm()` dialog "このメッセージを削除しますか?(削除後は元に戻せません)" → click OK → Flash success "メッセージを削除しました" + redirect → message disappears from list.
-
-- [ ] **(8)** From device 1 (account A), `/dashboard/settings` → scroll to danger-zone fieldset → click `退会の手続きへ` link → `/account/delete` page opens → tick "上記の内容を理解した上で、退会します" checkbox → click `退会する` button → redirect to `/` → Flash info "退会が完了しました…" → confirm session destroyed (LP shows Bluesky CTA, not dashboard) → navigate to `/<a-slug>` → confirm 404 error page (REV-01).
-
-- [ ] **(9)** From device 2 (account B), inspect any of B's previously-sent messages to A's inbox via `/dashboard` (B has no receive entries from A; this step is the MOD-03 sentinel). To verify MOD-03 strict snapshot retention, use SSH SQL on Lolipop: `mysql tamabox -e "SELECT sender_handle_snapshot, sender_avatar_url_snapshot, sender_profile_url_snapshot FROM messages WHERE sender_user_id='<B-user-id>'\G"` — confirm the row count is unchanged AND the snapshot values are non-null and match B's data at send time.
+**実施日**: ____________
+**実施者**: ____________
+**検証対象 URL**: https://tamabox.emomie.com
+**Bluesky テストアカウント A**: ____________
+**Bluesky テストアカウント B**: ____________
 
 ---
 
-## Phase 2 / Phase 3 carry-over human items
+## Phase 4 で新規追加された機能の歩き(D-35 walkthrough)
 
-(Deferred from Phase 2 / Phase 3 verify-phase as `human_needed`; consumed at Phase 4 launch per CONTEXT D-39.)
+- [ ] **(1) サインアップ** — 実 Bluesky アカウント A でサインアップ → OAuth callback 後 `/dashboard` にリダイレクト → ダッシュボードヘッダに `/<a-slug>` URL が表示される → 受信リストは空(「まだ受信したメッセージはありません」等の empty state コピーが表示される)。
 
-- [ ] **(10)** **Live Bluesky AS handshake** (Phase 2 verifier item): Step (1) above implicitly exercises this — the actual signup goes through PAR + DPoP + private_key_jwt + token exchange + getProfile against `bsky.social`. If Step (1) succeeded, this item is satisfied. (If signup failed at any of those substeps, log the error_url and capture POST/redirect HAR.)
+- [ ] **(2) 送信フロー** — デバイス 2 に切り替え、Bluesky アカウント B でログイン → `/<a-slug>` を開く → 送信フォームが表示される → 本文記入 + 同意チェックボックス ON → 送信。送信完了ページにリダイレクトされること。
 
-- [ ] **(11)** **Browser cookie destroy on logout** (Phase 2 verifier item): from device 1, account A logged in → `/oauth/logout` (POST via dashboard logout button or equivalent) → confirm session cookie is unset (browser DevTools > Application > Cookies; the CakePHP session cookie should be gone) → re-navigating to `/dashboard` redirects to `/` (LP). Do this BEFORE Step (8) for cleanest test, or test on a fresh sign-up after Step (8).
+- [ ] **(3) 開封 + SSR reveal** — デバイス 1 (アカウント A) に戻る → `/dashboard` → B からのメッセージが受信リストに表示される(`<details>` は閉じてる) → クリックで展開 → 「開封する」フォームをクリック → 当落結果が表示される(`★ 抽選 hit` で送信者カード付き、または `★ 抽選 miss(送信者は匿名のまま)`)。実際の当落は受信箱の確率設定で決まる。
 
-- [ ] **(12)** **Handle-change sync via second login** (Phase 3 verifier item): rename account A's Bluesky handle (via bsky.app handle settings) → log out of tamabox → log in again → confirm `/dashboard` header reflects the new handle AND `/<a-slug>` resolves to the new slug (auto-derived from new handle) → the OLD slug returns 301 redirect to the new slug for 1 generation (Phase 3 D-04 grace period).
+- [ ] **(4) ブロック (SSR hit のみ)** — 送信者カードが見えてる状態で `このユーザーをブロック` ボタンをクリック → Flash 成功メッセージ + `/dashboard` にリダイレクト → ブロック中ユーザーセクションに B のハンドルが表示される。
+  > miss だった場合は Step 2-3 を別メッセージで繰り返して hit 引くまで試す。または `/dashboard/settings` で受信箱の `ssr_probability_pct` を 100 に一時設定してテスト確率を上げる。
+
+- [ ] **(5) ブロック後の送信防止** — デバイス 2 (アカウント B) に切り替え → `/<a-slug>` を再度開く → 送信フォームの上に「この受信箱には送信できません」エラーバナーが表示される → フォームが視覚的にグレーアウトしてる(disabled) → DevTools で disabled を解除して POST を強行しても、サーバ側で Flash エラー + リダイレクトで弾かれる。
+
+- [ ] **(6) 通報** — デバイス 1 (アカウント A) のダッシュボードでメッセージ行のフッタの `通報する` リンクをクリック → `/report/<message_id>` ページが開く → `嫌がらせ・誹謗中傷` ラジオを選択 → 送信 → Flash 成功 「通報を送信しました…」 + `/dashboard` にリダイレクト → メッセージ行のフッタが `通報する` から `通報済` バッジに変わってる。
+
+- [ ] **(7) ソフト削除** — デバイス 1 (アカウント A) でメッセージを展開 → フッタの `削除` ボタンをクリック → ネイティブ `confirm()` ダイアログ「このメッセージを削除しますか?(削除後は元に戻せません)」 → OK → Flash 成功 「メッセージを削除しました」 + リダイレクト → 受信リストからそのメッセージが消える。
+
+- [ ] **(8) 退会 + 退会後 404** — デバイス 1 (アカウント A) で `/dashboard/settings` → danger-zone フィールドセットまでスクロール → `退会の手続きへ` リンクをクリック → `/account/delete` ページが開く → 「上記の内容を理解した上で、退会します」チェックボックス ON → `退会する` ボタンをクリック → `/` にリダイレクト → Flash info「退会が完了しました…」 → セッション破棄を確認(LP に Bluesky の CTA が出る、ダッシュボードではない) → `/<a-slug>` を直接開く → 404 ページが返る(REV-01: 退会者の slug は他人からも見えなくなる)。
+
+- [ ] **(9) MOD-03 送信者スナップショット保持** — B が過去に A の inbox に送ったメッセージのスナップショットが、B 退会後も残ってることを確認(MOD-03 の sentinel)。Lolipop SSH で SQL 実行:
+  ```bash
+  cd ~/web/tamabox.emomie.com
+  /usr/local/php/8.3/bin/php -r "echo getenv('DATABASE_URL');"  # 接続情報確認
+  mysql -u LA71012316 -p -h mysql327.phy.lolipop.lan LA71012316-tamabox -e \
+    "SELECT sender_handle_snapshot, sender_avatar_url_snapshot, sender_profile_url_snapshot FROM messages WHERE sender_user_id='<B-user-id>'\G"
+  ```
+  期待: 行数は B の送信回数のまま不変、かつ snapshot 値が NULL じゃなくて B の送信時データのまま残ってる。
+  > 厳密にやるなら Step 8 の前に B からのメッセージを最低 1 件 A に送っておくこと。Step 8 の退会で B のスナップショットも消えてないことを確認したい。
 
 ---
 
-## Failure logging
+## Phase 2 / Phase 3 から繰越した human 項目
 
-For each failed step, fill out:
+(Phase 2 / Phase 3 の verify-phase で `human_needed` として deferred になってたもの。Phase 4 ローンチで消化する取り決め(CONTEXT D-39))
+
+- [ ] **(10) 実 Bluesky AS との handshake** (Phase 2 verifier 項目) — 上の Step (1) のサインアップが暗黙的にこれを exercise してる。実 PAR + DPoP + private_key_jwt + token exchange + getProfile を `bsky.social` 相手に通すフロー。Step (1) が成功してれば本項目クリア。
+  > サインアップが途中で失敗したら、エラー URL と POST / redirect の HAR をキャプチャして失敗ログに記録。
+
+- [ ] **(11) ログアウト時のクッキー破棄** (Phase 2 verifier 項目) — デバイス 1、アカウント A でログイン中の状態 → `/oauth/logout` (ダッシュボードのログアウトボタンで POST) → セッション cookie が unset されてることを確認(ブラウザ DevTools > Application > Cookies で CakePHP セッション cookie が消えてる) → `/dashboard` を再アクセス → `/` (LP) にリダイレクトされる。
+  > Step (8) 退会の前にやっておくと最もクリーンな検証になる(退会後だとセッションがどっちで切れたか曖昧になる)。または Step (8) 後に新規サインアップして再検証。
+
+- [ ] **(12) ハンドル変更の再ログイン同期** (Phase 3 verifier 項目) — bsky.app の handle 設定でアカウント A の Bluesky ハンドルを変更 → tamabox からログアウト → 再ログイン → ダッシュボードヘッダが新ハンドルに更新されてる + `/<a-slug>` が新しい slug (新ハンドルから自動派生) に解決される + 旧 slug は新 slug に 301 リダイレクトされる(Phase 3 D-04 で 1 世代だけ grace 期間あり)。
+
+---
+
+## 失敗時の記録テンプレート
+
+失敗した step ごとに以下を埋める:
 
 ```
 Step #: __
-Expected: __
-Actual: __
-Reproduction: __
-Workaround / next-action: __
-Screenshot: <path or imgur link>
+期待値 (Expected): __
+実際 (Actual): __
+再現手順 (Reproduction): __
+ワークアラウンド / 次の手 (Workaround / next-action): __
+スクショ: <パス or imgur リンク>
 ```
 
-Then summarize all failures in `.planning/phases/04-moderation-production-launch/VERIFICATION.md` and decide:
-- **Block-launch**: rollback (LAUNCH-RUNBOOK.md Rollback procedure) + open gap-closure plan via `/gsd-plan-phase --gaps 4`.
-- **Non-blocking**: log in `STATE.md` Open Todos for next milestone.
+すべての失敗を `.planning/phases/04-moderation-production-launch/VERIFICATION.md` にまとめて、判断:
+
+- **Block-launch (ローンチ阻害)**: ロールバック実施(LAUNCH-RUNBOOK.md の Rollback procedure 参照) + `/gsd-plan-phase --gaps 4` で gap-closure plan を起こす。
+- **Non-blocking (緊急ではない)**: `STATE.md` の Open Todos に積んで次マイルストーンへ。
 
 ---
 
-*Authored from .planning/phases/04-moderation-production-launch/04-CONTEXT.md D-35 specifics + Phase 2/3 verifier human_needed carry-overs (STATE.md Research Flags). Last updated: Phase 4 plan 04-03.*
+*出典: .planning/phases/04-moderation-production-launch/04-CONTEXT.md D-35 + Phase 2/3 verifier の human_needed 繰越項目(STATE.md Research Flags)。最終更新: Phase 4 plan 04-03、Japanese 翻訳: post-launch hotfix。*
