@@ -86,11 +86,10 @@
   4. 受け手ユーザーが退会(削除)しても、過去に送った message の送信者 snapshot(handle / avatar / profile_url)は DB 上に残る
   5. 通報された送信者でも、受け手側のブロックがない限り、別 inbox への送信は拒否されない(グローバル BAN は発生しない)
   6. `tamabox.emomie.com` で実サイトが稼働し、`debug=false` 固定 / DebugKit 無効化 / webroot 外 config / ES256 鍵は `config/keys/` に配置された状態で OAuth・送信・開封が本番から通る
-**Plans**: 4 plans (3 waves)
-  - [x] 03-01-slug-foundation-PLAN.md — SlugDeriver + SsrJudge + slug_previous migration + InboxesTable findBySlug/assignSlugForUser + UserIdentitiesTable rename hook + fixtures (INBOX-01, INBOX-06, MSG-03 algorithm) [wave 1]
-  - [x] 03-02-send-flow-PLAN.md — MessagesController send GET/POST + MessagesTable sendMessage + AuthController/OauthController D-13 pending body restoration + send.php / send_done.php templates + 4 routes (AUTH-03, MSG-01..05) [wave 2]
-  - [x] 03-03a-dashboard-reveal-PLAN.md — UsersController dashboard expansion + InboxesController settings + MessagesController open + dashboard.php (paginated <details> receive list + SSR reveal + settings element) (INBOX-02, INBOX-03, MSG-06, MSG-07) [wave 3] ✓ 2026-04-26
-  - [x] 03-03b-stubs-styles-asset-PLAN.md — BlocksController 501 stub + default-avatar.svg + tamabox.css Phase 3 extension (~421 lines appended) + flash/info element + home.php Phase 3 minor copy (D-35 hand-off contract + visual layer) [wave 3, parallel with 03-03a] ✓ 2026-04-26
+**Plans**: 3 plans (2 waves)
+  - [ ] 04-01-PLAN.md — Block CRUD (BlocksController create/delete + isBlocked finder) + send-form block error banner + soft-delete (MessagesController delete + softDeleteByReceiver) + dashboard deleted_at filter + block-list element + 通報済 view-var (INBOX-04, INBOX-05, MSG-08, MOD-04) [wave 1]
+  - [ ] 04-02-PLAN.md — Report flow (ReportsController + uk_reports_reporter_message UNIQUE migration + Reports/create.php) + Account deletion (AccountController + Account/delete.php + danger-zone) + InboxesTable REV-01 retired-user filter + dashboard 通報する link replacement + tamabox.css §2/§4/§7 append (MOD-01, MOD-02, MOD-03) [wave 2]
+  - [ ] 04-03-PLAN.md — config/.env.example DEBUG=false guidance + LAUNCH-RUNBOOK.md (D-37 6 steps + Lolipop quirks + rollback) + MANUAL-SMOKE-CHECKLIST.md (12 items: 9 Phase 4 + 3 carry-over) + STATE.md REV-03 propagation (INFRA-01, INFRA-06) [wave 1, parallel with 04-01]
 **UI hint**: yes
 
 ## Progress
@@ -100,7 +99,7 @@
 | 1. Foundation & Schema | 4/4 | Complete (01-01 ✓, 01-02a ✓, 01-02b ✓, 01-03 ✓); awaits verifier | 2026-04-22 |
 | 2. Bluesky OAuth & Identity | 4/4 | Complete (02-01 ✓, 02-02 ✓, 02-03 ✓ 2026-04-23; 02-04 ✓ 2026-04-24); awaits verifier | 2026-04-24 |
 | 3. Inbox, Message & SSR Reveal | 4/4 | **VERIFIED 2026-04-26** (human_needed — 7/7 code-level, 3 human items for live-AS deferred to Phase 4) | 2026-04-26 |
-| 4. Moderation & Production Launch | 0/? | Not started | - |
+| 4. Moderation & Production Launch | 0/3 | PLANNED 2026-04-28 (3 plans / 2 waves: 04-01 moderation+block+soft-delete / 04-02 report+account-deletion / 04-03 launch-runbook) | - |
 
 ## Coverage Summary
 
