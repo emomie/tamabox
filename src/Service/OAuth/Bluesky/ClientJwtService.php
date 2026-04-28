@@ -23,7 +23,9 @@ final class ClientJwtService
     }
 
     /**
-     * @param string $audience Either par_endpoint or token_endpoint per caller context.
+     * @param string $audience AS issuer URL (e.g. https://bsky.social), NOT the par/token endpoint URL.
+     *                         Bluesky/atproto AS validates `aud` against the AS issuer; passing the
+     *                         endpoint URL yields `invalid_client: unexpected "aud" claim value` (D-LIVE-FIX-1).
      * @return string Compact JWT (3 parts, dot-separated).
      * @throws \RuntimeException If Bluesky.client_id is unset or sign fails.
      */

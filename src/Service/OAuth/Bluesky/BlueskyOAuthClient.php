@@ -79,6 +79,7 @@ final class BlueskyOAuthClient implements OAuthProviderInterface
     public function executeParRequest(string $codeChallenge, string $state): array
     {
         $endpoint = (string)Configure::read('Bluesky.par_endpoint');
+        $issuer = (string)Configure::read('Bluesky.issuer');
         $clientId = (string)Configure::read('Bluesky.client_id');
         $redirect = (string)Configure::read('Bluesky.redirect_uri');
         $scope = (string)Configure::read('Bluesky.client_metadata.scope');
@@ -92,7 +93,7 @@ final class BlueskyOAuthClient implements OAuthProviderInterface
             'state' => $state,
             'scope' => $scope,
             'client_assertion_type' => 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer',
-            'client_assertion' => $this->clientJwt->createAssertion($endpoint),
+            'client_assertion' => $this->clientJwt->createAssertion($issuer),
         ];
 
         $response = $this->postWithNonceRetry('POST', $endpoint, $params);
@@ -115,6 +116,7 @@ final class BlueskyOAuthClient implements OAuthProviderInterface
     public function exchangeCodeForToken(string $code, string $codeVerifier): array
     {
         $endpoint = (string)Configure::read('Bluesky.token_endpoint');
+        $issuer = (string)Configure::read('Bluesky.issuer');
         $clientId = (string)Configure::read('Bluesky.client_id');
         $redirect = (string)Configure::read('Bluesky.redirect_uri');
 
@@ -125,7 +127,7 @@ final class BlueskyOAuthClient implements OAuthProviderInterface
             'code_verifier' => $codeVerifier,
             'client_id' => $clientId,
             'client_assertion_type' => 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer',
-            'client_assertion' => $this->clientJwt->createAssertion($endpoint),
+            'client_assertion' => $this->clientJwt->createAssertion($issuer),
         ];
 
         $response = $this->postWithNonceRetry('POST', $endpoint, $params);
@@ -156,6 +158,7 @@ final class BlueskyOAuthClient implements OAuthProviderInterface
     public function refreshToken(string $refreshToken): array
     {
         $endpoint = (string)Configure::read('Bluesky.token_endpoint');
+        $issuer = (string)Configure::read('Bluesky.issuer');
         $clientId = (string)Configure::read('Bluesky.client_id');
 
         $params = [
@@ -163,7 +166,7 @@ final class BlueskyOAuthClient implements OAuthProviderInterface
             'refresh_token' => $refreshToken,
             'client_id' => $clientId,
             'client_assertion_type' => 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer',
-            'client_assertion' => $this->clientJwt->createAssertion($endpoint),
+            'client_assertion' => $this->clientJwt->createAssertion($issuer),
         ];
 
         $response = $this->postWithNonceRetry('POST', $endpoint, $params);
