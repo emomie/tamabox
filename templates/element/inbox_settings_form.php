@@ -50,6 +50,12 @@ $isAccepting = (bool)$inbox->is_accepting;
     </fieldset>
 
     <button type="submit" class="button primary-button">保存する</button>
+
+    <fieldset class="settings-form__danger-zone">
+        <legend>退会</legend>
+        <p class="text-secondary">アカウントを削除すると元に戻せません。</p>
+        <a href="/account/delete" class="button button-clear button-destructive">退会の手続きへ</a>
+    </fieldset>
 <?= $this->Form->end() ?>
 
 <script>

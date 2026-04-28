@@ -103,13 +103,6 @@ $slug = (string)$inbox->slug;
                                                rel="noopener">Bluesky プロフィールを見る</a>
                                         <?php endif; ?>
                                         <?= $this->Form->create(null, [
-                                            'url' => '/report/' . h((string)$msg->id),
-                                            'type' => 'post',
-                                            'class' => 'inline',
-                                        ]) ?>
-                                            <button type="submit" class="button button-clear button-destructive">通報する</button>
-                                        <?= $this->Form->end() ?>
-                                        <?= $this->Form->create(null, [
                                             'url' => '/block/' . h($senderUserId),
                                             'type' => 'post',
                                             'class' => 'inline',
@@ -132,6 +125,8 @@ $slug = (string)$inbox->slug;
                                 <?= $this->Form->end() ?>
                                 <?php if (isset($reportedSet[(string)$msg->id])): ?>
                                     <span class="report-badge" aria-label="このメッセージは通報済みです">通報済</span>
+                                <?php else: ?>
+                                    <a href="/report/<?= h((string)$msg->id) ?>" class="button button-clear button-destructive">通報する</a>
                                 <?php endif; ?>
                             </div>
                         <?php endif; ?>
