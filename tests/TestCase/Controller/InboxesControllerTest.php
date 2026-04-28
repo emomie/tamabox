@@ -261,4 +261,18 @@ class InboxesControllerTest extends TestCase
         $this->assertIsArray($flash);
         $this->assertMatchesRegularExpression('/保存しました/', (string)$flash[0]['message']);
     }
+
+    /**
+     * Phase 4 REV-01 regression sentinel: retired-user JOIN filter must NOT break the active-user
+     * happy path on /dashboard/settings.
+     *
+     * @return void
+     */
+    public function testSettingsStillReachableForActiveUser(): void
+    {
+        $this->loginAsAlice();
+        $this->get('/dashboard/settings');
+        $this->assertResponseCode(302);
+        $this->assertRedirectContains('/dashboard');
+    }
 }

@@ -70,12 +70,16 @@ class ReportsTable extends Table
      */
     public function validationDefault(Validator $validator): Validator
     {
+        // NOTE: Phase 4 04-02 — uses scalar() not uuid() to match MessagesTable / BlocksTable
+        // convention. CakePHP's strict uuid() validator rejects RFC-4122-non-versioned
+        // CHAR(36) values used by test fixtures (e.g. 'aaaa1111-aaaa-aaaa-aaaa-aaaaaaaaaaaa').
+        // Schema column is CHAR(36) — DB-level enforcement is sufficient.
         $validator
-            ->uuid('message_id')
+            ->scalar('message_id')
             ->notEmptyString('message_id');
 
         $validator
-            ->uuid('reporter_user_id')
+            ->scalar('reporter_user_id')
             ->allowEmptyString('reporter_user_id');
 
         $validator

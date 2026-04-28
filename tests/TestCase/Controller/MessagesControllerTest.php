@@ -546,4 +546,27 @@ class MessagesControllerTest extends TestCase
     {
         $this->session(['Auth' => ['id' => '44444444-4444-4444-4444-444444444444']]);
     }
+
+    /**
+     * REV-01 sentinel: after the inbox owner's deleted_at is set, /<their-slug> must return 404.
+     *
+     * @return void
+     */
+    public function testSendReturns404WhenInboxOwnerRetired(): void
+    {
+        /** @var \App\Model\Entity\Inbox $aliceInbox */
+        $aliceInbox = $this->fetchTable('Inboxes')->find()
+            ->where(['user_id' => '11111111-1111-1111-1111-111111111111'])
+            ->firstOrFail();
+
+        // Set alice's deleted_at directly (simulating post-退会 state).
+        $usersTable = $this->fetchTable('Users');
+        $alice = $usersTable->get('11111111-1111-1111-1111-111111111111');
+        $alice->set('deleted_at', \Cake\I18n\FrozenTime::now());
+        $usersTable->saveOrFail($alice, ['accessibleFields' => ['deleted_at' => true]]);
+
+        // Anonymous GET /<alice-slug> must 404.
+        $this->get('/' . $aliceInbox->slug);
+        $this->assertResponseCode(404);
+    }
 }

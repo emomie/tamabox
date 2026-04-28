@@ -7,6 +7,7 @@ use Cake\Database\Exception\DatabaseException;
 use Cake\Http\Exception\NotFoundException;
 use Cake\Http\Response;
 use Cake\Utility\Text;
+use PDOException;
 
 /**
  * ReportsController — receiver-side abuse reports (Phase 4 MOD-01 / MOD-02 / D-09..D-13).
@@ -113,11 +114,24 @@ class ReportsController extends AppController
                 'status' => true,
             ]]);
             $reportsTable->saveOrFail($entity);
-        } catch (DatabaseException $e) {
+        } catch (DatabaseException | PDOException $e) {
             // uk_reports_reporter_message UNIQUE collision (D-12) — race-safe.
-            $this->Flash->error(__('このメッセージは既に通報済みです。'));
+            // Catches both Cake\Database\Exception\DatabaseException AND raw PDOException
+            // (CakePHP 5 may pass through PDO's SQLSTATE 23000 without wrapping).
+            $code = method_exists($e, 'getCode') ? (string)$e->getCode() : '';
+            $msg = $e->getMessage();
+            $isDup = $code === '23000'
+                || str_contains($msg, 'uk_reports_reporter_message')
+                || str_contains($msg, 'Duplicate entry');
+            if ($isDup) {
+                $this->Flash->error(__('このメッセージは既に通報済みです。'));
 
-            return $this->redirect('/dashboard');
+                return $this->redirect('/dashboard');
+            }
+            // Other DB error — re-flash as generic failure.
+            $this->Flash->error(__('通報の送信に失敗しました。'));
+
+            return $this->redirect('/report/' . $messageId);
         } catch (\Cake\ORM\Exception\PersistenceFailedException $e) {
             $this->Flash->error(__('通報の送信に失敗しました。'));
 
