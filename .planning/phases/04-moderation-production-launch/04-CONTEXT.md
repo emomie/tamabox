@@ -233,7 +233,48 @@
 
 </deferred>
 
+<revisions>
+## Revisions (post-research, 2026-04-28)
+
+研究フェーズで以下 3 件の不整合を検出。**downstream agents (planner / executor) は本セクションを優先する**(D-XX 上書き)。
+
+### REV-01: D-24 訂正 — `inboxes.deleted_at` 列は存在しない
+
+**元の決定**: D-24「`inboxes.deleted_at` も同時 UPDATE(inbox 隠蔽)」
+**実態**: Phase 1 `CreateInboxes` migration / DB-SCHEMA.md v0.2 §3 ともに `inboxes.deleted_at` は**未定義**。`inboxes` テーブルには `deleted_at` 列がない。
+**確定方針**: 退会後の slug 404 は `InboxesTable::findBySlug()` の WHERE に `users.deleted_at IS NULL` JOIN フィルタを追加して実現。`inboxes` 行は触らない。`messages.sender_*_snapshot` の保持(MOD-03)には影響しない。
+**影響範囲**: D-24 / D-25 / D-37 関連の plan task。新 migration 不要。
+
+### REV-02: D-28 訂正 — 暗号化対象は access/refresh のみ、expiry は plaintext
+
+**元の決定**: D-28「`expires_at_enc` を `TokenEncryptionService::decrypt()` で復号して expiry チェック」
+**実態**: Phase 1/2 schema は `access_token_enc` / `refresh_token_enc` (BLOB AES-GCM) + `token_expires_at` (DATETIME plaintext)。expiry は **暗号化しない**(non-PII、頻繁参照、AS で発行された publicly verifiable 値)。
+**確定方針**: 仮に token refresh を Phase 4 で実装する場合、`token_expires_at` を直接 datetime として比較する。`expires_at_enc` という列は存在しないため、別 phase に持ち越し時もこの訂正に基づく。
+
+### REV-03: D-31 訂正(descope)— Phase 4 で token refresh は実装しない
+
+**元の決定**: D-31「Phase 4 でのスコープ = Full 実装(call site + method 本体 + integration test)」
+**実態**:
+1. `BlueskyOAuthClient::refreshToken()` は Phase 2 で既に実装済(`src/Service/OAuth/Bluesky/BlueskyOAuthClient.php:156-187`)、コードは存在する。
+2. Phase 4 機能(block / report / soft-delete / 退会 / 本番デプロイ)は **1 度も外部 PDS API を呼ばない**。token refresh の **call site が存在しない**。
+3. ログインフローは毎回 `exchangeCodeForToken()` で新規 access_token を発行する。`upsertBlueskyIdentity()` が呼ぶのも login 時の `getProfile` 1 回だけで、access_token は always fresh。
+4. D-28 通りに refresh を統合すると 100% dead code(test だけが叩くロジック)になる。
+
+**確定方針 (researcher Resolution A、ユーザ確認済 2026-04-28 03:10 JST)**:
+- Phase 4 では **token refresh の call site 統合と method 本体実装は行わない**。
+- Phase 2 sticky note #5 (`refreshTokenIfExpired()` defer) は `resolved-as-not-needed-for-MVP` で close。STATE.md にその旨記録。
+- 既に存在する Phase 2 の `BlueskyOAuthClient::refreshToken()` のコード自体は残す(将来 PDS API 呼び出し phase が立ったときに統合する)。
+- D-25 / D-26 / D-27 / D-29 / D-30 / D-31 の決定はすべて **将来の phase に持ち越し**。Phase 4 では執行しない。
+- Phase 4 plan は **moderation CRUD + 退会 + 本番 launch の 3 軸** に専念。
+
+**影響範囲**: Phase 4 の plan 数が 1〜2 本減る(refresh 専用 plan が無くなる)。Phase 4 機能(MVP launch)は完全に維持。送信機能 / ログイン機能 / セッション継続性すべて従来通り動作。
+
+**ユーザ確認**: 2026-04-28 03:10 JST、Discord で「A で OK」明示。
+
+</revisions>
+
 ---
 
 *Phase: 04-moderation-production-launch*
 *Context gathered: 2026-04-28 (interactive discuss-phase via Discord, 8 areas, 40 decisions captured)*
+*Revised: 2026-04-28 03:15 JST (post-research, 3 revisions: REV-01 inbox.deleted_at unset / REV-02 token_expires_at plaintext / REV-03 token refresh descope)*
