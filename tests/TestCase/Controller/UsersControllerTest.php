@@ -212,4 +212,47 @@ class UsersControllerTest extends TestCase
             'raw <script> must NOT appear in rendered dashboard HTML'
         );
     }
+
+    /**
+     * Phase 4 04-01 (MSG-08 / D-20): soft-deleted messages must not appear in dashboard list.
+     *
+     * @return void
+     */
+    public function testDashboardExcludesSoftDeletedMessages(): void
+    {
+        // Fixture aaaa4444 is soft-deleted (Plan 04-01 Task 1 added it).
+        // It must NOT appear in alice's dashboard render.
+        /** @var \App\Model\Entity\User $alice */
+        $alice = $this->fetchTable('Users')->get(
+            '11111111-1111-1111-1111-111111111111',
+            ['contain' => ['UserIdentities']]
+        );
+        $this->session(['Auth' => $alice]);
+        $this->get('/dashboard');
+        $this->assertResponseCode(200);
+        $this->assertResponseNotContains('aaaa4444-aaaa-aaaa-aaaa-aaaaaaaaaaaa');
+        $this->assertResponseNotContains('削除済テストメッセージ');
+    }
+
+    /**
+     * Phase 4 04-01 (INBOX-04 / D-04): dashboard renders ブロック中ユーザー section partial.
+     *
+     * @return void
+     */
+    public function testDashboardRendersBlockListSection(): void
+    {
+        // Fixture has alice→bob and alice→charlie blocks (after Plan 04-01 Task 1 append).
+        /** @var \App\Model\Entity\User $alice */
+        $alice = $this->fetchTable('Users')->get(
+            '11111111-1111-1111-1111-111111111111',
+            ['contain' => ['UserIdentities']]
+        );
+        $this->session(['Auth' => $alice]);
+        $this->get('/dashboard');
+        $this->assertResponseCode(200);
+        $this->assertResponseContains('ブロック中ユーザー');
+        $this->assertResponseContains('class="block-list"');
+        // Two block rows expected.
+        $this->assertResponseContains('class="block-list__row"');
+    }
 }

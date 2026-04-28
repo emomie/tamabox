@@ -374,6 +374,141 @@ class MessagesControllerTest extends TestCase
         );
     }
 
+    // === Phase 4 04-01: block check (D-05/D-06) + soft-delete (MSG-08) ===
+
+    /**
+     * @return void
+     */
+    public function testSendGetShowsBlockedBannerWhenBlocked(): void
+    {
+        // Fixture has alice→bob block. Login as bob, GET alice's slug → see error banner + disabled form.
+        /** @var \App\Model\Entity\Inbox $aliceInbox */
+        $aliceInbox = $this->fetchTable('Inboxes')->find()
+            ->where(['user_id' => '11111111-1111-1111-1111-111111111111'])
+            ->firstOrFail();
+        /** @var \App\Model\Entity\User $bob */
+        $bob = $this->fetchTable('Users')->get(
+            '22222222-2222-2222-2222-222222222222',
+            ['contain' => ['UserIdentities']]
+        );
+        $this->session(['Auth' => $bob]);
+
+        $this->get('/' . $aliceInbox->slug);
+        $this->assertResponseCode(200);
+        $this->assertResponseContains('この受信箱には送信できません');
+        $this->assertResponseContains('error-banner');
+        $this->assertResponseContains('is-disabled');
+    }
+
+    /**
+     * @return void
+     */
+    public function testSendPostBlockedRejectsMessage(): void
+    {
+        // Fixture has alice→bob block. POST send as bob → flash error + redirect, no INSERT.
+        /** @var \App\Model\Entity\Inbox $aliceInbox */
+        $aliceInbox = $this->fetchTable('Inboxes')->find()
+            ->where(['user_id' => '11111111-1111-1111-1111-111111111111'])
+            ->firstOrFail();
+        $beforeCount = $this->fetchTable('Messages')->find()
+            ->where(['inbox_id' => $aliceInbox->id])
+            ->count();
+        /** @var \App\Model\Entity\User $bob */
+        $bob = $this->fetchTable('Users')->get(
+            '22222222-2222-2222-2222-222222222222',
+            ['contain' => ['UserIdentities']]
+        );
+        $this->session(['Auth' => $bob]);
+        $this->enableRetainFlashMessages();
+        $this->enableCsrfToken();
+
+        $this->post('/' . $aliceInbox->slug, [
+            'body' => 'blocked send attempt',
+            'consent' => '1',
+        ]);
+        $this->assertResponseCode(302);
+        $this->assertRedirectContains('/' . $aliceInbox->slug);
+        $afterCount = $this->fetchTable('Messages')->find()
+            ->where(['inbox_id' => $aliceInbox->id])
+            ->count();
+        $this->assertSame($beforeCount, $afterCount, 'Blocked POST must not INSERT message');
+        $flash = $this->_requestSession->read('Flash.flash');
+        $this->assertIsArray($flash);
+        $this->assertMatchesRegularExpression('/送信できません/', (string)$flash[0]['message']);
+    }
+
+    /**
+     * MOD-04 sentinel: alice→bob block must NOT prevent bob sending to charlie's inbox.
+     *
+     * @return void
+     */
+    public function testSendPostUnrelatedInboxIgnoresUnrelatedBlocks(): void
+    {
+        $charlieInbox = $this->fetchTable('Inboxes')->find()
+            ->where(['user_id' => '33333333-3333-3333-3333-333333333333'])
+            ->first();
+        if ($charlieInbox === null) {
+            $this->markTestSkipped(
+                'Charlie inbox not in fixture; skipping MOD-04 sentinel.'
+            );
+
+            return;
+        }
+        /** @var \App\Model\Entity\User $bob */
+        $bob = $this->fetchTable('Users')->get(
+            '22222222-2222-2222-2222-222222222222',
+            ['contain' => ['UserIdentities']]
+        );
+        $this->session(['Auth' => $bob]);
+        $this->enableCsrfToken();
+        $this->get('/' . $charlieInbox->slug);
+        $this->assertResponseCode(200);
+        $this->assertResponseNotContains('error-banner');
+    }
+
+    /**
+     * @return void
+     */
+    public function testDeleteSoftDeletesMessage(): void
+    {
+        // Fixture aaaa1111... is alice's unread message. Login as alice, POST /dashboard/messages/{id}/delete.
+        $this->enableCsrfToken();
+        $this->enableRetainFlashMessages();
+        /** @var \App\Model\Entity\User $alice */
+        $alice = $this->fetchTable('Users')->get(
+            '11111111-1111-1111-1111-111111111111',
+            ['contain' => ['UserIdentities']]
+        );
+        $this->session(['Auth' => $alice]);
+
+        $this->post('/dashboard/messages/aaaa1111-aaaa-aaaa-aaaa-aaaaaaaaaaaa/delete');
+        $this->assertResponseCode(302);
+        $this->assertRedirectContains('/dashboard');
+        $msg = $this->fetchTable('Messages')->get('aaaa1111-aaaa-aaaa-aaaa-aaaaaaaaaaaa');
+        $this->assertNotNull($msg->deleted_at, 'deleted_at must be set');
+        $this->assertSame('user_deleted', (string)$msg->deleted_reason);
+        // body / body_length must NOT change (RESEARCH Pitfall 5)
+        $this->assertSame('未開封テストメッセージ', (string)$msg->body);
+        $this->assertSame(11, (int)$msg->body_length);
+    }
+
+    /**
+     * @return void
+     */
+    public function testDeleteForbiddenForNonOwner(): void
+    {
+        // bob tries to delete alice's message.
+        $this->enableCsrfToken();
+        /** @var \App\Model\Entity\User $bob */
+        $bob = $this->fetchTable('Users')->get(
+            '22222222-2222-2222-2222-222222222222',
+            ['contain' => ['UserIdentities']]
+        );
+        $this->session(['Auth' => $bob]);
+        $this->post('/dashboard/messages/aaaa1111-aaaa-aaaa-aaaa-aaaaaaaaaaaa/delete');
+        $this->assertResponseCode(403);
+    }
+
     // === helpers ===
 
     /**
