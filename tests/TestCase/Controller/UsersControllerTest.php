@@ -299,7 +299,7 @@ class UsersControllerTest extends TestCase
     }
 
     /**
-     * NAV-05: /dashboard/notifications auth returns 200.
+     * NAV-05: /dashboard/notifications auth returns 200 with Empty-state body.
      *
      * @return void
      */
@@ -308,5 +308,6 @@ class UsersControllerTest extends TestCase
         $this->loginAsAlice();
         $this->get('/dashboard/notifications');
         $this->assertResponseOk();
+        $this->assertResponseContains('通知はまだありません');
     }
 }
