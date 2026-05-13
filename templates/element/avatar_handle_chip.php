@@ -3,9 +3,12 @@
  * @var \App\View\AppView $this
  * @var \Authentication\IdentityInterface $identity
  *
- * AvatarHandleChip element (UI-SPEC §3). Pulls handle/avatar from the underlying
- * User entity's user_identity association — Authentication plugin's getOriginalData()
- * returns the entity that the ORM identifier resolved from the session 'id' value.
+ * UI-08 — AvatarHandleChip element (Phase 6 Calm Gacha rewrite of UI-SPEC v1 §3).
+ * Hi-fi: ~/projects/handoff_tamabox/components.jsx (TbChip lines 76-82).
+ *
+ * Pulls handle/avatar from the underlying User entity's user_identity association
+ * (Authentication plugin getOriginalData() returns the entity ORM resolved from the
+ * session 'id' value). Controller-side wiring is identical to v1 — only markup changed.
  */
 $originalData = $identity->getOriginalData();
 $handle = '';
@@ -17,20 +20,18 @@ if ($originalData !== null && isset($originalData->user_identity) && $originalDa
     }
 }
 ?>
-<div class="avatar-handle-chip" role="group" aria-label="ログイン中のユーザー">
+<span class="tb-chip tb-chip--user" role="group" aria-label="ログイン中のユーザー">
     <?php if ($avatar !== null && $avatar !== '') : ?>
         <img
             src="<?= h($avatar) ?>"
-            alt="<?= h($handle) ?> のアイコン"
-            class="avatar-handle-chip__avatar"
-            width="24"
-            height="24">
+            alt=""
+            class="tb-chip__avatar"
+            width="20"
+            height="20">
     <?php else : ?>
-        <span
-            class="avatar-handle-chip__avatar avatar-handle-chip__avatar--fallback"
-            aria-label="<?= h($handle) ?> のアイコン">
+        <span class="tb-chip__avatar tb-chip__avatar--fallback" aria-hidden="true">
             <?= h(mb_substr($handle, 0, 1)) ?>
         </span>
     <?php endif; ?>
-    <span class="avatar-handle-chip__handle">@<?= h($handle) ?></span>
-</div>
+    <span class="tb-mono tb-chip__handle">@<?= h($handle) ?></span>
+</span>
