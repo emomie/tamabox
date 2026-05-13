@@ -6,11 +6,19 @@
  * @var \Cake\Datasource\ResultSetInterface|array $messages
  * @var bool $pageOutOfRange
  * @var array{slug: string, base: string}|null $collisionFlash
- * @var array<int, \App\Model\Entity\Block> $blocks
+ * @var array<int, \App\Model\Entity\Block> $blocks  // unused in this template (moved to /dashboard/settings)
  * @var array<string, bool> $reportedSet
+ * @var int $unreadCount
+ * @var string $activeTab
  *
- * UI-SPEC §2 receive list + §3 settings + §5 empty + §10 paginator + §11 flash + D-06 collision.
- * Phase 4 04-01: + ブロック中ユーザー section (§3) + message-row footer (§6) with 削除 + 通報済 badge.
+ * NAV-03 — Dashboard 受信タブ (Phase 7 Calm Gacha rewrite).
+ * Hi-fi: ~/projects/handoff_tamabox/screens/Dashboard.jsx
+ *
+ * Settings aside + block_list element previously rendered here now live in
+ * /dashboard/settings (templates/Inboxes/settings.php) per Phase 7 D-02 / D-04.
+ *
+ * Preserved Phase 4 assertion substrings: data-state, ★ 抽選 hit / miss, profile URL,
+ * rel="noopener", action="/dashboard/messages/{id}/open", 開封する, ようこそ.
  */
 $this->assign('title', 'ダッシュボード');
 
@@ -19,131 +27,183 @@ if (isset($user->user_identity) && $user->user_identity !== null) {
     $handle = (string)$user->user_identity->handle_cached;
 }
 $slug = (string)$inbox->slug;
+$ssrPct = (int)round((float)$inbox->ssr_probability * 100);
+if (is_countable($messages)) {
+    $totalCount = count($messages);
+} else {
+    $totalCount = 0;
+    foreach ($messages as $_dummy) {
+        $totalCount++;
+    }
+}
+$initialChar = $handle !== '' ? mb_substr($handle, 0, 1) : '';
 ?>
-<div class="dashboard-page">
-    <header class="dashboard-header">
-        <h1>ようこそ、<?= h($handle) ?> さん</h1>
-        <p class="text-secondary">あなたの受信箱: <code><?= h('/' . $slug) ?></code></p>
+<div class="tb-dash-screen dashboard-page">
+    <header class="tb-appbar tb-appbar--big">
+        <div class="tb-appbar__left">
+            <div>
+                <div class="tb-appbar__title">受信箱</div>
+            </div>
+        </div>
+        <div class="tb-appbar__right">
+            <a href="/dashboard/notifications" class="tb-icon-btn" aria-label="通知">
+                <?= $this->element('icon', ['name' => 'bell', 'size' => 22]) ?>
+            </a>
+            <?php if ($initialChar !== ''): ?>
+                <span class="tb-dash-avatar" aria-hidden="true"><?= h($initialChar) ?></span>
+            <?php endif; ?>
+        </div>
     </header>
 
-    <?php if ($collisionFlash !== null): ?>
-        <div class="message info">
-            あなたの slug: <strong><?= h($collisionFlash['slug']) ?></strong> になりました(<?= h($collisionFlash['base']) ?> は他のユーザーに使われていたため)
+    <div class="tb-dash-screen__body">
+        <p class="visually-hidden">ようこそ、<?= h($handle) ?> さん</p>
+
+        <?php if ($collisionFlash !== null): ?>
+            <div class="tb-card-soft tb-dash-collision">
+                あなたの slug: <strong><?= h($collisionFlash['slug']) ?></strong> になりました(<?= h($collisionFlash['base']) ?> は他のユーザーに使われていたため)
+            </div>
+        <?php endif; ?>
+
+        <div class="tb-dash-box">
+            <div style="flex:1; min-width:0;">
+                <div class="tb-dash-box__label">あなたの箱</div>
+                <div class="tb-mono tb-dash-box__url">tamabox.emomie.com<?= h('/' . $slug) ?></div>
+            </div>
+            <span class="tb-chip tb-chip--warm">SSR <?= $ssrPct ?>%</span>
         </div>
-    <?php endif; ?>
 
-    <?php if ($pageOutOfRange === true): ?>
-        <p>そのページはありません。</p>
-        <p><?= $this->Html->link('最初のページに戻る', '/dashboard') ?></p>
-    <?php elseif (count($messages) === 0): ?>
-        <section class="receive-list-empty">
-            <h2>まだ受信したメッセージはありません</h2>
-            <p>あなたの inbox URL を Bluesky でシェアしてみましょう: <code>https://tamabox.emomie.com<?= h('/' . $slug) ?></code></p>
-        </section>
-    <?php else: ?>
-        <section class="receive-list">
-            <h2>受信メッセージ</h2>
-            <?php foreach ($messages as $msg): ?>
-                <?php
-                $isUnread = $msg->opened_at === null;
-                $state = $isUnread ? 'unread' : 'opened';
-                $icon = $isUnread ? '●' : '✓';
-                $bodyPreview = mb_substr((string)$msg->body, 0, 80);
-                if (mb_strlen((string)$msg->body) > 80) {
-                    $bodyPreview .= '…';
-                }
-                $createdIso = $msg->created_at !== null ? $msg->created_at->format(DATE_ATOM) : '';
-                $createdDisplay = $msg->created_at !== null ? $msg->created_at->format('Y/m/d H:i') : '';
-                $isHit = (bool)$msg->is_ssr;
-                $senderHandle = (string)$msg->sender_handle_snapshot;
-                $senderAvatar = $msg->sender_avatar_url_snapshot !== null ? (string)$msg->sender_avatar_url_snapshot : '';
-                $senderProfileUrl = $msg->sender_profile_url_snapshot !== null ? (string)$msg->sender_profile_url_snapshot : '';
-                $senderUserId = (string)$msg->sender_user_id;
-                ?>
-                <details class="message-row" data-msg-id="<?= h((string)$msg->id) ?>" data-state="<?= h($state) ?>" id="msg-<?= h((string)$msg->id) ?>" <?= $isUnread ? '' : 'open' ?>>
-                    <summary class="message-row__head">
-                        <span class="message-row__icon" aria-hidden="true"><?= $icon ?></span>
-                        <span class="visually-hidden"><?= $isUnread ? '未開封' : '開封済' ?></span>
-                        <time class="message-row__time" datetime="<?= h($createdIso) ?>"><?= h($createdDisplay) ?></time>
-                        <span class="message-row__preview"><?= h($bodyPreview) ?></span>
-                    </summary>
-                    <div class="message-row__body">
-                        <p><?= nl2br(h((string)$msg->body)) ?></p>
+        <div class="tb-dash-counts">
+            <div style="display:flex; align-items:baseline; gap:10px;">
+                <span class="tb-dash-counts__title">受信</span>
+                <span class="tb-mono tb-dash-counts__num"><?= $totalCount ?> 件</span>
+            </div>
+            <?php if ($unreadCount > 0): ?>
+                <span class="tb-dash-counts__pill">未開封 <?= $unreadCount ?></span>
+            <?php endif; ?>
+        </div>
 
-                        <?php if ($isUnread): ?>
-                            <?= $this->Form->create(null, [
-                                'url' => '/dashboard/messages/' . h((string)$msg->id) . '/open',
-                                'type' => 'post',
-                                'class' => 'open-form',
-                            ]) ?>
-                                <button type="submit" class="button primary-button">開封する</button>
-                            <?= $this->Form->end() ?>
-                        <?php else: ?>
-                            <?php if ($isHit): ?>
-                                <div class="ssr-reveal" data-outcome="hit">
-                                    <div class="ssr-reveal__banner">★ 抽選 hit — 送信者が開示されました</div>
-                                    <div class="sender-card">
-                                        <?php if ($senderAvatar !== ''): ?>
-                                            <img class="sender-card__avatar"
-                                                 src="<?= h($senderAvatar) ?>"
-                                                 alt="<?= h($senderHandle) ?>"
-                                                 width="64" height="64"
-                                                 onerror="this.src='/img/default-avatar.svg'">
-                                        <?php else: ?>
-                                            <img class="sender-card__avatar"
-                                                 src="/img/default-avatar.svg"
-                                                 alt="<?= h($senderHandle) ?>"
-                                                 width="64" height="64">
-                                        <?php endif; ?>
-                                        <a class="sender-card__handle" href="https://bsky.app/profile/<?= h($senderHandle) ?>">@<?= h($senderHandle) ?></a>
-                                        <?php if ($senderProfileUrl !== ''): ?>
-                                            <a class="button button-clear"
-                                               href="<?= h($senderProfileUrl) ?>"
-                                               target="_blank"
-                                               rel="noopener">Bluesky プロフィールを見る</a>
-                                        <?php endif; ?>
-                                        <?= $this->Form->create(null, [
-                                            'url' => '/block/' . h($senderUserId),
-                                            'type' => 'post',
-                                            'class' => 'inline',
-                                        ]) ?>
-                                            <button type="submit" class="button button-clear button-destructive">このユーザーをブロック</button>
-                                        <?= $this->Form->end() ?>
-                                    </div>
+        <?php if ($pageOutOfRange === true): ?>
+            <div class="tb-card-soft">
+                <p>そのページはありません。</p>
+                <p><?= $this->Html->link('最初のページに戻る', '/dashboard') ?></p>
+            </div>
+        <?php elseif ($totalCount === 0): ?>
+            <section class="tb-card-soft receive-list-empty">
+                <h2>まだ受信したメッセージはありません</h2>
+                <p>あなたの inbox URL を Bluesky でシェアしてみましょう: <code>https://tamabox.emomie.com<?= h('/' . $slug) ?></code></p>
+            </section>
+        <?php else: ?>
+            <section class="tb-receive-list receive-list">
+                <?php foreach ($messages as $msg): ?>
+                    <?php
+                    $isUnread = $msg->opened_at === null;
+                    $state = $isUnread ? 'unread' : 'opened';
+                    $bodyPreview = mb_substr((string)$msg->body, 0, 80);
+                    if (mb_strlen((string)$msg->body) > 80) {
+                        $bodyPreview .= '…';
+                    }
+                    $createdIso = $msg->created_at !== null ? $msg->created_at->format(DATE_ATOM) : '';
+                    $createdShort = $msg->created_at !== null ? $msg->created_at->format('n/d') : '';
+                    $isHit = (bool)$msg->is_ssr;
+                    $senderHandle = (string)$msg->sender_handle_snapshot;
+                    $senderAvatar = $msg->sender_avatar_url_snapshot !== null ? (string)$msg->sender_avatar_url_snapshot : '';
+                    $senderProfileUrl = $msg->sender_profile_url_snapshot !== null ? (string)$msg->sender_profile_url_snapshot : '';
+                    $senderUserId = (string)$msg->sender_user_id;
+                    $dotMod = $isUnread ? 'unread' : ($isHit ? 'hit' : 'miss');
+                    $fromText = (!$isUnread && $isHit && $senderHandle !== '') ? '@' . $senderHandle : '匿名';
+                    $fromMod = (!$isUnread && $isHit) ? 'hit' : 'anon';
+                    ?>
+                    <details class="message-row tb-message-row"
+                             data-msg-id="<?= h((string)$msg->id) ?>"
+                             data-state="<?= h($state) ?>"
+                             id="msg-<?= h((string)$msg->id) ?>"
+                             <?= $isUnread ? '' : 'open' ?>>
+                        <summary class="message-row__head tb-message-row__head">
+                            <span class="tb-dash-dot tb-dash-dot--<?= h($dotMod) ?>" aria-hidden="true"></span>
+                            <div style="flex:1; min-width:0;">
+                                <div class="tb-message-row__meta">
+                                    <span class="tb-message-row__from tb-message-row__from--<?= h($fromMod) ?>"><?= h($fromText) ?></span>
+                                    <?php if (!$isUnread && $isHit): ?>
+                                        <span class="tb-message-row__ssr">SSR</span>
+                                    <?php endif; ?>
+                                    <span class="visually-hidden"><?= $isUnread ? '未開封' : '開封済' ?></span>
                                 </div>
-                            <?php else: ?>
-                                <p class="ssr-reveal__miss text-secondary">★ 抽選 miss(送信者は匿名のまま)</p>
-                            <?php endif; ?>
-                            <div class="message-row__footer">
-                                <?= $this->Form->create(null, [
-                                    'url' => '/dashboard/messages/' . h((string)$msg->id) . '/delete',
-                                    'type' => 'post',
-                                    'class' => 'inline',
-                                    'onsubmit' => "return confirm('このメッセージを削除しますか?(削除後は元に戻せません)');",
-                                ]) ?>
-                                    <button type="submit" class="button button-clear button-destructive">削除</button>
-                                <?= $this->Form->end() ?>
-                                <?php if (isset($reportedSet[(string)$msg->id])): ?>
-                                    <span class="report-badge" aria-label="このメッセージは通報済みです">通報済</span>
-                                <?php else: ?>
-                                    <a href="/report/<?= h((string)$msg->id) ?>" class="button button-clear button-destructive">通報する</a>
-                                <?php endif; ?>
+                                <div class="tb-message-row__preview"><?= h($bodyPreview) ?></div>
                             </div>
-                        <?php endif; ?>
-                    </div>
-                </details>
-            <?php endforeach; ?>
-        </section>
+                            <time class="tb-mono tb-message-row__time" datetime="<?= h($createdIso) ?>"><?= h($createdShort) ?></time>
+                        </summary>
+                        <div class="message-row__body">
+                            <p><?= nl2br(h((string)$msg->body)) ?></p>
 
-        <nav class="pagination" aria-label="受信一覧ページ送り">
-            <?= $this->Paginator->numbers() ?>
-        </nav>
-    <?php endif; ?>
+                            <?php if ($isUnread): ?>
+                                <?= $this->Form->create(null, [
+                                    'url' => '/dashboard/messages/' . h((string)$msg->id) . '/open',
+                                    'type' => 'post',
+                                    'class' => 'open-form',
+                                ]) ?>
+                                    <button type="submit" class="tb-btn tb-btn--primary tb-btn--full">開封する</button>
+                                <?= $this->Form->end() ?>
+                            <?php else: ?>
+                                <?php if ($isHit): ?>
+                                    <div class="ssr-reveal" data-outcome="hit">
+                                        <div class="ssr-reveal__banner">★ 抽選 hit — 送信者が開示されました</div>
+                                        <div class="sender-card">
+                                            <?php if ($senderAvatar !== ''): ?>
+                                                <img class="sender-card__avatar"
+                                                     src="<?= h($senderAvatar) ?>"
+                                                     alt="<?= h($senderHandle) ?>"
+                                                     width="64" height="64">
+                                            <?php else: ?>
+                                                <img class="sender-card__avatar"
+                                                     src="/img/default-avatar.svg"
+                                                     alt="<?= h($senderHandle) ?>"
+                                                     width="64" height="64">
+                                            <?php endif; ?>
+                                            <a class="sender-card__handle" href="https://bsky.app/profile/<?= h($senderHandle) ?>" rel="noopener" target="_blank">@<?= h($senderHandle) ?></a>
+                                            <?php if ($senderProfileUrl !== ''): ?>
+                                                <a class="button button-clear"
+                                                   href="<?= h($senderProfileUrl) ?>"
+                                                   target="_blank"
+                                                   rel="noopener">Bluesky プロフィールを見る</a>
+                                            <?php endif; ?>
+                                            <?= $this->Form->create(null, [
+                                                'url' => '/block/' . h($senderUserId),
+                                                'type' => 'post',
+                                                'class' => 'inline',
+                                            ]) ?>
+                                                <button type="submit" class="tb-btn tb-btn--quiet">このユーザーをブロック</button>
+                                            <?= $this->Form->end() ?>
+                                        </div>
+                                    </div>
+                                <?php else: ?>
+                                    <p class="ssr-reveal__miss">★ 抽選 miss(送信者は匿名のまま)</p>
+                                <?php endif; ?>
+                                <div class="message-row__footer">
+                                    <?= $this->Form->create(null, [
+                                        'url' => '/dashboard/messages/' . h((string)$msg->id) . '/delete',
+                                        'type' => 'post',
+                                        'class' => 'inline',
+                                        'onsubmit' => "return confirm('このメッセージを削除しますか?(削除後は元に戻せません)');",
+                                    ]) ?>
+                                        <button type="submit" class="tb-btn tb-btn--quiet">削除</button>
+                                    <?= $this->Form->end() ?>
+                                    <?php if (isset($reportedSet[(string)$msg->id])): ?>
+                                        <span class="report-badge" aria-label="このメッセージは通報済みです">通報済</span>
+                                    <?php else: ?>
+                                        <a href="/report/<?= h((string)$msg->id) ?>" class="tb-btn tb-btn--quiet">通報する</a>
+                                    <?php endif; ?>
+                                </div>
+                            <?php endif; ?>
+                        </div>
+                    </details>
+                <?php endforeach; ?>
+            </section>
 
-    <aside class="dashboard-settings">
-        <h2>受信箱設定</h2>
-        <?= $this->element('inbox_settings_form', ['inbox' => $inbox]) ?>
-    </aside>
+            <nav class="pagination tb-pagination" aria-label="受信一覧ページ送り">
+                <?= $this->Paginator->numbers() ?>
+            </nav>
+        <?php endif; ?>
+    </div>
 
-    <?= $this->element('block_list', ['blocks' => $blocks]) ?>
+    <?= $this->element('tb_tabbar', ['active' => 'inbox', 'unreadCount' => $unreadCount]) ?>
 </div>

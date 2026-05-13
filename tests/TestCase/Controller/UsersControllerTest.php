@@ -137,12 +137,15 @@ class UsersControllerTest extends TestCase
     }
 
     /**
+     * Phase 7 NAV-06: settings form rendered on the /dashboard/settings tab
+     * (was previously inline in /dashboard — moved per Phase 7 D-02 / D-04).
+     *
      * @return void
      */
-    public function testDashboardRendersSettingsForm(): void
+    public function testSettingsTabRendersInboxSettingsForm(): void
     {
         $this->loginAsAlice();
-        $this->get('/dashboard');
+        $this->get('/dashboard/settings');
         $this->assertResponseContains('SSR 確率');
         $this->assertResponseContains('name="ssr_probability_pct"');
         $this->assertResponseContains('name="welcome_message"');
@@ -235,11 +238,12 @@ class UsersControllerTest extends TestCase
     }
 
     /**
-     * Phase 4 04-01 (INBOX-04 / D-04): dashboard renders ブロック中ユーザー section partial.
+     * Phase 7 NAV-06: ブロック中ユーザー section now rendered on /dashboard/settings
+     * (Phase 4 D-04 partial moved per Phase 7 D-02 / D-04).
      *
      * @return void
      */
-    public function testDashboardRendersBlockListSection(): void
+    public function testSettingsTabRendersBlockListSection(): void
     {
         // Fixture has alice→bob and alice→charlie blocks (after Plan 04-01 Task 1 append).
         /** @var \App\Model\Entity\User $alice */
@@ -248,7 +252,7 @@ class UsersControllerTest extends TestCase
             ['contain' => ['UserIdentities']]
         );
         $this->session(['Auth' => $alice]);
-        $this->get('/dashboard');
+        $this->get('/dashboard/settings');
         $this->assertResponseCode(200);
         $this->assertResponseContains('ブロック中ユーザー');
         // Phase 6 UI-07: outer wrapper now emits class="block-list tb-block-list" and

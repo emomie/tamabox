@@ -49,14 +49,20 @@ class InboxesControllerTest extends TestCase
     // === GET tests ===
 
     /**
+     * Phase 7 NAV-06: GET /dashboard/settings now renders the settings tab
+     * instead of 302-redirecting to /dashboard (was Phase 3 behavior; the
+     * settings page is now a standalone tab per Phase 7 D-02).
+     *
      * @return void
      */
-    public function testSettingsGetRedirectsToDashboard(): void
+    public function testSettingsGetRendersSettingsTab(): void
     {
         $this->loginAsAlice();
         $this->get('/dashboard/settings');
-        $this->assertResponseCode(302);
-        $this->assertRedirectContains('/dashboard');
+        $this->assertResponseOk();
+        // Inbox settings form is rendered (asserts on existing Phase 6 form fields).
+        $this->assertResponseContains('name="ssr_probability_pct"');
+        $this->assertResponseContains('name="welcome_message"');
     }
 
     /**
@@ -264,7 +270,8 @@ class InboxesControllerTest extends TestCase
 
     /**
      * Phase 4 REV-01 regression sentinel: retired-user JOIN filter must NOT break the active-user
-     * happy path on /dashboard/settings.
+     * happy path on /dashboard/settings. Phase 7 updated the GET behavior from 302→render
+     * (NAV-06), so this regression sentinel now asserts 200 + that the inbox is loaded.
      *
      * @return void
      */
@@ -272,7 +279,9 @@ class InboxesControllerTest extends TestCase
     {
         $this->loginAsAlice();
         $this->get('/dashboard/settings');
-        $this->assertResponseCode(302);
-        $this->assertRedirectContains('/dashboard');
+        $this->assertResponseOk();
+        // Inbox settings form fields are present (proves the controller loaded
+        // the inbox entity and rendered the template).
+        $this->assertResponseContains('name="ssr_probability_pct"');
     }
 }

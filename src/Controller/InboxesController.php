@@ -37,8 +37,35 @@ class InboxesController extends AppController
         }
 
         if ($this->request->is('get')) {
-            // Settings UI is rendered inline in /dashboard.
-            return $this->redirect('/dashboard');
+            // Phase 7 NAV-06 — GET now renders templates/Inboxes/settings.php
+            // (previously 302 to /dashboard inline-settings; settings is now a
+            // standalone tab per Phase 7 D-02).
+            /** @var \App\Model\Table\InboxesTable $inboxesTable */
+            $inboxesTable = $this->fetchTable('Inboxes');
+            /** @var \App\Model\Entity\Inbox|null $inbox */
+            $inbox = $inboxesTable->find()
+                ->where([$inboxesTable->aliasField('user_id') => $userId])
+                ->first();
+            if ($inbox === null) {
+                $this->Flash->error(__('受信箱が見つかりませんでした。再度ログインしてください。'));
+
+                return $this->redirect('/');
+            }
+            /** @var \App\Model\Table\BlocksTable $blocksTable */
+            $blocksTable = $this->fetchTable('Blocks');
+            $blocks = $blocksTable->find()
+                ->where(['Blocks.blocker_user_id' => $userId])
+                ->contain(['BlockedUsers' => ['UserIdentities']])
+                ->order(['Blocks.created_at' => 'DESC'])
+                ->toArray();
+            $this->set([
+                'inbox' => $inbox,
+                'blocks' => $blocks,
+                'activeTab' => 'settings',
+                'unreadCount' => 0,
+            ]);
+
+            return null;
         }
 
         $this->request->allowMethod(['post']);

@@ -2388,3 +2388,17 @@ button.button-clear {
     flex-direction: column;
     gap: 14px;
 }
+
+/* §H.8 — Dashboard app-bar avatar circle */
+.tb-dash-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--tb-turq-100), var(--tb-turq-200));
+    color: var(--tb-turq-700);
+    border: 1px solid var(--tb-turq-200);
+    display: inline-grid;
+    place-items: center;
+    font-weight: 700;
+    font-size: 13px;
+}
