@@ -2,10 +2,10 @@
 gsd_state_version: 1.0
 milestone: v2
 milestone_name: Calm Gacha UI / 4-tab 構造
-status: defining requirements
-last_updated: "2026-05-13T09:25:00.000Z"
+status: ready to plan
+last_updated: "2026-05-13T09:30:00.000Z"
 progress:
-  total_phases: 0
+  total_phases: 4
   completed_phases: 0
   total_plans: 0
   completed_plans: 0
@@ -18,11 +18,10 @@ Project memory. Updated by every gsd-* command.
 
 ## Project Reference
 
-**Core Value**: 「確率で名前がバレる」仕組みが悪意送信者の自己抑止になり、好意送信者にとってはガチャ的祝福演出となる匿名メッセージ箱 (V1 仮説)。SSR 露出確率は受け手が 0〜100% で設定可能。
+**Core Value**: 「確率で名前がバレる」仕組みが悪意送信者の自己抑止になり、好意送信者にとってはガチャ的祝福演出となる匿名メッセージ箱 (V1 仮説)。
+**Current Focus**: v2 Phase 5 — Design System Foundation (Calm Gacha トークン・共通コンポーネント整備)
 
-**Current Focus**: v2 — Calm Gacha UI / 4-tab 構造 milestone を開始。handoff_tamabox の hi-fi デザインシステムを tamabox v1 に注入し、Dashboard 4 タブ分離と最小限の Reveal 演出まで到達させる。バックエンド機能の新規追加なし。
-
-> v1 MVP (Phase 1-4) は 2026-05-13 shipped。詳細は `.planning/milestones/v1-ROADMAP.md` および `.planning/MILESTONES.md` を参照。
+> v1 MVP (Phase 1-4) は 2026-05-13 shipped。詳細は `.planning/milestones/v1-ROADMAP.md` を参照。
 
 **Granularity**: coarse
 **Mode**: yolo
@@ -30,14 +29,21 @@ Project memory. Updated by every gsd-* command.
 
 ## Current Position
 
-Phase: Not started (defining requirements)
-Plan: —
-Status: Defining requirements
-Last activity: 2026-05-13 — Milestone v2 started
+Phase: 5 of 8 (Design System Foundation)
+Plan: — (not yet planned)
+Status: Ready to plan
+Last activity: 2026-05-13 — v2 roadmap created (Phases 5-8)
+
+Progress: [░░░░░░░░░░] 0%
 
 ## Phase Status
 
-(v2 phases will be populated after roadmap creation)
+| Phase | Name | Status | Plans |
+|-------|------|--------|-------|
+| 5 | Design System Foundation | Not started | TBD |
+| 6 | v1 画面の Calm Gacha 化 | Not started | TBD |
+| 7 | Dashboard 4 タブ分離 + Reveal 演出 | Not started | TBD |
+| 8 | エッジケース & マイクロインタラクション | Not started | TBD |
 
 ## Performance Metrics
 
@@ -46,65 +52,34 @@ Last activity: 2026-05-13 — Milestone v2 started
 | Milestones shipped | 1 (v1 MVP, 2026-05-13) |
 | Phases completed (cumulative) | 4/4 (v1 Phase 1-4) |
 | Plans completed (cumulative) | 15/15 (v1) |
-| Requirements shipped (cumulative) | 34/34 (v1: AUTH×9, INBOX×6, MSG×8, MOD×4, INFRA×7) |
-| Current milestone phases | 0 (defining) |
+| Requirements shipped (cumulative) | 34/34 (v1) |
+| Current milestone phases | 0/4 |
 | Current milestone plans | 0 |
-
-### Plan Duration Log (carried from v1)
-
-See `.planning/milestones/v1-ROADMAP.md` for the full Phase 1-4 plan duration history (15 plans / 22 days / 109 commits).
 
 ## Accumulated Context
 
-### Key Decisions (carried from v1)
+### Key Decisions (v2-relevant)
 
-Carried from PROJECT.md Key Decisions — re-summarized here for quick reference:
-
-- Web only(ネイティブアプリ非対応)
-- Bluesky OAuth 先行 / X provider は v3+ で extend (OAuthProviderInterface 抽象化済)
-- slug は SNS handle 由来で自動付与・改名追従(1 世代 grace)
-- SNS OAuth 送信必須(完全匿名送信不可)— V1 仮説の根幹
-- SSR 判定は送信時確定 / 開封時は開示のみ(監査性)
-- メッセージ本文は暗号化せず、OAuth トークンのみ AES-GCM
-- AI 事前検閲は採用せず事後通報のみ(A2)
-- UUID (CHAR(36)) PK 採用
-- 退会時も送信者 snapshot 保持(MOD-03、V1 仮説補強)
-- `DatabaseException | PDOException` union catch + SQLSTATE 23000 マッチング(UNIQUE 衝突冪等吸収パターン)
-- REV-01 retired-user slug 404(timing oracle 防止)
-- Lolipop git deploy で migrations は hook に含めず手動 SSH
-
-### Codebase conventions (from v1 executor decisions — relevant to v2 UI work)
-
-UI / Template 関連の v1 知見（v2 で参照する可能性が高い）:
-
-- **既存 CSS スタック**: `webroot/css/{normalize.min, milligram.min, tamabox}.css` を `layout/default.php` で chain ロード。`tamabox.css` 911 行に `:root` CSS variables (`--color-bg / --color-accent / --space-* / --radius-* / --shadow-subtle / --font-family`) と全コンポーネントスタイル集中。v2 では tokens.css を追加 + `tamabox.css` の :root を Calm Gacha 値で書き換えるアプローチが破壊最小。
-- **CakePHP テンプレート構造**: `templates/{Pages,Messages,Inboxes,Users,Account,Auth,Reports}/` + `templates/{layout,element,cell}/`。inline JS が `inbox_settings_form.php` (probability slider sync) に存在。
-- **Dashboard モノリス**: `templates/Users/dashboard.php` 149 行に 受信リスト + Reveal inline + 設定 element + ブロックリスト element が同居。v2 タブ分離時に分割対象。
-- **既存 Form helper パターン**: `$this->Form->create(null, ['url' => '/path', 'type' => 'post', 'class' => 'xxx-form'])` + `$this->Form->end()` で wrap、CSRF token は自動付与。
-- **既存 Identity アクセス**: `$identity = $this->getRequest()->getAttribute('identity')` → `$identity->getOriginalData()->user_identity->handle_cached / avatar_url_cached` で SNS info 取得。v2 でも同 path 維持。
-- **`postString()` / `queryString()` helper パターン**: phpstan level 8 安全な POST / query 値取得。新 controller でも踏襲必須。
-- **既存 Phase 4 CSS section コメント慣習**: `tamabox.css` 内に `/* ========== Phase N — ... ========== */` で phase 単位の追加範囲明示。v2 でも同方式を踏襲予定。
+- v2 は PHP テンプレート / CSS / 最小限 JS のみ — バックエンド変更なし
+- tokens.css を `webroot/css/` に追加し `tamabox.css` の `:root` を Calm Gacha 値で上書きするアプローチ (破壊最小)
+- Discover / Notifications タブは Empty state 骨格のみ、機能本体は v3
+- Desktop ブレイクポイントは v3 候補 — モバイル 390×844 基準で設計
+- 設計一次情報: `~/projects/handoff_tamabox/` (tokens.css / 30 画面 hi-fi)
 
 ### Open Todos
 
-(v2 milestone 開始時点 — clean)
+None.
 
 ### Blockers
 
-None currently.
-
-### Research Flags
-
-- v2 は frontend UI 改修中心、新規バックエンド機能なし。Tech stack 調査は不要。
-- 設計仕様の一次情報: `~/projects/handoff_tamabox/` 配下 (tokens.css / colors_and_type.css / 30 画面 hi-fi)
-- 4 タブ分離で CakePHP のルーティングをどう設計するか(複数 route vs single route + query / fragment)は Phase 7 planning 時に判断
-- Bluesky 公式ロゴアセットは引き続き未取得 — 雲モチーフ仮置きで v2 を完走、差し替えは v3
+None.
 
 ## Session Continuity
 
-**Last Agent Run**: /gsd-new-milestone v2 — milestone scope 定義中 (2026-05-13)
-**Next Action**: REQUIREMENTS.md 定義 → roadmap 作成 → /gsd-discuss-phase 5 で Phase 5 着手
-**Context Notes**: v1 shipped 完全クローズ済。v2 は UI/UX overhaul のみで、PHP/MySQL/Bluesky OAuth/SSR メカニクスへの変更は出ない想定。handoff package `~/projects/handoff_tamabox/` の `tokens.css` を一次情報として扱う。
+Last session: 2026-05-13
+Stopped at: v2 roadmap created — Phases 5-8 defined, 28/28 requirements mapped
+Resume file: None
+Next action: `/gsd-plan-phase 5` で Phase 5 着手
 
 ---
-*Last updated: 2026-05-13 — v2 Calm Gacha UI milestone started, defining requirements*
+*Last updated: 2026-05-13 — v2 roadmap created, ready to plan Phase 5*

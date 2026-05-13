@@ -105,44 +105,48 @@ v2 に含めない、後続 milestone の候補。
 
 ## Traceability
 
-各 REQ → Phase マッピング。roadmapper 実行時に埋まる。
+各 REQ → Phase マッピング。
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| DS-01 | TBD | Pending |
-| DS-02 | TBD | Pending |
-| DS-03 | TBD | Pending |
-| DS-04 | TBD | Pending |
-| DS-05 | TBD | Pending |
-| DS-06 | TBD | Pending |
-| UI-01 | TBD | Pending |
-| UI-02 | TBD | Pending |
-| UI-03 | TBD | Pending |
-| UI-04 | TBD | Pending |
-| UI-05 | TBD | Pending |
-| UI-06 | TBD | Pending |
-| UI-07 | TBD | Pending |
-| UI-08 | TBD | Pending |
-| NAV-01 | TBD | Pending |
-| NAV-02 | TBD | Pending |
-| NAV-03 | TBD | Pending |
-| NAV-04 | TBD | Pending |
-| NAV-05 | TBD | Pending |
-| NAV-06 | TBD | Pending |
-| MOTION-01 | TBD | Pending |
-| MOTION-02 | TBD | Pending |
-| MOTION-03 | TBD | Pending |
-| EDGE-01 | TBD | Pending |
-| EDGE-02 | TBD | Pending |
-| EDGE-03 | TBD | Pending |
-| EDGE-04 | TBD | Pending |
-| EDGE-05 | TBD | Pending |
+| DS-01 | Phase 5 | Pending |
+| DS-02 | Phase 5 | Pending |
+| DS-03 | Phase 5 | Pending |
+| DS-04 | Phase 5 | Pending |
+| DS-05 | Phase 5 | Pending |
+| DS-06 | Phase 5 | Pending |
+| UI-01 | Phase 6 | Pending |
+| UI-02 | Phase 6 | Pending |
+| UI-03 | Phase 6 | Pending |
+| UI-04 | Phase 6 | Pending |
+| UI-05 | Phase 6 | Pending |
+| UI-06 | Phase 6 | Pending |
+| UI-07 | Phase 6 | Pending |
+| UI-08 | Phase 6 | Pending |
+| NAV-01 | Phase 7 | Pending |
+| NAV-02 | Phase 7 | Pending |
+| NAV-03 | Phase 7 | Pending |
+| NAV-04 | Phase 7 | Pending |
+| NAV-05 | Phase 7 | Pending |
+| NAV-06 | Phase 7 | Pending |
+| MOTION-01 | Phase 8 | Pending |
+| MOTION-02 | Phase 7 | Pending |
+| MOTION-03 | Phase 7 | Pending |
+| EDGE-01 | Phase 8 | Pending |
+| EDGE-02 | Phase 8 | Pending |
+| EDGE-03 | Phase 8 | Pending |
+| EDGE-04 | Phase 8 | Pending |
+| EDGE-05 | Phase 8 | Pending |
 
 **Coverage:**
 - v2 requirements: 28 total (DS×6, UI×8, NAV×6, MOTION×3, EDGE×5)
-- Mapped to phases: 0 (awaiting roadmapper)
-- Unmapped: 28 ⚠️ (will be resolved by /gsd-new-milestone roadmap step)
+- Mapped to phases: 28/28 ✓
+- Unmapped: 0 ✓
+- Phase 5: DS-01, DS-02, DS-03, DS-04, DS-05, DS-06 (6 requirements)
+- Phase 6: UI-01, UI-02, UI-03, UI-04, UI-05, UI-06, UI-07, UI-08 (8 requirements)
+- Phase 7: NAV-01, NAV-02, NAV-03, NAV-04, NAV-05, NAV-06, MOTION-02, MOTION-03 (8 requirements)
+- Phase 8: MOTION-01, EDGE-01, EDGE-02, EDGE-03, EDGE-04, EDGE-05 (6 requirements)
 
 ---
 *Requirements defined: 2026-05-13*
-*Last updated: 2026-05-13 — v2 milestone initial requirements*
+*Last updated: 2026-05-13 — traceability filled by roadmapper (28/28 mapped)*
