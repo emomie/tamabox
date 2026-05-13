@@ -921,3 +921,100 @@ button.button-clear {
 .settings-form__danger-zone legend {
     color: var(--color-error);
 }
+
+/* ============================================================
+ * Phase 5 — Design System Foundation (Plan 05-03)
+ * §A button focus + disabled / danger variants + .tb-icon-btn
+ * Base .tb-btn rules live in tokens.css; this file extends.
+ * Source: handoff_tamabox/components.jsx + UI-SPEC.md
+ * Reqs: DS-03 (5 button variants), DS-06 (alias-driven palette)
+ * ============================================================ */
+
+/* §A.1 — focus ring (UI-SPEC line 276) */
+.tb-btn:focus-visible {
+    outline: 2px solid var(--tb-turq-400);
+    outline-offset: 2px;
+}
+
+/* §A.2 — universal press feedback (MOTION-01 ships in Phase 8 globally;
+   Phase 5 only ships the .tb-btn:active scale per UI-SPEC line 494) */
+.tb-btn:active {
+    transform: scale(0.985);
+}
+.tb-btn--ghost:active {
+    transform: scale(0.985);
+}
+.tb-btn--quiet:active {
+    transform: scale(0.985);
+    background: var(--tb-line);
+}
+
+/* §A.3 — disabled variant (UI-SPEC line 271) */
+.tb-btn--disabled,
+.tb-btn:disabled,
+.tb-btn[disabled] {
+    background: var(--tb-paper-deep);
+    color: var(--tb-ink-4);
+    pointer-events: none;
+    transform: none;
+}
+
+/* §A.4 — danger variant (UI-SPEC line 272) */
+.tb-btn--danger {
+    background: var(--tb-danger);
+    color: #fff;
+    border: 0;
+}
+.tb-btn--danger:hover {
+    background: var(--tb-danger-bg);
+    color: var(--tb-danger);
+}
+.tb-btn--danger:active {
+    transform: scale(0.985);
+    background: var(--tb-danger-bg);
+    color: var(--tb-danger);
+}
+.tb-btn--danger:disabled,
+.tb-btn--danger[disabled] {
+    opacity: 0.5;
+}
+
+/* §A.5 — ghost variant hover (UI-SPEC line 270) */
+.tb-btn--ghost:hover {
+    border-color: var(--tb-turq-300);
+}
+
+/* §A.6 — primary variant hover (UI-SPEC line 269; tokens.css only has :active) */
+.tb-btn--primary:hover {
+    background: var(--tb-turq-500);
+}
+
+/* §A.7 — quiet variant hover (UI-SPEC line 270) */
+.tb-btn--quiet:hover {
+    background: var(--tb-line);
+}
+
+/* §A.8 — icon button (UI-SPEC lines 377-381) */
+.tb-icon-btn {
+    width: 40px;
+    height: 40px;
+    display: inline-grid;
+    place-items: center;
+    background: transparent;
+    border: 0;
+    border-radius: 999px;
+    cursor: pointer;
+    color: var(--tb-ink-2);
+}
+.tb-icon-btn:hover {
+    background: var(--tb-paper-deep);
+}
+.tb-icon-btn.is-active {
+    color: var(--tb-turq-500);
+}
+.tb-icon-btn:focus-visible {
+    outline: 2px solid var(--tb-turq-400);
+    outline-offset: 2px;
+}
+/* Accessibility: ALL .tb-icon-btn elements in templates MUST carry aria-label
+   (e.g. aria-label="閉じる"). See UI-SPEC line 381. */
