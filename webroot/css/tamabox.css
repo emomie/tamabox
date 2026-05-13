@@ -1,5 +1,5 @@
 /* tamabox.css — Phase 2 Bluesky OAuth UI + Phase 5 Calm Gacha aliases. Loaded after milligram.min.css. */
-/* UI-SPEC v1 §7 — design tokens + component styles. As of Phase 5, legacy --color-*/--radius-* aliases resolve to --tb-* primitives from tokens.css. */
+/* UI-SPEC v1 §7 — design tokens + component styles. As of Phase 5, legacy --color and --radius aliases resolve to --tb-* primitives from tokens.css. */
 
 :root {
     /* Legacy --color-* → Calm Gacha aliases (DS-06).
