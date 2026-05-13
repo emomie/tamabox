@@ -111,6 +111,15 @@ v2 milestone の最終 phase。Send フローの 4 エラー画面 (EDGE-01 404 
 - **Justification:** each value is hi-fi-required and used exactly once (or in the case of #F0DCA8, twice in the same edge-tone role). Promoting to `--tb-*` tokens would expand the design-token surface without payoff. If a second non-edge consumer arises for any value, promote at that time.
 - **Scope-of-override:** these specific selectors only.
 
+### Locked Decision — Single-use rgba literals (Phase 8 §I, post-UI-REVIEW)
+
+- **Scope (2 locations):**
+  - `rgba(20, 28, 32, 0.42)` — `.tb-block-modal::backdrop` modal backdrop wash (§I.6). Hi-fi-pinned from `RevealHit.jsx` `BlockConfirmModal` backdrop value.
+  - `rgba(217, 162, 60, 0.10)` — `.tb-reveal-hit-card__corner-glyph` color (§I.7). Decorative 10%-alpha corner-✦ glyph; lifted from `dashboard.php` inline style in Phase 7 audit Recommendation §2 follow-up.
+- **Justification:** both are decorative-only, single-use, and hi-fi-pinned. The backdrop is intrinsically a modal-only concern (no second consumer expected); the 10%-alpha glyph color is intentionally edge-faded relative to the warm-500 sibling so promotion to a token would suggest a reuse that does not exist.
+- **Scope-of-override:** these specific selectors only. New rgba literals require fresh review.
+- **Locked at:** 08-UI-REVIEW Pillar 2 follow-up (v2 milestone close).
+
 </decisions>
 
 <canonical_refs>
