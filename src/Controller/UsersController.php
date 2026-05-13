@@ -98,6 +98,8 @@ class UsersController extends AppController
                 'collisionFlash' => null,
                 'blocks' => [],
                 'reportedSet' => [],
+                'unreadCount' => 0,
+                'activeTab' => 'inbox',
             ]);
 
             return null;
@@ -145,6 +147,15 @@ class UsersController extends AppController
             $session->delete('Flash.slug_collision_suffix');
         }
 
+        // Phase 7 NAV-02 — unread count for inbox tab dot + Counts pill.
+        $unreadCount = (int)$messagesTable->find()
+            ->where([
+                'Messages.inbox_id' => $inbox->id,
+                'Messages.opened_at IS' => null,
+                'Messages.deleted_at IS' => null,
+            ])
+            ->count();
+
         $this->set([
             'user' => $user,
             'inbox' => $inbox,
@@ -153,7 +164,45 @@ class UsersController extends AppController
             'collisionFlash' => $collisionFlash,
             'blocks' => $blocks,
             'reportedSet' => $reportedSet,
+            'unreadCount' => $unreadCount,
+            'activeTab' => 'inbox',
         ]);
+
+        return null;
+    }
+
+    /**
+     * GET /dashboard/discover — 発見タブの Empty-state スタブ (NAV-04).
+     *
+     * Phase 7 stub. No DB query. Backend body for DISC-01 is v3 candidate.
+     *
+     * @return \Cake\Http\Response|null
+     */
+    public function discover(): ?Response
+    {
+        $identity = $this->Authentication->getIdentity();
+        if ($identity === null) {
+            return $this->redirect('/');
+        }
+        $this->set(['activeTab' => 'discover']);
+
+        return null;
+    }
+
+    /**
+     * GET /dashboard/notifications — 通知タブの Empty-state スタブ (NAV-05).
+     *
+     * Phase 7 stub. No DB query. Backend body for NOTIF-01 is v3 candidate.
+     *
+     * @return \Cake\Http\Response|null
+     */
+    public function notifications(): ?Response
+    {
+        $identity = $this->Authentication->getIdentity();
+        if ($identity === null) {
+            return $this->redirect('/');
+        }
+        $this->set(['activeTab' => 'notifications']);
 
         return null;
     }

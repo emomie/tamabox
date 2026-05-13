@@ -108,6 +108,19 @@ return function (RouteBuilder $routes): void {
             ['controller' => 'Inboxes', 'action' => 'settings']
         )->setMethods(['GET', 'POST']);
 
+        // === Phase 7 routes (NAV-04 / NAV-05) ===
+        // GET /dashboard/discover — 発見タブ Empty-state stub.
+        $builder->connect(
+            '/dashboard/discover',
+            ['controller' => 'Users', 'action' => 'discover']
+        )->setMethods(['GET']);
+
+        // GET /dashboard/notifications — 通知タブ Empty-state stub.
+        $builder->connect(
+            '/dashboard/notifications',
+            ['controller' => 'Users', 'action' => 'notifications']
+        )->setMethods(['GET']);
+
         // GET|POST /report/{id} — Phase 4 ReportsController::create (Phase 3 routed Messages::report which is now removed).
         $builder->connect(
             '/report/{id}',

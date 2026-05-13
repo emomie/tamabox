@@ -258,4 +258,53 @@ class UsersControllerTest extends TestCase
         // Two block rows expected.
         $this->assertResponseContains('class="block-list__row ');
     }
+
+    /**
+     * NAV-04: /dashboard/discover unauth redirects to '/'.
+     *
+     * @return void
+     */
+    public function testDiscoverUnauthRedirectsHome(): void
+    {
+        $this->get('/dashboard/discover');
+        $this->assertResponseCode(302);
+    }
+
+    /**
+     * NAV-04: /dashboard/discover auth returns 200.
+     *
+     * Body assertion ("発見はもうすぐ来ます" copy) added in plan 07-06 once the
+     * template lands. For 07-02 we only assert the status code.
+     *
+     * @return void
+     */
+    public function testDiscoverAuthRenders200(): void
+    {
+        $this->loginAsAlice();
+        $this->get('/dashboard/discover');
+        $this->assertResponseOk();
+    }
+
+    /**
+     * NAV-05: /dashboard/notifications unauth redirects to '/'.
+     *
+     * @return void
+     */
+    public function testNotificationsUnauthRedirectsHome(): void
+    {
+        $this->get('/dashboard/notifications');
+        $this->assertResponseCode(302);
+    }
+
+    /**
+     * NAV-05: /dashboard/notifications auth returns 200.
+     *
+     * @return void
+     */
+    public function testNotificationsAuthRenders200(): void
+    {
+        $this->loginAsAlice();
+        $this->get('/dashboard/notifications');
+        $this->assertResponseOk();
+    }
 }
