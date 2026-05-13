@@ -77,9 +77,23 @@ $initial = $displayName !== '' ? mb_substr($displayName, 0, 1) : '?';
         <?php endif; ?>
 
         <?php if (!$isAccepting): ?>
-            <div class="tb-card-soft tb-send__closed">
-                <p class="tb-send__closed-title">現在この受信箱は受け付けていません</p>
-                <p class="tb-send__closed-sub">受け取り再開をお待ちください。</p>
+            <div class="tb-send__closed-status" role="status">
+                <div class="tb-send__closed-status__kicker">
+                    <span class="tb-send__closed-status__dot" aria-hidden="true"></span>
+                    inbox · paused
+                </div>
+                <h3 class="tb-send__closed-status__title">この箱はいま受信を停止しています</h3>
+                <p class="tb-send__closed-status__body">
+                    受信者が一時的にメッセージを受け取らない設定にしています。<br>
+                    また開いた頃に、もう一度きてみてください。
+                </p>
+            </div>
+
+            <div class="tb-send__textarea-block">
+                <label class="tb-label" aria-hidden="true">メッセージ</label>
+                <div class="tb-input tb-send__closed-input" aria-disabled="true">
+                    <span>受信停止中のため、入力できません</span>
+                </div>
             </div>
         <?php else: ?>
             <div class="tb-send__textarea-block">
@@ -124,6 +138,10 @@ $initial = $displayName !== '' ? mb_substr($displayName, 0, 1) : '?';
             </button>
         </div>
         <?= $this->Form->end() ?>
+    <?php else: ?>
+        <div class="tb-screen__cta tb-send__cta">
+            <button type="button" disabled class="tb-send__closed-cta">送信できません</button>
+        </div>
     <?php endif; ?>
 </div>
 

@@ -93,9 +93,12 @@ class MessagesControllerTest extends TestCase
     public function testSendGetIsAcceptingFalseHidesForm(): void
     {
         // charlie has is_accepting=0.
+        // EDGE-02: copy upgraded from v1 "現在この受信箱は受け付けていません" to
+        // hi-fi SendInboxClosed "この箱はいま受信を停止しています" + status kicker.
         $this->get('/charlie');
         $this->assertResponseOk();
-        $this->assertResponseContains('現在この受信箱は受け付けていません');
+        $this->assertResponseContains('この箱はいま受信を停止しています');
+        $this->assertResponseContains('inbox · paused');
         $this->assertResponseNotContains('<textarea name="body"');
     }
 
