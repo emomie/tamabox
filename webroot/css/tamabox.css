@@ -2057,6 +2057,14 @@ button.button-clear {
 .message-row__body.is-opening {
     animation: tb-fade-in 400ms ease;
 }
+/* REVIEW M-02 — honor OS-level reduced-motion setting (WCAG 2.3.3).
+   The 2px translateY is small but the contract is to disable non-essential
+   motion entirely when the user opts out. */
+@media (prefers-reduced-motion: reduce) {
+    .message-row__body.is-opening {
+        animation: none;
+    }
+}
 
 /* §H.3 — Dashboard Box card + Counts row */
 .tb-dash-box {
