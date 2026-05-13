@@ -2033,3 +2033,358 @@ button.button-clear {
 .tb-send__cta .tb-btn--primary > span { flex: 1; text-align: left; }
 .tb-send-form.is-disabled .tb-screen__body,
 .tb-send-form.is-disabled .tb-screen__cta { opacity: 0.5; pointer-events: none; }
+
+/* ============================================================
+ * Phase 7 — Dashboard 4-tab + Reveal motion
+ * Source: .planning/phases/07-dashboard-4-reveal/07-UI-SPEC.md
+ * ============================================================ */
+
+/* §H.1 — TabBar element internal tweaks (tokens.css owns the base) */
+.tb-tabbar__item {
+    text-decoration: none;
+}
+.tb-tabbar__item:focus-visible {
+    outline: 2px solid var(--tb-turq-400);
+    outline-offset: -2px;
+    border-radius: 4px;
+}
+
+/* §H.2 — Reveal fade-in animation (MOTION-02) */
+@keyframes tb-fade-in {
+    from { opacity: 0; transform: translateY(2px); }
+    to   { opacity: 1; transform: none; }
+}
+.message-row__body.is-opening {
+    animation: tb-fade-in 400ms ease;
+}
+
+/* §H.3 — Dashboard Box card + Counts row */
+.tb-dash-box {
+    background: var(--tb-card);
+    border: 1px solid var(--tb-line);
+    border-radius: var(--tb-r-lg);
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+.tb-dash-box__label {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--tb-ink-3);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+}
+.tb-dash-box__url {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--tb-ink);
+    margin-top: 3px;
+}
+.tb-dash-counts {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    padding: 4px 2px;
+}
+.tb-dash-counts__title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--tb-ink);
+}
+.tb-dash-counts__num {
+    font-size: 12px;
+    color: var(--tb-ink-3);
+    letter-spacing: 0.06em;
+}
+.tb-dash-counts__pill {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--tb-warm-700);
+    background: var(--tb-warm-100);
+    padding: 4px 10px;
+    border-radius: 999px;
+    letter-spacing: 0.08em;
+}
+
+/* §H.4 — Receive list + message row hi-fi adaptation */
+.tb-receive-list {
+    background: var(--tb-card);
+    border: 1px solid var(--tb-line);
+    border-radius: var(--tb-r-lg);
+    overflow: hidden;
+}
+.tb-message-row { padding: 0; }
+.tb-message-row + .tb-message-row { border-top: 1px solid var(--tb-line); }
+.tb-message-row__head {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px 14px;
+    cursor: pointer;
+    list-style: none;
+}
+.tb-message-row[data-state="unread"] .tb-message-row__head { background: #FBFCFD; }
+.tb-dash-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex: 0 0 auto;
+    margin-top: 7px;
+}
+.tb-dash-dot--unread { background: var(--tb-warm-500); }
+.tb-dash-dot--hit    { border: 1.5px solid var(--tb-warm-500); }
+.tb-dash-dot--miss   { border: 1.5px solid var(--tb-line-strong); }
+.tb-message-row__meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.tb-message-row__from {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+}
+.tb-message-row__from--hit  { color: var(--tb-warm-700); }
+.tb-message-row__from--anon { color: var(--tb-ink-3); }
+.tb-message-row__ssr {
+    font-size: 10px;
+    color: var(--tb-warm-500);
+    font-weight: 700;
+    letter-spacing: 0.16em;
+}
+.tb-message-row__preview {
+    flex: 1;
+    font-size: 14px;
+    line-height: 1.55;
+    letter-spacing: 0.02em;
+    color: var(--tb-ink);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+.tb-message-row[data-state="opened"] .tb-message-row__preview {
+    color: var(--tb-ink-2);
+    font-weight: 400;
+}
+.tb-message-row__time {
+    font-size: 10px;
+    color: var(--tb-ink-3);
+    flex: 0 0 auto;
+    margin-top: 2px;
+}
+
+/* §H.5 — Reveal MISS / HIT cards (inline, not full-screen) */
+.tb-reveal-miss-card {
+    background: var(--tb-card-soft);
+    border: 1px solid var(--tb-line);
+    border-radius: var(--tb-r-lg);
+    padding: 18px 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+.tb-reveal-miss-card__dash {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 1px dashed var(--tb-line-strong);
+    display: grid;
+    place-items: center;
+    color: var(--tb-ink-3);
+    font-size: 22px;
+    flex: 0 0 auto;
+}
+.tb-reveal-hit-card {
+    background: linear-gradient(180deg, #FFF7E0 0%, #FBEFCC 100%);
+    border: 1px solid #F0DCA8;
+    border-radius: var(--tb-r-lg);
+    padding: 18px 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    position: relative;
+    overflow: hidden;
+}
+.tb-reveal-hit-card__symbol {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: #fff;
+    border: 1px solid var(--tb-warm-300);
+    color: var(--tb-warm-500);
+    display: grid;
+    place-items: center;
+    font-size: 22px;
+    box-shadow: 0 2px 8px rgba(217, 162, 60, 0.22);
+    flex: 0 0 auto;
+}
+.tb-sender-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--tb-card);
+    border: 1px solid var(--tb-line);
+    border-radius: var(--tb-r-lg);
+    padding: 14px;
+    box-shadow: var(--tb-shadow-1);
+    margin-top: 12px;
+}
+.tb-sender-card__avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #E7C795, #B98449);
+    color: #fff;
+    font-weight: 700;
+    font-size: 17px;
+    display: grid;
+    place-items: center;
+    flex: 0 0 auto;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    object-fit: cover;
+}
+.tb-sender-card__name {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--tb-ink);
+}
+.tb-sender-card__handle {
+    font-size: 12px;
+    color: var(--tb-ink-3);
+    display: block;
+    margin-top: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-decoration: none;
+}
+.tb-sender-card__profile-link {
+    height: 30px;
+    padding: 0 12px;
+    border-radius: 999px;
+    background: transparent;
+    border: 1px solid var(--tb-turq-200);
+    color: var(--tb-turq-700);
+    font-size: 12px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+    flex: 0 0 auto;
+}
+
+/* §H.6 — Discover / Notifications stubs */
+.tb-discover-search {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--tb-card-soft);
+    border: 1px solid var(--tb-line);
+    border-radius: 999px;
+    padding: 0 14px;
+    height: 42px;
+}
+.tb-discover-search__placeholder {
+    font-size: 12px;
+    color: var(--tb-ink-4);
+    flex: 1;
+}
+.tb-discover-tags {
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    padding: 2px 0;
+}
+.tb-discover-tag {
+    flex: 0 0 auto;
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    background: transparent;
+    color: var(--tb-ink-3);
+    border: 1px solid var(--tb-line);
+}
+.tb-discover-tag.is-pseudo-active {
+    background: var(--tb-ink);
+    color: #fff;
+    border-color: var(--tb-ink);
+}
+.tb-empty-state {
+    background: var(--tb-card);
+    border: 1px solid var(--tb-line);
+    border-radius: var(--tb-r-lg);
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    text-align: center;
+}
+.tb-empty-state__symbol {
+    font-size: 36px;
+    color: var(--tb-warm-500);
+    line-height: 1;
+}
+.tb-empty-state__title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--tb-ink);
+}
+.tb-empty-state__body {
+    font-size: 12px;
+    line-height: 1.7;
+    color: var(--tb-ink-2);
+    max-width: 280px;
+}
+.tb-notif-empty {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    padding: 40px 24px;
+}
+.tb-notif-empty__circle {
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    background: var(--tb-paper-deep);
+    border: 1px solid var(--tb-line);
+    display: grid;
+    place-items: center;
+    color: var(--tb-ink-4);
+}
+.tb-notif-empty__title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--tb-ink);
+}
+.tb-notif-empty__body {
+    font-size: 12px;
+    line-height: 1.7;
+    color: var(--tb-ink-3);
+    max-width: 280px;
+    text-align: center;
+}
+
+/* §H.7 — Screen wrapper for full-height dashboard tabs */
+.tb-dash-screen {
+    display: flex;
+    flex-direction: column;
+    min-height: calc(100vh - 56px);
+    background: var(--tb-paper);
+}
+.tb-dash-screen__body {
+    flex: 1;
+    overflow: auto;
+    padding: 4px 20px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
