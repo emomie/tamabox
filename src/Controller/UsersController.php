@@ -225,7 +225,7 @@ class UsersController extends AppController
      * @param string $userId Authenticated user id (empty string → 0).
      * @return int Non-negative unread count; 0 when user has no inbox.
      */
-    public function computeUnreadCount(string $userId): int
+    private function computeUnreadCount(string $userId): int
     {
         if ($userId === '') {
             return 0;
