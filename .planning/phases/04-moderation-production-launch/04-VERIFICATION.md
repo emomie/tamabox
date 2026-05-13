@@ -1,8 +1,9 @@
 ---
 phase: 04-moderation-production-launch
 verified: 2026-04-28T13:50:00Z
-status: human_needed
-score: 9/9 code-level requirements verified; 12 manual smoke items pending
+re_verified: 2026-05-13T08:30:30Z
+status: verified
+score: 9/9 code-level requirements verified; 12/12 manual smoke items passed (see 04-UAT.md)
 overrides_applied: 0
 roadmap_success_criteria_passed: 6/6 (code-level)
 test_suite: 195 tests / 546 assertions / 0 failures (6 incomplete pre-existing skips)
@@ -94,10 +95,10 @@ human_verification:
 
 **Phase Goal**: 通報・ブロック・論理削除・退会時 snapshot 保持の運用レーンを整え、`tamabox.emomie.com` 上で `debug=false` 固定の本番運用に乗せる。
 
-**Verified**: 2026-04-28
-**Status**: `human_needed` — code-level 9/9 requirements verified, 12 manual smoke items + production deploy walkthrough remaining
-**Re-verification**: No (initial)
-**Verdict**: **PASS at code level. PARTIAL until manual smoke walkthrough on tamabox.emomie.com is complete.**
+**Verified**: 2026-04-28 (code-level), 2026-05-13 (manual smoke walkthrough)
+**Status**: `verified` — code-level 9/9 requirements verified, 12/12 manual smoke items passed on tamabox.emomie.com
+**Re-verification**: Yes (manual smoke pass appended 2026-05-13 via `/gsd-verify-phase 4` — see `04-UAT.md`)
+**Verdict**: **PASS — Phase 4 fully verified, ready for v1 milestone close.**
 
 ---
 
