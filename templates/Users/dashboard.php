@@ -168,7 +168,6 @@ $initialChar = $handle !== '' ? mb_substr($handle, 0, 1) : '';
                                                      width="44" height="44">
                                             <?php else: ?>
                                                 <span class="tb-sender-card__avatar" aria-hidden="true"><?= h($senderInitial) ?></span>
-                                                <img class="sender-card__avatar" src="/img/default-avatar.svg" alt="<?= h($senderHandle) ?>" width="44" height="44" style="display:none;">
                                             <?php endif; ?>
                                             <div style="flex:1; min-width:0;">
                                                 <div style="display:flex; align-items:center; gap:6px;">
