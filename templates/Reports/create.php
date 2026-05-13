@@ -32,7 +32,7 @@ $reasons = [
     </header>
 
     <?= $this->Form->create(null, [
-        'url' => '/report/' . h((string)$message->id),
+        'url' => '/report/' . (string)$message->id,
         'type' => 'post',
         'class' => 'report-form tb-report-form',
     ]) ?>

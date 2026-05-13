@@ -8,7 +8,7 @@
  * D-19 (preserved): sender sees no SSR outcome.
  */
 $this->assign('title', '送信しました');
-$slug = h((string)$inbox->slug);
+$slug = (string)$inbox->slug;
 ?>
 <div class="tb-screen tb-screen--done">
     <header class="tb-appbar tb-appbar--transparent">

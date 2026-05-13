@@ -54,7 +54,7 @@ $count = count($blocks);
                         <div class="tb-mono tb-block-row__handle">@<?= h($handle) ?></div>
                     </div>
                     <?= $this->Form->create(null, [
-                        'url' => '/dashboard/blocks/' . h((string)$block->id) . '/delete',
+                        'url' => '/dashboard/blocks/' . (string)$block->id . '/delete',
                         'type' => 'post',
                         'class' => 'inline tb-block-row__form',
                     ]) ?>

@@ -43,7 +43,7 @@ $initial = $displayName !== '' ? mb_substr($displayName, 0, 1) : '?';
 
     <?php if ($isAccepting): ?>
         <?= $this->Form->create(null, [
-            'url' => '/' . h($slug),
+            'url' => '/' . $slug,
             'type' => 'post',
             'class' => 'send-form tb-send-form' . $blockedFormClassMod,
         ]) ?>
