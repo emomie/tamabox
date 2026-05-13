@@ -3,9 +3,9 @@ gsd_state_version: 1.0
 milestone: v2
 milestone_name: Calm Gacha UI / 4-tab 構造
 status: executing
-stopped_at: Phase 6 complete — code-level verified + reviewed + UI-audited, awaits human smoke verify post-deploy
-last_updated: "2026-05-13T13:00:00.000Z"
-last_activity: 2026-05-13 -- Phase 6 complete (8 plans, code review fixed, UI review PASS)
+stopped_at: Phase 6 ✅ shipped — deployed (1777c2a) + smoke verified on tamabox.emomie.com 2026-05-13
+last_updated: "2026-05-13T13:10:00.000Z"
+last_activity: 2026-05-13 -- Phase 6 smoke verified, ready for Phase 7
 progress:
   total_phases: 4
   completed_phases: 2
@@ -43,7 +43,7 @@ Progress: [█████░░░░░] 50% (2/4 v2 phases done)
 | Phase | Name | Status | Plans |
 |-------|------|--------|-------|
 | 5 | Design System Foundation | ✅ Complete (deployed) | 5/5 |
-| 6 | v1 画面の Calm Gacha 化 | ✅ Code complete, awaits smoke | 8/8 |
+| 6 | v1 画面の Calm Gacha 化 | ✅ Shipped + smoke verified | 8/8 |
 | 7 | Dashboard 4 タブ分離 + Reveal 演出 | Not started | TBD |
 | 8 | エッジケース & マイクロインタラクション | Not started | TBD |
 
@@ -78,14 +78,14 @@ None.
 
 ### Blockers
 
-None. Awaiting `git push lolipop main` + 本番 smoke verify on `https://tamabox.emomie.com`.
+None. Phase 6 fully shipped (`1777c2a` deployed + smoke verified). Ready for Phase 7.
 
 ## Session Continuity
 
-Last session: 2026-05-13T13:00:00Z
-Stopped at: Phase 6 complete — 8 plans landed, code review 5/8 findings fixed (3 deferred), UI review 27/30 PASS, awaits human smoke verify post-deploy
-Resume file: .planning/phases/06-v1-calm-gacha/06-VERIFICATION.md
-Next action: `git push lolipop main` で本番反映 → smoke verify → `/gsd-discuss-phase 7` で Phase 7 (Dashboard 4 タブ + Reveal) 開始
+Last session: 2026-05-13T13:10:00Z
+Stopped at: Phase 6 shipped — deploy `1777c2a` reflected on tamabox.emomie.com, smoke verified by user
+Resume file: .planning/phases/06-v1-calm-gacha/06-VERIFICATION.md (status: passed)
+Next action: `/gsd-autonomous --only 7 --auto` で Phase 7 (Dashboard 4 タブ + Reveal 演出) 開始
 
 ---
 *Last updated: 2026-05-13 — Phase 6 complete via /gsd-autonomous --only 6 --auto*

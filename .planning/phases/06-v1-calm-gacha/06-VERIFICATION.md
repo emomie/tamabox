@@ -1,15 +1,16 @@
 ---
 phase: 6
 slug: v1-calm-gacha
-status: human_needed
+status: passed
 created: 2026-05-13
+smoke_verified: 2026-05-13 (tamabox.emomie.com, deploy 1777c2a)
 test_result: "195 tests, 548 assertions, 0 failures (6 incomplete — pre-existing)"
 commits: 10
 ---
 
 # Phase 6 — Verification Report
 
-8 plans landed. All `composer test` runs green. No backend file (`src/`, `config/Migrations/`) modified. Visual fidelity verified by side-by-side diff against `~/projects/handoff_tamabox/screens/*.jsx` for each plan. Remaining check is human smoke verification on `tamabox.emomie.com` after deploy — hence `status: human_needed`.
+8 plans landed. All `composer test` runs green. No backend file (`src/`, `config/Migrations/`) modified. Visual fidelity verified by side-by-side diff against `~/projects/handoff_tamabox/screens/*.jsx` for each plan. **Human smoke verified 2026-05-13 on `tamabox.emomie.com` (deploy `1777c2a`) — PASS.**
 
 ---
 
