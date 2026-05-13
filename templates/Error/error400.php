@@ -61,8 +61,9 @@ $this->assign('title', '箱が見つかりません');
     <div class="tb-error-screen__body">
         <div class="tb-error-screen__symbol" aria-hidden="true">?</div>
         <h2 class="tb-error-screen__title">この箱は見つかりません</h2>
+        <?php // $url is pre-escaped by WebExceptionRenderer::_outputMessage (vendor verified). ?>
         <?php if (isset($url) && $url !== ''): ?>
-            <div class="tb-error-screen__url-pill tb-mono"><?= h((string)$url) ?></div>
+            <div class="tb-error-screen__url-pill tb-mono"><?= $url ?></div>
         <?php endif; ?>
         <p class="tb-error-screen__body-text">
             URL の入力ミス、または箱が<br>削除された可能性があります。
