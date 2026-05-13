@@ -47,6 +47,16 @@ Calm Gacha デザイントークン (`handoff_tamabox/tokens.css` + `colors_and_
 - アイコン SVG を「ファイル配置」と「inline element 化」のどちらにするかは plan-phase で codebase の既存 SVG 慣習を見て決定 (現状 `/img/default-avatar.svg` の前例あり)
 - `tokens.css` / `colors_and_type.css` のコピー方法 (symlink / 物理 copy) は物理 copy で進める (`webroot/` は本番 git deploy 対象)
 
+### Locked Decision — Typography Scale Override (UI-checker 制限値の override)
+
+UI checker (`gsd-ui-checker`) の Dimension 4 は max 4 font sizes / max 2 weights を制限とするが、これは western SaaS UI 基準で **本 phase の CJK モバイル UI には適用しない** 旨をここで固定する。
+
+- **Why**: handoff_tamabox は CJK タイポグラフィ密度要求 (本文 14px / メタ 11px / handle 10px label / mono 12px / display 22px) を満たすため 7-8 段の type role を持つ。`colors_and_type.css` の `--type-*` 一次情報を verbatim 採用するのが Phase 5 全体の指針 (Area 1〜4 全て一貫)。collapsing は hi-fi 視覚との不整合を生む。
+- **Approved sizes (8)**: 22px (display/h1) / 18px (h2) / 16px (body-lg) / 15px (h3, button) / 14px (body) / 12px (mono) / 11px (meta/chip) / 10px (label/tab)
+- **Approved weights (4)**: 400 (body) / 500 (mono, tab item) / 600 (chip / button label) / 700 (headings, label en)
+- **Scope of override**: tamabox プロジェクト全体に適用 (Phase 5-8 全部)。UI-SPEC / UI-Review の Dimension 4 評価では本 override を参照して PASS 扱いとする。
+- **How to apply**: 後続 Phase 6/7/8 の UI-SPEC.md でも同じ scale を継承する。新しい size/weight を追加する場合のみ、再度判断 (ad-hoc 追加禁止)。
+
 </decisions>
 
 <code_context>
