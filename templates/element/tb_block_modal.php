@@ -65,8 +65,9 @@ if ($displayName === '') {
             解除は <b>設定 → ブロック中</b> からいつでも行えます。
         </p>
 
+        <?php // $senderUserId is route-constrained to [0-9a-f-]{36}; Form helper escapes its own URL attr. ?>
         <?= $this->Form->create(null, [
-            'url' => '/block/' . h($senderUserId),
+            'url' => '/block/' . $senderUserId,
             'type' => 'post',
             'class' => 'tb-block-modal__actions',
         ]) ?>
