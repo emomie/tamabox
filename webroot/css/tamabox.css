@@ -1018,3 +1018,125 @@ button.button-clear {
 }
 /* Accessibility: ALL .tb-icon-btn elements in templates MUST carry aria-label
    (e.g. aria-label="閉じる"). See UI-SPEC line 381. */
+
+/* ============================================================
+ * Phase 5 — Design System Foundation (Plan 05-04)
+ * §B card / letter (DS-04)
+ * §C chip icon sizing (DS-05) — base in tokens.css
+ * §D input states (DS-05)
+ * §E tabbar augmentation: unread dot (DS-05)
+ * §F appbar family (DS-05)
+ * ============================================================ */
+
+/* §B.1 — .tb-card internal padding + shadow (UI-SPEC line 288)
+   Note: tokens.css has bg+border+radius; this adds page-element values.
+   The 18px padding is a LOCKED spacing exception (CONTEXT.md). */
+.tb-card {
+    padding: 18px;
+    box-shadow: var(--tb-shadow-1);
+}
+
+/* §B.2 — .tb-card-soft (UI-SPEC line 289) — no shadow, soft surface
+   Used for input wrappers, explanation blocks. */
+.tb-card-soft {
+    background: var(--tb-card-soft);
+    border: 1px solid var(--tb-line);
+    border-radius: var(--tb-r-lg);
+    padding: 18px;
+}
+
+/* §B.3 — .tb-letter (UI-SPEC line 290) — honey-bordered letter card */
+.tb-letter {
+    background: var(--tb-card-soft);
+    border: 1px solid var(--tb-line);
+    border-left: 3px solid var(--tb-warm-500);
+    border-radius: var(--tb-r-md);
+    padding: 18px;
+    box-shadow: var(--tb-shadow-2);
+}
+
+/* §C — .tb-chip icon sizing helper (chip base in tokens.css) */
+.tb-chip svg {
+    width: 12px;
+    height: 12px;
+    display: block;
+}
+
+/* §D.1 — .tb-input.is-over-limit (UI-SPEC line 320)
+   Over-limit warning state — used by Send form when char count > 2000.
+   NOTE: UI-SPEC describes the class as both `.tb-input.is-over-limit` and `.tb-input--over-limit`.
+   Provide BOTH selectors so Phase 6 templates can use either naming convention. */
+.tb-input.is-over-limit,
+.tb-input--over-limit {
+    border-color: var(--tb-warm-700);
+}
+/* Companion char counter element class — used by Send form template */
+.tb-input-counter--over-limit {
+    color: var(--tb-warm-700);
+}
+
+/* §D.2 — .tb-input disabled (UI-SPEC line 321) */
+.tb-input:disabled,
+.tb-input[disabled] {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* §E — .tb-unread-dot (UI-SPEC line 345)
+   Used inside .tb-tabbar__item to indicate unread messages on the inbox tab.
+   The icon wrapper inside the tab item must have `position: relative` for this to anchor. */
+.tb-tabbar__item .tb-unread-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--tb-turq-400);
+    position: absolute;
+    top: -2px;
+    right: -4px;
+}
+/* Ensure the icon wrapper inside a tab item can host the unread dot positionally */
+.tb-tabbar__item .tb-tabbar__icon {
+    position: relative;
+    display: inline-flex;
+}
+
+/* §F.1 — .tb-appbar (UI-SPEC lines 349-356) */
+.tb-appbar {
+    height: 56px;
+    padding: 0 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--tb-paper);
+    border-bottom: 1px solid var(--tb-line);
+    flex: 0 0 auto;
+}
+.tb-appbar__title {
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: var(--tb-ink);
+}
+.tb-appbar__sub {
+    font-size: 11px;
+    color: var(--tb-ink-3);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-top: 2px;
+}
+
+/* §F.2 — .tb-appbar--big (UI-SPEC lines 365-371) */
+.tb-appbar--big {
+    height: auto;
+    padding: 8px 20px 12px;
+    border-bottom: none;
+}
+.tb-appbar--big .tb-appbar__title {
+    font-size: 22px;
+}
+
+/* §F.3 — .tb-appbar--transparent (UI-SPEC line 372) */
+.tb-appbar--transparent {
+    background: transparent;
+    border-bottom: none;
+}
