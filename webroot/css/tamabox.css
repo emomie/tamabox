@@ -1773,3 +1773,112 @@ button.button-clear {
     text-decoration: none;
 }
 .tb-danger-row:hover { background: var(--tb-danger-bg); }
+
+/* §G.9 — Block list (UI-07) */
+.tb-block-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+.tb-block-list__count {
+    color: var(--tb-ink-3);
+    font-size: 11px;
+    font-weight: 500;
+}
+.tb-block-list__note,
+.tb-block-list__empty {
+    padding: 12px 14px;
+}
+.tb-block-list__note p {
+    margin: 0;
+    font-size: 12px;
+    color: var(--tb-ink-2);
+    line-height: 1.7;
+}
+.tb-block-list__note-sub {
+    color: var(--tb-ink-3) !important;
+    margin-top: 4px !important;
+}
+.tb-block-list__empty-title {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--tb-ink);
+}
+.tb-block-list__empty-body {
+    margin: 6px 0 0;
+    font-size: 12px;
+    color: var(--tb-ink-3);
+    line-height: 1.7;
+}
+
+.tb-block-list__items {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    background: var(--tb-card);
+    border: 1px solid var(--tb-line);
+    border-radius: var(--tb-r-lg);
+    overflow: hidden;
+}
+.tb-block-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 14px;
+    border-top: 1px solid var(--tb-line);
+    margin: 0;
+}
+.tb-block-row:first-child { border-top: 0; }
+.tb-block-row__avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    background: var(--tb-paper-deep);
+    border: 1px solid var(--tb-line);
+    flex: 0 0 auto;
+    display: grid;
+    place-items: center;
+}
+.tb-block-row__avatar--fallback {
+    color: var(--tb-ink-3);
+    font-weight: 600;
+    font-size: 13px;
+    text-align: center;
+}
+.tb-block-row__body { flex: 1; min-width: 0; }
+.tb-block-row__name {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--tb-ink);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.tb-block-row__handle {
+    font-size: 11px;
+    color: var(--tb-ink-3);
+    margin-top: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.tb-block-row__form { margin: 0; }
+.tb-pill-btn {
+    padding: 7px 12px;
+    border-radius: 999px;
+    background: transparent;
+    border: 1px solid var(--tb-line);
+    color: var(--tb-ink-2);
+    font-size: 11.5px;
+    font-weight: 600;
+    cursor: pointer;
+    flex: 0 0 auto;
+    line-height: 1;
+    min-height: 0;
+}
+.tb-pill-btn:hover {
+    background: var(--tb-paper-deep);
+    border-color: var(--tb-line-strong);
+}

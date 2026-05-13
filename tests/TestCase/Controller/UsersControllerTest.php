@@ -251,8 +251,11 @@ class UsersControllerTest extends TestCase
         $this->get('/dashboard');
         $this->assertResponseCode(200);
         $this->assertResponseContains('ブロック中ユーザー');
-        $this->assertResponseContains('class="block-list"');
+        // Phase 6 UI-07: outer wrapper now emits class="block-list tb-block-list" and
+        // rows emit class="block-list__row tb-block-row" — match the legacy class as
+        // a substring (proves the test-required class is still present).
+        $this->assertResponseContains('class="block-list ');
         // Two block rows expected.
-        $this->assertResponseContains('class="block-list__row"');
+        $this->assertResponseContains('class="block-list__row ');
     }
 }
