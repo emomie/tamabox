@@ -275,10 +275,7 @@ class UsersControllerTest extends TestCase
     }
 
     /**
-     * NAV-04: /dashboard/discover auth returns 200.
-     *
-     * Body assertion ("発見はもうすぐ来ます" copy) added in plan 07-06 once the
-     * template lands. For 07-02 we only assert the status code.
+     * NAV-04: /dashboard/discover auth returns 200 with Empty-state body.
      *
      * @return void
      */
@@ -287,6 +284,7 @@ class UsersControllerTest extends TestCase
         $this->loginAsAlice();
         $this->get('/dashboard/discover');
         $this->assertResponseOk();
+        $this->assertResponseContains('発見はもうすぐ来ます');
     }
 
     /**
