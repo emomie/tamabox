@@ -57,6 +57,14 @@ Phase 5 で `webroot/css/` に整備した Calm Gacha デザインシステム (
 - **Typography Override** — 8 sizes / 4 weights (22 / 18 / 16 / 15 / 14 / 12 / 11 / 10 px、400 / 500 / 600 / 700) を `gsd-ui-checker` Dimension 4 の override として継承
 - **Spacing Exceptions** — `.tb-chip gap: 6px` / `.tb-input padding: 14px` / `.tb-card padding: 18px` を Dimension 5 multiple-of-4 規則の例外として継承
 
+### Locked Decision — Home display title typography exception (Phase 6 追加)
+
+- **Scope:** `.tb-home__title` セレクタ単独 (UI-01 Home 画面のヒーロー見出しのみ)。
+- **Value:** `font-size: 30px; font-weight: 700;` — 22px (Phase 5 locked set の最大) では hi-fi `~/projects/handoff_tamabox/screens/Home.jsx` のマーケティング・ディスプレイ見出しとして弱く、視覚的アンカーとしての存在感が不足する
+- **Justification:** Home 画面は Bluesky OAuth 開始エントリーポイントであり、hi-fi ではブランド名相当の display heading として 30px の重みを使っている。`marketing display heading` ロールに該当する一回限りの追加であり、本文 (body) / セクション見出し (h2/h3) / ラベル (label) など locked set 内に収まるべき role には影響しない
+- **Scope-of-override:** 本セレクタのみ。他の display heading 用途で 30px を使う場合や、追加サイズを導入する場合は再度 locked decision エントリが必要 (ad-hoc 追加禁止の Phase 5 ポリシー継承)
+- **Dimension 4 implication:** `gsd-ui-checker` Dimension 4 (locked typography scale) はこのセレクタを許容する exception として扱う
+
 </decisions>
 
 <canonical_refs>
