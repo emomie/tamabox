@@ -34,7 +34,7 @@ if ($displayName === '') {
     $displayName = '送信者';
 }
 ?>
-<dialog class="tb-block-modal" id="<?= h($modalId) ?>" aria-labelledby="<?= h($modalId) ?>-title">
+<dialog class="tb-block-modal" id="<?= h($modalId) ?>" aria-labelledby="<?= h($modalId) ?>-title" aria-describedby="<?= h($modalId) ?>-impacts">
     <div class="tb-block-modal__sheet" role="document">
         <div class="tb-block-modal__handle" aria-hidden="true"></div>
 
@@ -46,7 +46,7 @@ if ($displayName === '') {
             </div>
         </div>
 
-        <ul class="tb-block-modal__list">
+        <ul class="tb-block-modal__list" id="<?= h($modalId) ?>-impacts">
             <li class="tb-block-modal__list-item">
                 <span class="tb-block-modal__list-dot" aria-hidden="true"></span>
                 <span>このユーザーから新しいメッセージを受け取りません</span>
