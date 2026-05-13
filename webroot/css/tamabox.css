@@ -15,14 +15,15 @@
     --color-error:           var(--tb-danger);        /* was #DC2626 → #B84238 */
     --color-border:          var(--tb-line);          /* was #E5E7EB → #E4E6E8 */
 
-    /* --space-* aliased to --tb-sp-* (preserve existing values; --tb-sp-* are identical 4/8/12/16/24/32) */
-    --space-1: 4px;
-    --space-2: 8px;
-    --space-3: 12px;
-    --space-4: 16px;
-    --space-6: 24px;
-    --space-8: 32px;
-    --space-12: 48px;
+    /* --space-* aliased to --tb-sp-* primitives (defined in tokens.css — WR-02) */
+    --space-1:  var(--tb-sp-1);   /* 4px */
+    --space-2:  var(--tb-sp-2);   /* 8px */
+    --space-3:  var(--tb-sp-3);   /* 12px */
+    --space-4:  var(--tb-sp-4);   /* 16px */
+    --space-5:  var(--tb-sp-5);   /* 20px — AppBar horizontal padding (IN-03) */
+    --space-6:  var(--tb-sp-6);   /* 24px */
+    --space-8:  var(--tb-sp-8);   /* 32px */
+    --space-12: 48px;             /* no --tb-sp-12 equivalent in scale */
 
     /* Legacy --radius-* → tb radii (intentional change: 4→6, 8→10 per UI-SPEC line 246) */
     --radius-sm: var(--tb-r-sm);   /* was 4px → 6px */
@@ -1112,7 +1113,7 @@ button.button-clear {
     flex: 0 0 auto;
 }
 .tb-appbar__title {
-    font-size: 17px;
+    font-size: 18px;  /* was 17px — realigned to approved typography scale (WR-01) */
     font-weight: 700;
     letter-spacing: 0.02em;
     color: var(--tb-ink);
