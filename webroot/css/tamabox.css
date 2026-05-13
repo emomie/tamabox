@@ -909,8 +909,8 @@ button.button-clear {
     color: var(--color-surface);
 }
 .button-destructive-bg:hover {
-    background-color: #B91C1C;
-    border-color: #B91C1C;
+    background-color: var(--tb-danger);  /* was #B91C1C — align to token system (IN-02) */
+    border-color: var(--tb-danger);
 }
 
 /* §Layouts — Settings → 退会 entry point (danger-zone fieldset) */
