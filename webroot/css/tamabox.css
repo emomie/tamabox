@@ -1450,3 +1450,121 @@ button.button-clear {
     line-height: 1.7;
 }
 .tb-delete__cta { gap: 8px; }
+
+/* §G.6 — shared section label (used by UI-05 Report, UI-04 Settings, UI-07 Block) */
+.tb-section-label {
+    font-size: 10.5px;
+    font-weight: 700;
+    color: var(--tb-ink-3);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    padding-left: 2px;
+    display: block;
+}
+.tb-section-label--danger { color: var(--tb-danger); }
+.tb-section-label__required {
+    color: var(--tb-danger);
+    font-weight: 700;
+    letter-spacing: 0;
+}
+.tb-section-label__optional {
+    color: var(--tb-ink-3);
+    font-weight: 500;
+    letter-spacing: 0;
+}
+
+/* §G.7 — Report (UI-05) */
+.tb-screen--report .tb-screen__body {
+    padding: 8px 20px 16px;
+    gap: 16px;
+}
+.tb-report-form { margin: 0; }
+.tb-report__excerpt {
+    padding: 12px 14px;
+}
+.tb-report__excerpt-body {
+    margin: 0;
+    font-size: 13px;
+    color: var(--tb-ink-2);
+    line-height: 1.6;
+    font-style: italic;
+    white-space: pre-wrap;
+}
+.tb-report__reasons,
+.tb-report__detail {
+    border: 0;
+    padding: 0;
+    margin: 0;
+}
+.tb-report__tiles {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+.tb-radio-tile {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 14px;
+    cursor: pointer;
+    background: transparent;
+    border: 1px solid var(--tb-line);
+    border-radius: var(--tb-r-md);
+    transition: border-color 0.12s, box-shadow 0.12s, background 0.12s;
+    position: relative;
+}
+.tb-radio-tile__input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+.tb-radio-tile__mark {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    flex: 0 0 auto;
+    margin-top: 1px;
+    background: #fff;
+    border: 2px solid var(--tb-line-strong);
+    display: grid;
+    place-items: center;
+    transition: background 0.12s, border-color 0.12s;
+}
+.tb-radio-tile__mark > span {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: transparent;
+}
+.tb-radio-tile__input:checked ~ .tb-radio-tile__mark {
+    background: var(--tb-turq-400);
+    border-color: var(--tb-turq-400);
+}
+.tb-radio-tile__input:checked ~ .tb-radio-tile__mark > span {
+    background: #fff;
+}
+.tb-radio-tile:has(.tb-radio-tile__input:checked) {
+    background: var(--tb-card);
+    border-color: var(--tb-turq-300);
+    box-shadow: 0 0 0 3px var(--tb-turq-50);
+}
+.tb-radio-tile__body {
+    flex: 1;
+    min-width: 0;
+    display: block;
+}
+.tb-radio-tile__title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--tb-ink);
+    display: block;
+}
+.tb-radio-tile__sub {
+    font-size: 11.5px;
+    color: var(--tb-ink-3);
+    margin-top: 2px;
+    letter-spacing: 0.02em;
+    display: block;
+}
+.tb-report__cta { gap: 10px; }

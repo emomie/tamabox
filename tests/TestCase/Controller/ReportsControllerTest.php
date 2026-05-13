@@ -71,8 +71,9 @@ class ReportsControllerTest extends TestCase
         $this->loginAsAlice();
         $this->get('/report/aaaa1111-aaaa-aaaa-aaaa-aaaaaaaaaaaa');
         $this->assertResponseCode(200);
-        $this->assertResponseContains('このメッセージを通報する');
-        $this->assertResponseContains('class="report-form"');
+        // Phase 6 UI-05 shortens the heading from "このメッセージを通報する" to hi-fi "メッセージを通報".
+        $this->assertResponseContains('メッセージを通報');
+        $this->assertResponseContains('class="report-form');
         $this->assertResponseContains('value="harassment"');
         $this->assertResponseContains('value="spam"');
         $this->assertResponseContains('value="illegal"');
