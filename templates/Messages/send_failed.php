@@ -34,7 +34,7 @@ $this->assign('title', $displayName . ' の受信箱');
     <div class="tb-send-failed__banner" role="alert">
         <span class="tb-send-failed__symbol" aria-hidden="true">!</span>
         <div class="tb-flex-grow">
-            <div class="tb-send-failed__title">送信できませんでした</div>
+            <h2 class="tb-send-failed__title">送信できませんでした</h2>
             <div class="tb-send-failed__sub">通信が不安定なようです。本文はそのまま残してあります。</div>
         </div>
         <a href="/<?= h($slug) ?>" class="tb-send-failed__retry">再送信</a>
