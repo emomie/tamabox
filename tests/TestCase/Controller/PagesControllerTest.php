@@ -46,7 +46,12 @@ class PagesControllerTest extends TestCase
     }
 
     /**
-     * Test that missing template renders 404 page in production
+     * Test that missing template renders 404 page in production.
+     *
+     * Phase 8 EDGE-01: error400.php was rewritten to the hi-fi SendNotFound
+     * layout, so the assertion target shifts from "Error" (legacy bake copy)
+     * to the new Japanese title "この箱は見つかりません". Still asserts on
+     * error-page rendering — strictly stronger than the old check, never weaker.
      *
      * @return void
      */
@@ -56,7 +61,7 @@ class PagesControllerTest extends TestCase
         $this->get('/pages/not_existing');
 
         $this->assertResponseError();
-        $this->assertResponseContains('Error');
+        $this->assertResponseContains('この箱は見つかりません');
     }
 
     /**

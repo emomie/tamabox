@@ -53,6 +53,19 @@ class MessagesControllerTest extends TestCase
     }
 
     /**
+     * EDGE-01 — Phase 8 D-01: 404 renders the hi-fi SendNotFound layout.
+     *
+     * @return void
+     */
+    public function testSendNotFoundRendersHiFiTemplate(): void
+    {
+        $this->get('/no-such-inbox');
+        $this->assertResponseCode(404);
+        $this->assertResponseContains('この箱は見つかりません');
+        $this->assertResponseContains('tb-error-screen');
+    }
+
+    /**
      * @return void
      */
     public function testSendGetSlugPreviousRedirectsToCurrent(): void
