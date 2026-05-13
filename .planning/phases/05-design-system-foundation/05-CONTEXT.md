@@ -57,6 +57,18 @@ UI checker (`gsd-ui-checker`) の Dimension 4 は max 4 font sizes / max 2 weigh
 - **Scope of override**: tamabox プロジェクト全体に適用 (Phase 5-8 全部)。UI-SPEC / UI-Review の Dimension 4 評価では本 override を参照して PASS 扱いとする。
 - **How to apply**: 後続 Phase 6/7/8 の UI-SPEC.md でも同じ scale を継承する。新しい size/weight を追加する場合のみ、再度判断 (ad-hoc 追加禁止)。
 
+### Locked Decision — Spacing Exceptions (verbatim handoff micro-values)
+
+UI checker (`gsd-ui-checker`) の Dimension 5 は全 spacing 値が multiple-of-4 であることを求めるが、handoff_tamabox の component-level micro-spacing には multiple-of-4 ではない値が含まれる。Typography Override と同じ「verbatim from handoff」の指針に従い、以下の値を **明示的に許容**する。
+
+- **Why**: `handoff_tamabox/tokens.css` の component CSS には CJK モバイル UI の視覚密度を最適化した micro-spacing が含まれる (chip の `gap: 6px`、input の `padding: 14px`、card の内部 padding 18px 等)。これらは 4px grid system の純粋な拡張ではなく、handoff デザイナーが視覚的に最適化した固定値。multiple-of-4 に丸めると visual diff (handoff 一致性) が損なわれる。
+- **Approved spacing exceptions (component-internal only)**:
+  - `6px` — `.tb-chip` 内部 `gap` (アイコン/ラベル間隔)
+  - `14px` — `.tb-input` 内部 `padding` (上下/左右)
+  - `18px` — `.tb-card` 内部 `padding` (page element として使用時の標準値)
+- **Scope of override**: 上記 3 値のみ。**layout-level の spacing (margin, gap between sections, top-level padding) は全て multiple-of-4 を維持**する。spacing scale (`--tb-sp-*`) 自体は 4/8/12/16/20/24/32 を維持し、これらの例外は component CSS リテラルに限定する。
+- **How to apply**: 後続 Phase 6/7/8 の UI-SPEC.md でも `.tb-chip` / `.tb-input` / `.tb-card` を使用する場合は同 micro-spacing を継承。新規 component を追加する場合は、grid 値を優先し、handoff verbatim な exception を導入する場合のみ本 locked decision に追記して文書化する。
+
 </decisions>
 
 <code_context>

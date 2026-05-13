@@ -88,11 +88,45 @@ Existing tokens preserved via alias in `tamabox.css`:
 --space-12: 48px; /* kept as literal — no tb-sp-12 equivalent */
 ```
 
-Exceptions: Touch target minimum is 44px (existing `.button` `min-height: 44px` retained). Tab bar height is 72px (non-grid value, driven by visual design).
+Touch target minimum is 44px (existing `.button` `min-height: 44px` retained — 44 = 11×4, valid grid value). Tab bar height is 72px (72 = 18×4, valid grid value).
+
+### Spacing Exception (Locked) — Component-Internal Micro-Spacing
+
+> **This exception is a project-wide locked decision per `05-CONTEXT.md` — "Locked Decision — Spacing Exceptions (verbatim handoff micro-values)".**
+>
+> The UI checker (`gsd-ui-checker`) Dimension 5 default rule requires all spacing values to be multiples of 4. The following three values from `handoff_tamabox` are explicitly approved as **component-internal exceptions** (not layout spacing).
+>
+> **Approved exceptions (3 values, component-internal only):**
+> - `6px` — `.tb-chip` internal `gap` (icon ↔ label spacing)
+> - `14px` — `.tb-input` internal `padding`
+> - `18px` — `.tb-card` internal `padding` when used as a page element
+>
+> **Reason (verbatim from CONTEXT.md):** "`handoff_tamabox/tokens.css` の component CSS には CJK モバイル UI の視覚密度を最適化した micro-spacing が含まれる ... handoff デザイナーが視覚的に最適化した固定値。multiple-of-4 に丸めると visual diff (handoff 一致性) が損なわれる。"
+>
+> **Scope strictly limited to:** the three values above, applied only to `.tb-chip`, `.tb-input`, and `.tb-card` component-internal CSS. **Layout-level spacing (margins, gaps between sections, top-level padding) must remain multiples of 4.** The `--tb-sp-*` scale itself is unchanged (4/8/12/16/20/24/32).
+>
+> **Cross-phase carry:** Phases 6, 7, 8 inherit these three exceptions whenever using `.tb-chip` / `.tb-input` / `.tb-card`. Any additional non-grid micro-spacing requires a new locked decision entry in the relevant phase's CONTEXT.md.
+>
+> **UI-checker Dimension 5 evaluation:** Checker must reference this locked decision and mark these three values as approved exceptions, not violations.
 
 ---
 
 ## Typography
+
+### Typography Scale Override (Locked)
+
+> **This override is a project-wide locked decision per `05-CONTEXT.md` — "Locked Decision — Typography Scale Override (UI-checker 制限値の override)".**
+>
+> The UI checker (`gsd-ui-checker`) Dimension 4 default limits (max 4 font sizes, max 2 weights) are **not applied to this project**. Those defaults target western SaaS UI; tamabox is a CJK mobile UI with density requirements that cannot be satisfied within those limits.
+>
+> **Reason (verbatim from CONTEXT.md):** "handoff_tamabox は CJK タイポグラフィ密度要求 (本文 14px / メタ 11px / handle 10px label / mono 12px / display 22px) を満たすため 7-8 段の type role を持つ。`colors_and_type.css` の `--type-*` 一次情報を verbatim 採用するのが Phase 5 全体の指針 (Area 1〜4 全て一貫)。collapsing は hi-fi 視覚との不整合を生む。"
+>
+> **Approved sizes (8):** 22 / 18 / 16 / 15 / 14 / 12 / 11 / 10 px — all verbatim from `colors_and_type.css`.
+> **Approved weights (4):** 400 / 500 / 600 / 700 — all verbatim from `colors_and_type.css`.
+>
+> **Cross-phase carry:** This override applies to Phase 5, 6, 7, and 8 UI-SPECs. All subsequent UI-SPECs must inherit this scale without re-requesting approval. New sizes or weights beyond this set require a fresh locked decision entry in the relevant phase CONTEXT.md; ad-hoc additions are prohibited.
+>
+> **UI-checker Dimension 4 evaluation:** Checker must reference this locked decision and mark Dimension 4 as PASS for all tamabox phases.
 
 Source: `handoff_tamabox/colors_and_type.css` (`--type-*` variables). Values are verbatim.
 
@@ -344,6 +378,8 @@ Icon button inside AppBar: `.tb-icon-btn` → `width: 40px; height: 40px; displa
 
 Active state `.tb-icon-btn.is-active`: `color: var(--tb-turq-500);`
 
+**Accessibility requirement:** All `.tb-icon-btn` elements MUST carry `aria-label` with a descriptive action string (e.g., `aria-label="閉じる"`, `aria-label="戻る"`). Icon-only buttons without accessible names are disallowed.
+
 ---
 
 ## Icon Set Contract
@@ -570,7 +606,7 @@ No external component registry is used. All CSS is hand-authored from the `hando
 - [ ] Dimension 1 Copywriting: PASS
 - [ ] Dimension 2 Visuals: PASS
 - [ ] Dimension 3 Color: PASS
-- [ ] Dimension 4 Typography: PASS
+- [ ] Dimension 4 Typography: PASS (override — see "Typography Scale Override (Locked)" section)
 - [ ] Dimension 5 Spacing: PASS
 - [ ] Dimension 6 Registry Safety: PASS
 
@@ -586,7 +622,7 @@ No external component registry is used. All CSS is hand-authored from the `hando
 | `handoff_tamabox/colors_and_type.css` | All semantic alias names, all type role sizes/weights/line-heights |
 | `handoff_tamabox/components.jsx` | All SVG path data, AppBar/TabBar/Letter sizing, TbIconBtn dimensions |
 | `handoff_tamabox/DESIGN_SYSTEM.md` | Copywriting rules, animation timings, icon stroke spec, card type restrictions |
-| `05-CONTEXT.md` (Decisions) | File strategy, load order, alias strategy, icon delivery format, component scope boundary |
+| `05-CONTEXT.md` (Decisions) | File strategy, load order, alias strategy, icon delivery format, component scope boundary, typography scale override (locked) |
 | `REQUIREMENTS.md` (DS-01 to DS-06) | Verification checklist items |
 | `tamabox/webroot/css/tamabox.css` | All existing class names that must backward-alias |
 | `tamabox/templates/layout/default.php` | Current `Html->css()` array, existing Google Fonts absence confirmed |
