@@ -81,6 +81,43 @@ class MessagesControllerTest extends TestCase
     }
 
     /**
+     * EDGE-04 — Phase 8 D-10: when MessagesTable::sendMessage throws RuntimeException,
+     * the controller renders the dedicated send_failed template (status 500),
+     * preserving body + receiver context for retry.
+     *
+     * Strategy: swap MessagesTable in TableRegistry with a stub whose sendMessage
+     * always throws. The controller catch then triggers the render path.
+     *
+     * @return void
+     */
+    public function testSendPostRendersFailedWhenMessagesTableThrows(): void
+    {
+        $stub = $this->getMockBuilder(\App\Model\Table\MessagesTable::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['sendMessage'])
+            ->getMock();
+        $stub->method('sendMessage')->willThrowException(
+            new \RuntimeException('simulated sendMessage failure')
+        );
+        \Cake\ORM\TableRegistry::getTableLocator()->set('Messages', $stub);
+
+        $this->enableCsrfToken();
+        $this->loginAsDave(); // non-blocked sender against alice
+        $this->post('/alice', [
+            'body' => 'retry me later',
+            'consent' => '1',
+        ]);
+
+        $this->assertResponseCode(500);
+        $this->assertResponseContains('送信できませんでした');
+        $this->assertResponseContains('retry me later');
+        $this->assertResponseContains('もう一度送信');
+
+        // Clean up: clear the stub so other tests get the real table.
+        \Cake\ORM\TableRegistry::getTableLocator()->remove('Messages');
+    }
+
+    /**
      * @return void
      */
     public function testSendGetSlugPreviousRedirectsToCurrent(): void

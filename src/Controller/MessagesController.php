@@ -266,9 +266,16 @@ class MessagesController extends AppController
             $messagesTable = $this->fetchTable('Messages');
             $messagesTable->sendMessage($inbox, $senderUserId, $body);
         } catch (RuntimeException $e) {
-            $this->Flash->error(__('送信に失敗しました。しばらくしてから再度お試しください。'));
+            // EDGE-04 (Phase 8 D-10) — render dedicated SendFailed screen
+            // instead of Flash + redirect. Preserves body + receiver context
+            // for the retry CTA.
+            $this->set([
+                'inbox' => $inbox,
+                'restoredBody' => $body,
+            ]);
+            $this->response = $this->response->withStatus(500);
 
-            return $this->redirect('/' . $inbox->slug);
+            return $this->render('send_failed');
         }
 
         // D-19: send_done shows fixed copy + 2 CTAs, NO ssr result.
