@@ -1272,3 +1272,80 @@ button.button-clear {
     height: 18px;
     flex: 0 0 auto;
 }
+
+/* §G.3 — Screen layout helpers (introduced by UI-03 SendDone, reused by UI-02/04/05/06/07) */
+.tb-screen {
+    display: flex;
+    flex-direction: column;
+    min-height: calc(100vh - 56px);
+    background: var(--tb-paper);
+}
+.tb-screen__body {
+    flex: 1;
+    overflow: auto;
+    padding: 8px 20px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+.tb-screen__cta {
+    flex: 0 0 auto;
+    padding: 12px 20px 16px;
+    border-top: 1px solid var(--tb-line);
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(10px);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* §G.4 — SendDone (UI-03) */
+.tb-screen--done .tb-screen__body {
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 0 32px;
+}
+.tb-done__check {
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    border: 1px solid var(--tb-turq-200);
+    background: var(--tb-turq-50);
+    color: var(--tb-turq-500);
+    display: grid;
+    place-items: center;
+    margin-bottom: 28px;
+}
+.tb-done__heading {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--tb-ink);
+    letter-spacing: 0.08em;
+}
+.tb-done__body {
+    margin: 14px 0 0;
+    font-size: 13px;
+    color: var(--tb-ink-2);
+    line-height: 1.9;
+    letter-spacing: 0.05em;
+    max-width: 280px;
+    font-weight: 400;
+}
+.tb-done__meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 28px 0 0;
+    font-size: 11px;
+    color: var(--tb-ink-3);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-family: var(--tb-font-mono);
+}
+.tb-done__meta-rule {
+    width: 24px;
+    height: 1px;
+    background: var(--tb-line-strong);
+}

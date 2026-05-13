@@ -186,7 +186,10 @@ class MessagesControllerTest extends TestCase
             'consent' => '1',
         ]);
         $this->assertResponseOk(); // send_done renders directly
-        $this->assertResponseContains('送信しました。受け手が開封したとき');
+        // Phase 6 UI-03: copy split into heading "送信しました" + body "受け手が開封したとき…"
+        // Assert both fragments to keep send_done page identity assertion.
+        $this->assertResponseContains('送信しました');
+        $this->assertResponseContains('受け手が開封したとき');
         $countAfter = $this->fetchTable('Messages')
             ->find()
             ->where(['inbox_id' => '11111111-1111-1111-1111-111111111111'])
@@ -319,7 +322,9 @@ class MessagesControllerTest extends TestCase
             'consent' => '1',
         ]);
         $this->assertResponseOk(); // send_done renders directly
-        $this->assertResponseContains('送信しました。受け手が開封したとき');
+        // Phase 6 UI-03: copy split — assert both fragments individually.
+        $this->assertResponseContains('送信しました');
+        $this->assertResponseContains('受け手が開封したとき');
         $countAfter = $this->fetchTable('Messages')
             ->find()
             ->where(['inbox_id' => '11111111-1111-1111-1111-111111111111'])
