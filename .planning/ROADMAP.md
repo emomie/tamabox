@@ -40,7 +40,13 @@ Full archive: `.planning/milestones/v1-ROADMAP.md`
   3. `.tb-btn` の 5 variant (primary / ghost / quiet / disabled / danger) がブラウザ inspector で確認できる
   4. `.tb-card` / `.tb-card-soft` / `.tb-letter` / `.tb-chip` / `.tb-input` / `.tb-tabbar` / `.tb-appbar` が CSS に定義されテンプレートから参照できる
   5. 既存ページのターコイズ / 蜂蜜 / 紙基調の配色が v1 と視覚的に異なり、Calm Gacha カラーパレットに切り替わっている
-**Plans**: TBD
+**Plans:** 5 plans
+Plans:
+- [ ] 05-01-PLAN.md — Token files (tokens.css + colors_and_type.css) + Google Fonts + layout chain update (DS-01, DS-02)
+- [ ] 05-02-PLAN.md — 13 icon SVG files + templates/element/icon.php inline helper (DS-05 support)
+- [ ] 05-03-PLAN.md — :root alias rewrite + .tb-btn 5 variants + .tb-icon-btn (DS-03, DS-06)
+- [ ] 05-04-PLAN.md — .tb-card / .tb-letter / .tb-input states / .tb-tabbar dot / .tb-appbar (DS-04, DS-05)
+- [ ] 05-05-PLAN.md — Legacy CSS cleanup + composer test + smoke verification checkpoint
 **UI hint**: yes
 
 ### Phase 6: v1 画面の Calm Gacha 化
@@ -94,10 +100,10 @@ Full archive: `.planning/milestones/v1-ROADMAP.md`
 | 2. Bluesky OAuth & Identity | v1 | 4/4 | Complete | 2026-04-24 |
 | 3. Inbox, Message & SSR Reveal | v1 | 4/4 | Complete | 2026-04-26 |
 | 4. Moderation & Production Launch | v1 | 3/3 | Complete | 2026-05-13 |
-| 5. Design System Foundation | v2 | 0/TBD | Not started | - |
+| 5. Design System Foundation | v2 | 0/5 | Not started | - |
 | 6. v1 画面の Calm Gacha 化 | v2 | 0/TBD | Not started | - |
 | 7. Dashboard 4 タブ分離 + Reveal 演出 | v2 | 0/TBD | Not started | - |
 | 8. エッジケース & マイクロインタラクション | v2 | 0/TBD | Not started | - |
 
 ---
-*Last updated: 2026-05-13 — v2 Calm Gacha UI roadmap created (Phases 5-8)*
+*Last updated: 2026-05-13 — Phase 5 plans created (5 plans across 4 waves)*
