@@ -22,9 +22,9 @@ $this->assign('title', '受信箱の設定');
 <div class="tb-dash-screen settings-page">
     <header class="tb-appbar">
         <div class="tb-appbar__left">
-            <button type="button" class="tb-icon-btn" aria-label="戻る" onclick="history.back()">
+            <a href="/dashboard" class="tb-icon-btn" aria-label="戻る">
                 <?= $this->element('icon', ['name' => 'back', 'size' => 22]) ?>
-            </button>
+            </a>
             <div>
                 <div class="tb-appbar__title">受信箱の設定</div>
             </div>

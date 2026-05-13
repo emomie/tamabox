@@ -1006,6 +1006,7 @@ button.button-clear {
     border-radius: 999px;
     cursor: pointer;
     color: var(--tb-ink-2);
+    text-decoration: none; /* allow .tb-icon-btn on <a> (REVIEW L-01) */
 }
 .tb-icon-btn:hover {
     background: var(--tb-paper-deep);
