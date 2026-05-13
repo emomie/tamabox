@@ -1,17 +1,17 @@
 ---
 gsd_state_version: 1.0
-milestone: v2
-milestone_name: Calm Gacha UI / 4-tab 構造
-status: milestone_complete_pending_audit
-stopped_at: Phase 8 ✅ code complete — v2 milestone all 4 phases done, ready for audit + complete + cleanup
-last_updated: "2026-05-13T14:10:00.000Z"
-last_activity: 2026-05-13 -- Phase 8 (edge cases + motion + Phase 7 cleanup) executed, reviewed, fix landed
+milestone: v3
+milestone_name: TBD
+status: ready_for_new_milestone
+stopped_at: v2 milestone shipped + archived — awaits /gsd-new-milestone to scope v3
+last_updated: "2026-05-13T15:00:00.000Z"
+last_activity: 2026-05-13 -- v2 milestone closeout sequence (audit → complete → cleanup) executed
 progress:
-  total_phases: 4
-  completed_phases: 4
-  total_plans: 29
-  completed_plans: 29
-  percent: 100
+  total_phases: 0
+  completed_phases: 0
+  total_plans: 0
+  completed_plans: 0
+  percent: 0
 ---
 
 # tamabox — STATE
@@ -21,9 +21,10 @@ Project memory. Updated by every gsd-* command.
 ## Project Reference
 
 **Core Value**: 「確率で名前がバレる」仕組みが悪意送信者の自己抑止になり、好意送信者にとってはガチャ的祝福演出となる匿名メッセージ箱 (V1 仮説)。
-**Current Focus**: v2 milestone 全 4 phases code complete (Phase 5-8)。28/28 v2 requirements 達成、次は milestone audit → complete → cleanup → deploy + smoke
+**Current Focus**: v2 milestone shipped + archived (28/28 reqs, Phase 5+6 smoke verified on prod, Phase 7+8 code complete awaits push). Project state reset — ready for v3 scoping via `/gsd-new-milestone`.
 
-> v1 MVP (Phase 1-4) は 2026-05-13 shipped。詳細は `.planning/milestones/v1-ROADMAP.md` を参照。
+> v1 MVP (Phase 1-4) shipped 2026-05-13. v2 Calm Gacha UI (Phase 5-8) shipped 2026-05-13.
+> Archives: `.planning/milestones/v1-ROADMAP.md`, `.planning/milestones/v2-ROADMAP.md`.
 
 **Granularity**: coarse
 **Mode**: yolo
@@ -31,73 +32,87 @@ Project memory. Updated by every gsd-* command.
 
 ## Current Position
 
-Phase: 8 (エッジケース & マイクロインタラクション) — COMPLETE (code-level、v2 closer)
-Plan: 8 of 8 done + fix iteration 1
-Status: v2 milestone all phases code complete; ready for audit/complete/cleanup
-Last activity: 2026-05-13 -- /gsd-autonomous --from 7 --auto v2 milestone full sweep complete
+Phase: — (no active phase, between milestones)
+Plan: —
+Status: ready for new milestone
+Last activity: 2026-05-13 -- v2 milestone closeout sequence (audit → complete → cleanup) executed
 
-Progress: [██████████] 100% (4/4 v2 phases done at code level)
+Progress: [          ] 0% (v3 not yet scoped)
 
-## Phase Status (v2)
+## Phase Status
 
 | Phase | Name | Status | Plans |
 |-------|------|--------|-------|
-| 5 | Design System Foundation | ✅ Shipped (deployed) | 5/5 |
-| 6 | v1 画面の Calm Gacha 化 | ✅ Shipped + smoke verified | 8/8 |
-| 7 | Dashboard 4 タブ分離 + Reveal 演出 | ✅ Code complete + reviewed | 8/8 |
-| 8 | エッジケース & マイクロインタラクション | ✅ Code complete + reviewed | 8/8 |
+| — | (v3 placeholder) | Not started | — |
+
+To scope v3: run `/gsd-new-milestone`. Candidate themes catalogued in `.planning/ROADMAP.md` and `.planning/REQUIREMENTS.md` v3 Requirements section.
 
 ## Performance Metrics
 
 | Metric | Value |
 |--------|-------|
-| Milestones shipped | 1 (v1 MVP, 2026-05-13) |
-| Phases completed (cumulative) | 8/8 (v1 1-4 + v2 5-8) |
-| Plans completed (cumulative) | 44/44 (v1 15 + v2 29) |
-| Requirements shipped (cumulative) | 62/62 (v1 34 + v2 28) ✅ ALL |
-| Current milestone phases | 4/4 |
-| Current milestone plans | 29 |
+| Milestones shipped | 2 (v1 MVP + v2 Calm Gacha UI / 4-tab, both 2026-05-13) |
+| Phases completed (cumulative) | 8/8 (v1: 1-4 + v2: 5-8) |
+| Plans completed (cumulative) | 44/44 (v1: 15 + v2: 29) |
+| Requirements shipped (cumulative) | 62/62 (v1: 34 + v2: 28) ✅ ALL |
+| Current milestone phases | — (v3 unscoped) |
+| Current milestone plans | — (v3 unscoped) |
 | `composer test` | 203 tests, 576 assertions, 0 failures (6 incomplete, pre-existing) |
 
 ## Accumulated Context
 
-### Key Decisions (v2-relevant)
+### Key Decisions (cross-milestone, still active)
 
-- v2 は PHP テンプレート / CSS / 最小限 JS のみ — バックエンド変更なし
-- tokens.css を `webroot/css/` に追加し `tamabox.css` の `:root` を Calm Gacha 値で上書きするアプローチ (破壊最小)
-- Discover / Notifications タブは Empty state 骨格のみ、機能本体は v3
-- Desktop ブレイクポイントは v3 候補 — モバイル 390×844 基準で設計
-- 設計一次情報: `~/projects/handoff_tamabox/` (tokens.css / 30 画面 hi-fi)
-- Phase 6: tb_* element 抽出は YAGNI で skip (`06-VERIFICATION.md` 参照)、Phase 7 で再評価
-- Phase 6: Home `.tb-home__title` 30px を locked typography exception として `06-CONTEXT.md` に追記
-- Phase 6: half-pixel font-sizes 8 箇所を locked scale に rounding (sub-pixel diff、D-11 「ピクセルパーフェクト非目標」と整合)
-- Phase 7: 4 タブ = 4 独立 URL SSR-pure 戦略採用 (`/dashboard`, `/dashboard/discover`, `/dashboard/notifications`, `/dashboard/settings`)
-- Phase 7: `tb_tabbar` element 抽出 + 4 controller で `$unreadCount` 共通計算 (`computeUnreadCount()` helper、L-04 fix)
-- Phase 7: Reveal は CSS `@keyframes tb-fade-in` + JS class toggle、URL hash で初回 paint も発火 (M-01 fix)、`prefers-reduced-motion` 対応 (M-02 fix)
-- Phase 7 advisory carry-over to Phase 8 cleanup: `dashboard.php` の ~18 inline `style="..."` を CSS class 化、`#FBFCFD` undocumented hex の locked decision 化、`margin-top: 3px` 系の文書化 — **Phase 8 で全消化済**
-- Phase 8: EDGE-01..05 全実装、MOTION-01 universal press scale、Block modal を `<dialog>` element で実装
-- Phase 8: `MessagesController::processSend` catch を render('send_failed') 切替 (Flash redirect は recoverable validation only に限定)
-- Phase 8 review fix: IN-03 security (`computeUnreadCount` public → private、auth-bypass DB oracle 塞ぎ)、H-01 double-escape、M-01 `javascript:history.back()` → `/`、2 a11y (block modal `aria-describedby`、SendFailed `<div>` → `<h2>`)
+**v1 inheritance:**
+- PHP 8.0+ on Lolipop shared hosting, CakePHP 4.5
+- Bluesky OAuth (AT Protocol, ES256 confidential client, PAR + DPoP + PKCE) for both sender and receiver authentication
+- AES-256-GCM token encryption (`*_enc` columns)
+- 1 user = 1 SNS account DB UNIQUE constraint
+- SSR judgment baked in at send-time (`is_ssr` + `ssr_seed = sha256(server_secret + message_id + created_at)`)
+- Per-inbox block scope (no global BAN)
+- Snapshot persistence on user deletion (handle/avatar/profile_url preserved on `messages` rows)
+- `debug=false` fixed in production + DebugKit physically removed via `composer install --no-dev`
+- 7 OWASP/STRIDE accepted-risk items logged
+
+**v2 additions (now locked baseline):**
+- Calm Gacha design tokens (`tokens.css` + `colors_and_type.css`) + Noto Sans JP + JetBrains Mono
+- 8-size type scale (22/18/16/15/14/12/11/10) + 4-weight set (400/500/600/700)
+- 4-grid spacing with 3 documented exceptions (6/14/18px) + 3px sub-grid micro-offset
+- Home `.tb-home__title` 30px display title exception
+- 4-tab dashboard (`/dashboard`, `/dashboard/discover`, `/dashboard/notifications`, `/dashboard/settings`) SSR-pure routing
+- `prefers-reduced-motion: reduce` opt-out on all motion (Phase 7 + 8)
+- Single-use literal hex registry: `#FBFCFD`, `#F0DCA8`, `#FFFBEF`, `#EFD5D2`
+- 2 single-use rgba literals: `rgba(20,28,32,0.42)` (backdrop), `rgba(217,162,60,0.10)` (corner-✦)
+- `MessagesController::processSend` catch renders `send_failed.php` (Flash redirect retained only for recoverable validation)
+- Block confirm modal uses native `<dialog>` (slide-up animation deferred to v3 MOTION-X2)
 
 ### Open Todos
 
-None.
+None at the milestone level. v3 scoping awaits `/gsd-new-milestone`.
 
 ### Blockers
 
-None. v2 milestone all 4 phases code complete (Phase 5-8). Ready for:
-1. `gsd-audit-milestone` — v2 milestone audit
-2. `gsd-complete-milestone` — archive v2 to `.planning/milestones/v2-*`
-3. `gsd-cleanup` — phases dir cleanup
-4. `git push lolipop main` — Phase 7+8 を `tamabox.emomie.com` に反映
-5. 本番 smoke verify
+None for milestone close. **User-side pending action** before v3 begins:
+1. `git push lolipop main` to deploy Phase 7+8 (HEAD `960fc11`, 57 commits ahead)
+2. Run 12-item Phase 7 smoke checklist + 6-item Phase 8 smoke checklist on `tamabox.emomie.com`
+3. (Optional) `git tag v2.0.0` after smoke passes
+
+### v3 Carry-over (from v2 audit tech debt + deferred requirements)
+
+See `.planning/REQUIREMENTS.md` v3 Requirements (Deferred) section. Key items:
+- DISC-01 / NOTIF-01 (Discover + Notifications backends behind v2 empty stubs)
+- ONB-01/02 (Onboarding), STATIC-01/02 (Help/Terms), SHARE-01
+- MOTION-X1 (3D rotateX), MOTION-X2 (bottom-sheet slide-up)
+- DESKTOP-01..03 (Desktop breakpoint)
+- A11Y-01/02 (WCAG audit + focus-visible polish)
+- TECH-01..05 (deferred review findings)
 
 ## Session Continuity
 
-Last session: 2026-05-13T14:10:00Z
-Stopped at: v2 milestone all phases complete — Phase 5 deployed + smoke ✅、Phase 6 deployed + smoke ✅、Phase 7 code complete (未 push)、Phase 8 code complete (未 push)。`composer test` 203/576/0 green、76 commits ahead of origin。Ready for milestone lifecycle (audit/complete/cleanup) + final push + smoke.
-Resume file: .planning/phases/07-dashboard-4-reveal/07-VERIFICATION.md (status: human_needed)
-Next action: Phase 8 (`/gsd-autonomous --only 8 --auto` continuation) — Send errors + Block modal + press scale
+Last session: 2026-05-13T15:00:00Z
+Stopped at: v2 milestone closeout sequence completed. v2-MILESTONE-AUDIT.md + v2-ROADMAP.md + v2-REQUIREMENTS.md archived. Main ROADMAP/REQUIREMENTS updated. STATE reset to ready-for-new-milestone. CHANGELOG.md written.
+Resume file: —
+Next action: `git push lolipop main` to deploy Phase 7+8 + run smoke checklists. Then `/gsd-new-milestone` to scope v3.
 
 ---
-*Last updated: 2026-05-13 — Phase 6 complete via /gsd-autonomous --only 6 --auto*
+*Last updated: 2026-05-13 — v2 milestone closeout (audit → complete → cleanup) executed*
