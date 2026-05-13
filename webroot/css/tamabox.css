@@ -2789,9 +2789,10 @@ button.button-clear {
     letter-spacing: 0.04em;
     cursor: pointer;
 }
-@media (prefers-reduced-motion: reduce) {
-    .tb-block-modal__sheet { animation: none; }
-}
+/* Sheet slide-up animation deferred to v3. When added, pair with:
+   @media (prefers-reduced-motion: reduce) {
+       .tb-block-modal__sheet { animation: none; }
+   } */
 
 /* §I.7 — Phase 7 deferred inline-style → CSS class refactor.
    #FBFCFD — Phase 7 deferred color exception, see 08-CONTEXT.md Locked Decisions. */
