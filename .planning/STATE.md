@@ -1,15 +1,15 @@
 ---
 gsd_state_version: 1.0
-milestone: v0.2
-milestone_name: milestone
-status: Ready to execute
-last_updated: "2026-04-28T05:00:00.000Z"
+milestone: v2
+milestone_name: (planning)
+status: v1 shipped — ready for /gsd-new-milestone
+last_updated: "2026-05-13T08:45:00.000Z"
 progress:
-  total_phases: 4
-  completed_phases: 3
-  total_plans: 15
-  completed_plans: 15
-  percent: 100
+  total_phases: 0
+  completed_phases: 0
+  total_plans: 0
+  completed_plans: 0
+  percent: 0
 ---
 
 # tamabox — STATE
@@ -20,7 +20,9 @@ Project memory. Updated by every gsd-* command.
 
 **Core Value**: 「確率で名前がバレる」仕組みが悪意送信者の自己抑止になり、好意送信者にとってはガチャ的祝福演出となる匿名メッセージ箱 (V1 仮説)。SSR 露出確率は受け手が 0〜100% で設定可能。
 
-**Current Focus**: v1 milestone — CakePHP 4.5 + MySQL 8.0 + Bluesky OAuth で `tamabox.emomie.com` に launch する。4 phase 構成 (coarse)。
+**Current Focus**: v1 milestone shipped 2026-05-13 (tamabox.emomie.com live, 195 tests / 0 fail / 29 STRIDE threats closed)。次は `/gsd-new-milestone` で v2 scope を定義する。
+
+> 過去の Phase 1-4 / Plan 詳細は `.planning/milestones/v1-ROADMAP.md` および `.planning/MILESTONES.md` を参照。
 
 **Granularity**: coarse
 **Mode**: yolo
