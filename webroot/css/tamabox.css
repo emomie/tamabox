@@ -1,17 +1,21 @@
-/* tamabox.css — Phase 2 Bluesky OAuth UI. Loaded after milligram.min.css. */
-/* UI-SPEC v1 §7 — design tokens + component styles for home / dashboard / auth flow. */
+/* tamabox.css — Phase 2 Bluesky OAuth UI + Phase 5 Calm Gacha aliases. Loaded after milligram.min.css. */
+/* UI-SPEC v1 §7 — design tokens + component styles. As of Phase 5, legacy --color-*/--radius-* aliases resolve to --tb-* primitives from tokens.css. */
 
 :root {
-    --color-bg: #F8F9FA;
-    --color-surface: #FFFFFF;
-    --color-text-primary: #1A1A1A;
-    --color-text-secondary: #6C757D;
-    --color-accent: #0085FF;
-    --color-accent-hover: #006EDB;
-    --color-success: #16A34A;
-    --color-warning: #D97706;
-    --color-error: #DC2626;
-    --color-border: #E5E7EB;
+    /* Legacy --color-* → Calm Gacha aliases (DS-06).
+       Class names in existing templates are preserved; values now point at handoff tokens. */
+    --color-bg:              var(--tb-paper-deep);   /* was #F8F9FA → neutral gray #F2F3F4 */
+    --color-surface:         var(--tb-paper);         /* #FFFFFF, unchanged */
+    --color-text-primary:    var(--tb-ink);           /* was #1A1A1A → #1A1F22 */
+    --color-text-secondary:  var(--tb-ink-3);         /* was #6C757D → #828A90 */
+    --color-accent:          var(--tb-turq-400);      /* was #0085FF → turquoise #2FA597 */
+    --color-accent-hover:    var(--tb-turq-500);      /* was #006EDB → #1A8C7F */
+    --color-success:         #16A34A;                 /* no tb equivalent — keep literal */
+    --color-warning:         var(--tb-warm-500);      /* was #D97706 → honey #D9A23C */
+    --color-error:           var(--tb-danger);        /* was #DC2626 → #B84238 */
+    --color-border:          var(--tb-line);          /* was #E5E7EB → #E4E6E8 */
+
+    /* --space-* aliased to --tb-sp-* (preserve existing values; --tb-sp-* are identical 4/8/12/16/24/32) */
     --space-1: 4px;
     --space-2: 8px;
     --space-3: 12px;
@@ -19,10 +23,18 @@
     --space-6: 24px;
     --space-8: 32px;
     --space-12: 48px;
-    --radius-sm: 4px;
-    --radius-md: 8px;
-    --shadow-subtle: 0 1px 3px rgba(0, 0, 0, 0.08);
-    --font-family: system-ui, -apple-system, "Segoe UI", "Hiragino Sans", "Yu Gothic UI", Meiryo, sans-serif;
+
+    /* Legacy --radius-* → tb radii (intentional change: 4→6, 8→10 per UI-SPEC line 246) */
+    --radius-sm: var(--tb-r-sm);   /* was 4px → 6px */
+    --radius-md: var(--tb-r-md);   /* was 8px → 10px */
+
+    /* Legacy --shadow-subtle → tb shadow-1 */
+    --shadow-subtle: var(--tb-shadow-1);
+
+    /* Legacy --font-family → Noto Sans JP stack */
+    --font-family: var(--tb-font-sans);
+
+    /* Phase 3 avatar tokens preserved unchanged */
     --avatar-sm: 24px;   /* Phase 3 — avatar chip in header */
     --avatar-lg: 64px;   /* Phase 3 — avatar in SSR reveal sender card */
 }
