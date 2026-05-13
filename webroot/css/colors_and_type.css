@@ -1,0 +1,76 @@
+/* tamabox · colors_and_type.css
+   Semantic aliases on top of hifi/tokens.css.
+   Implementations: import this file + hifi/tokens.css together. */
+
+
+:root {
+  /* ──────────────── Semantic foreground ──────────────── */
+  --fg-1: var(--tb-ink);     /* primary text */
+  --fg-2: var(--tb-ink-2);   /* secondary */
+  --fg-3: var(--tb-ink-3);   /* meta / placeholder shoulder */
+  --fg-4: var(--tb-ink-4);   /* placeholder / disabled */
+  --fg-accent: var(--tb-turq-700);
+  --fg-honey:  var(--tb-warm-700);
+  --fg-danger: var(--tb-danger);
+
+  /* ──────────────── Semantic background ──────────────── */
+  --bg-page:   var(--tb-paper);
+  --bg-deep:   var(--tb-paper-deep);
+  --bg-card:   var(--tb-card);
+  --bg-soft:   var(--tb-card-soft);
+  --bg-honey:  var(--tb-warm-100);
+  --bg-danger: var(--tb-danger-bg);
+
+  --line:        var(--tb-line);
+  --line-strong: var(--tb-line-strong);
+
+  --accent:        var(--tb-turq-400);
+  --accent-hover:  var(--tb-turq-500);
+  --accent-press:  var(--tb-turq-600);
+
+  --honey:  var(--tb-warm-500);
+
+  /* ──────────────── Type roles ──────────────── */
+  --type-display: 700 22px/1.5 var(--tb-font-sans);
+  --type-h1:      700 22px/1.5 var(--tb-font-sans);
+  --type-h2:      700 18px/1.55 var(--tb-font-sans);
+  --type-h3:      700 15px/1.55 var(--tb-font-sans);
+  --type-body:    400 14px/1.75 var(--tb-font-sans);
+  --type-body-lg: 400 16px/1.95 var(--tb-font-sans);
+  --type-meta:    600 11px/1.5 var(--tb-font-sans);
+  --type-mono:    500 12px/1.5 var(--tb-font-mono);
+  --type-label:   700 10px/1.5 var(--tb-font-sans);
+
+  /* Tracking */
+  --tracking-ja:    0.02em;
+  --tracking-en:    0.04em;
+  --tracking-label: 0.2em;
+  --tracking-mono:  0;
+
+  /* ──────────────── Elevation ──────────────── */
+  --elev-1: var(--tb-shadow-1);
+  --elev-2: var(--tb-shadow-2);
+  --elev-3: var(--tb-shadow-3);
+
+  /* ──────────────── Radii ──────────────── */
+  --r-sm:   var(--tb-r-sm);
+  --r-md:   var(--tb-r-md);
+  --r-lg:   var(--tb-r-lg);
+  --r-xl:   var(--tb-r-xl);
+  --r-pill: var(--tb-r-pill);
+}
+
+/* Reusable semantic helpers */
+h1, .h1 { font: var(--type-h1); color: var(--fg-1); letter-spacing: var(--tracking-en); }
+h2, .h2 { font: var(--type-h2); color: var(--fg-1); letter-spacing: var(--tracking-en); }
+h3, .h3 { font: var(--type-h3); color: var(--fg-1); letter-spacing: var(--tracking-ja); }
+p,  .body  { font: var(--type-body); color: var(--fg-2); letter-spacing: var(--tracking-ja); }
+.body-lg   { font: var(--type-body-lg); color: var(--fg-1); letter-spacing: 0.05em; }
+.meta      { font: var(--type-meta); color: var(--fg-3); letter-spacing: 0.06em; }
+.mono      { font: var(--type-mono); color: var(--fg-2); letter-spacing: var(--tracking-mono); }
+.label-en  {
+  font: var(--type-label);
+  color: var(--fg-3);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+}
