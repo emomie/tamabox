@@ -107,6 +107,34 @@ class UsersControllerTest extends TestCase
     }
 
     /**
+     * EDGE-05 — Phase 8: HIT message renders the block confirm modal element
+     * with its 3-item consequence list and a POST form to /block/{senderUserId}.
+     *
+     * @return void
+     */
+    public function testDashboardHitMessageRendersBlockModal(): void
+    {
+        $this->loginAsAlice();
+        $this->get('/dashboard');
+        $this->assertResponseOk();
+        // Modal dialog markup
+        $this->assertResponseContains('<dialog class="tb-block-modal"');
+        // Modal trigger button (replaces inline Block form)
+        $this->assertResponseContains('data-block-modal-trigger="block-modal-');
+        // 3-item consequence list copy
+        $this->assertResponseContains('このユーザーから新しいメッセージを受け取りません');
+        $this->assertResponseContains('今回のメッセージは受信箱に残ります');
+        $this->assertResponseContains('ブロックの事実は相手に通知されません');
+        // Hint footer
+        $this->assertResponseContains('解除は');
+        // Form preserved: still POSTs to /block/{senderUserId}
+        $this->assertResponseContains('action="/block/');
+        // Confirm + cancel button copy
+        $this->assertResponseContains('ブロックする');
+        $this->assertResponseContains('キャンセル');
+    }
+
+    /**
      * D-06: collision flash shown once then cleared from session.
      *
      * @return void

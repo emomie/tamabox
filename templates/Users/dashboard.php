@@ -187,13 +187,17 @@ $initialChar = $handle !== '' ? mb_substr($handle, 0, 1) : '';
                                             <?php endif; ?>
                                         </div>
 
-                                        <?= $this->Form->create(null, [
-                                            'url' => '/block/' . h($senderUserId),
-                                            'type' => 'post',
-                                            'class' => 'inline tb-sender-card-block-form',
+                                        <button type="button"
+                                                class="tb-btn tb-btn--quiet"
+                                                data-block-modal-trigger="block-modal-<?= h((string)$msg->id) ?>">
+                                            このユーザーをブロック
+                                        </button>
+                                        <?= $this->element('tb_block_modal', [
+                                            'modalId'       => 'block-modal-' . (string)$msg->id,
+                                            'senderHandle'  => $senderHandle,
+                                            'senderUserId'  => $senderUserId,
+                                            'senderInitial' => $senderHandle !== '' ? mb_substr($senderHandle, 0, 1) : '?',
                                         ]) ?>
-                                            <button type="submit" class="tb-btn tb-btn--quiet">このユーザーをブロック</button>
-                                        <?= $this->Form->end() ?>
                                     </div>
                                 <?php else: ?>
                                     <div class="ssr-reveal" data-outcome="miss">
