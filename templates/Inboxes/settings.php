@@ -3,6 +3,8 @@
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\Inbox $inbox
  * @var array<int, \App\Model\Entity\Block> $blocks
+ * @var string $activeTab
+ * @var int $unreadCount
  *
  * NAV-06 — Settings tab (Phase 7 Calm Gacha rewrite).
  * Hi-fi: ~/projects/handoff_tamabox/screens/Settings.jsx
@@ -36,5 +38,5 @@ $this->assign('title', '受信箱の設定');
         <?= $this->element('block_list', ['blocks' => $blocks]) ?>
     </div>
 
-    <?= $this->element('tb_tabbar', ['active' => 'settings', 'unreadCount' => 0]) ?>
+    <?= $this->element('tb_tabbar', ['active' => 'settings', 'unreadCount' => $unreadCount]) ?>
 </div>

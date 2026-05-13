@@ -174,7 +174,9 @@ class UsersController extends AppController
     /**
      * GET /dashboard/discover — 発見タブの Empty-state スタブ (NAV-04).
      *
-     * Phase 7 stub. No DB query. Backend body for DISC-01 is v3 candidate.
+     * Phase 7 stub. Body has no DB query (DISC-01 deferred to v3); only the
+     * cross-tab unread count is computed so the TabBar inbox dot stays
+     * accurate while the user is on Discover.
      *
      * @return \Cake\Http\Response|null
      */
@@ -184,7 +186,12 @@ class UsersController extends AppController
         if ($identity === null) {
             return $this->redirect('/');
         }
-        $this->set(['activeTab' => 'discover']);
+        $identifier = $identity->getIdentifier();
+        $userId = is_scalar($identifier) ? (string)$identifier : '';
+        $this->set([
+            'activeTab' => 'discover',
+            'unreadCount' => $this->computeUnreadCount($userId),
+        ]);
 
         return null;
     }
@@ -192,7 +199,9 @@ class UsersController extends AppController
     /**
      * GET /dashboard/notifications — 通知タブの Empty-state スタブ (NAV-05).
      *
-     * Phase 7 stub. No DB query. Backend body for NOTIF-01 is v3 candidate.
+     * Phase 7 stub. Body has no DB query (NOTIF-01 deferred to v3); only the
+     * cross-tab unread count is computed so the TabBar inbox dot stays
+     * accurate while the user is on Notifications.
      *
      * @return \Cake\Http\Response|null
      */
@@ -202,8 +211,49 @@ class UsersController extends AppController
         if ($identity === null) {
             return $this->redirect('/');
         }
-        $this->set(['activeTab' => 'notifications']);
+        $identifier = $identity->getIdentifier();
+        $userId = is_scalar($identifier) ? (string)$identifier : '';
+        $this->set([
+            'activeTab' => 'notifications',
+            'unreadCount' => $this->computeUnreadCount($userId),
+        ]);
 
         return null;
+    }
+
+    /**
+     * Compute unread message count for the given user, for the TabBar
+     * inbox-tab dot. Single COUNT query on (inbox_id, opened_at, deleted_at).
+     *
+     * Shared by dashboard / discover / notifications / settings so the dot
+     * persists across tab navigation (REVIEW L-04 fix).
+     *
+     * @param string $userId Authenticated user id (empty string → 0).
+     * @return int Non-negative unread count; 0 when user has no inbox.
+     */
+    public function computeUnreadCount(string $userId): int
+    {
+        if ($userId === '') {
+            return 0;
+        }
+        /** @var \App\Model\Table\InboxesTable $inboxesTable */
+        $inboxesTable = $this->fetchTable('Inboxes');
+        /** @var \App\Model\Entity\Inbox|null $inbox */
+        $inbox = $inboxesTable->find()
+            ->where([$inboxesTable->aliasField('user_id') => $userId])
+            ->first();
+        if ($inbox === null) {
+            return 0;
+        }
+        /** @var \App\Model\Table\MessagesTable $messagesTable */
+        $messagesTable = $this->fetchTable('Messages');
+
+        return (int)$messagesTable->find()
+            ->where([
+                'Messages.inbox_id' => $inbox->id,
+                'Messages.opened_at IS' => null,
+                'Messages.deleted_at IS' => null,
+            ])
+            ->count();
     }
 }

@@ -58,11 +58,22 @@ class InboxesController extends AppController
                 ->contain(['BlockedUsers' => ['UserIdentities']])
                 ->order(['Blocks.created_at' => 'DESC'])
                 ->toArray();
+            // REVIEW L-04 — cross-tab unread count so the TabBar inbox dot
+            // stays accurate while the user is on Settings.
+            /** @var \App\Model\Table\MessagesTable $messagesTable */
+            $messagesTable = $this->fetchTable('Messages');
+            $unreadCount = (int)$messagesTable->find()
+                ->where([
+                    'Messages.inbox_id' => $inbox->id,
+                    'Messages.opened_at IS' => null,
+                    'Messages.deleted_at IS' => null,
+                ])
+                ->count();
             $this->set([
                 'inbox' => $inbox,
                 'blocks' => $blocks,
                 'activeTab' => 'settings',
-                'unreadCount' => 0,
+                'unreadCount' => $unreadCount,
             ]);
 
             return null;

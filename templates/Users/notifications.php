@@ -2,12 +2,15 @@
 /**
  * @var \App\View\AppView $this
  * @var string $activeTab
+ * @var int $unreadCount
  *
  * NAV-05 — 通知タブ Empty-state スタブ (Phase 7).
  * Hi-fi: ~/projects/handoff_tamabox/screens/Notifications.jsx (Empty subset).
  *
- * No backend / no DB query. The full notification feed (新着 / これまで sections,
- * 種別アイコン rows) is deferred to v3 (NOTIF-01).
+ * Backend body for the notification feed (新着 / これまで sections, 種別アイコン
+ * rows) is deferred to v3 (NOTIF-01). Only the cross-tab unread count is
+ * computed by the controller so the TabBar inbox dot stays accurate on this
+ * tab (REVIEW L-04).
  */
 $this->assign('title', '通知');
 ?>
@@ -29,5 +32,5 @@ $this->assign('title', '通知');
         <p class="tb-notif-empty__body">メッセージへの返信や開封のお知らせがここに届きます。</p>
     </div>
 
-    <?= $this->element('tb_tabbar', ['active' => 'notifications', 'unreadCount' => 0]) ?>
+    <?= $this->element('tb_tabbar', ['active' => 'notifications', 'unreadCount' => $unreadCount]) ?>
 </div>

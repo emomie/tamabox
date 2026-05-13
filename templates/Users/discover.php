@@ -2,12 +2,15 @@
 /**
  * @var \App\View\AppView $this
  * @var string $activeTab
+ * @var int $unreadCount
  *
  * NAV-04 — 発見タブ Empty-state スタブ (Phase 7).
  * Hi-fi: ~/projects/handoff_tamabox/screens/Discover.jsx (Empty subset).
  *
- * No backend / no DB query. The full Discover feed (search / tag filter / featured 箱
- * / list) is deferred to v3 (DISC-01).
+ * Backend body for the Discover feed (search / tag filter / featured 箱 / list)
+ * is deferred to v3 (DISC-01). Only the cross-tab unread count is computed by
+ * the controller so the TabBar inbox dot stays accurate on this tab
+ * (REVIEW L-04).
  */
 $this->assign('title', '発見');
 $tags = ['すべて', '創作', '音楽', '研究', '写真', 'ゲーム'];
@@ -47,5 +50,5 @@ $tags = ['すべて', '創作', '音楽', '研究', '写真', 'ゲーム'];
         </div>
     </div>
 
-    <?= $this->element('tb_tabbar', ['active' => 'discover', 'unreadCount' => 0]) ?>
+    <?= $this->element('tb_tabbar', ['active' => 'discover', 'unreadCount' => $unreadCount]) ?>
 </div>
