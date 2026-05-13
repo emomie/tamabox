@@ -1168,3 +1168,107 @@ button.button-clear {
 .tb-chip__handle {
     font-size: 11px;
 }
+
+/* §G.2 — Home page (UI-01) */
+.tb-home {
+    background: var(--tb-paper);
+    padding: 36px 28px 24px;
+    min-height: calc(100vh - 56px);
+    box-sizing: border-box;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+.tb-home__hero {
+    text-align: center;
+    padding-top: 32px;
+}
+.tb-home__symbol {
+    font-size: 64px;
+    line-height: 1;
+    color: var(--tb-warm-500);
+    font-weight: 300;
+    letter-spacing: 0.06em;
+}
+.tb-home__title {
+    font-size: 30px;
+    font-weight: 700;
+    margin: 22px 0 0;
+    letter-spacing: 0.22em;
+    color: var(--tb-ink);
+}
+.tb-home__lead {
+    margin: 14px 0 0;
+    font-size: 13.5px;
+    color: var(--tb-ink-2);
+    line-height: 1.85;
+    letter-spacing: 0.06em;
+    font-weight: 400;
+}
+.tb-home__divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 38px 0 28px;
+}
+.tb-home__divider-line {
+    flex: 1;
+    height: 1px;
+    background: var(--tb-line);
+}
+.tb-home__divider-label {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--tb-ink-3);
+    letter-spacing: 0.32em;
+}
+.tb-step-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+.tb-step-list__item {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+}
+.tb-step-list__num {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--tb-warm-700);
+    border: 1px solid var(--tb-warm-300);
+    border-radius: 999px;
+    padding: 4px 9px;
+    letter-spacing: 0.1em;
+    flex: 0 0 auto;
+    background: var(--tb-warm-100);
+    font-family: var(--tb-font-mono);
+    line-height: 1.5;
+}
+.tb-step-list__title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--tb-ink);
+}
+.tb-step-list__sub {
+    font-size: 12px;
+    color: var(--tb-ink-3);
+    margin-top: 2px;
+    letter-spacing: 0.04em;
+}
+.tb-step-list__mark { color: var(--tb-warm-500); }
+.tb-home__cta {
+    margin-top: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.tb-home__cta-form { margin: 0; }
+.tb-home__bluesky-mark {
+    width: 18px;
+    height: 18px;
+    flex: 0 0 auto;
+}

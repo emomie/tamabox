@@ -115,7 +115,10 @@ class PagesControllerTest extends TestCase
     }
 
     /**
-     * Test that Phase 3 explainer paragraph is present and CTA is preserved.
+     * Test that the home page explainer concept is communicated and the
+     * Bluesky CTA is preserved. Phase 6 (UI-01) replaces the long Phase 3
+     * paragraph with a Calm Gacha hero + 3-step HOW list — this test
+     * asserts the step that conveys the SSR-discloses-sender concept.
      *
      * @return void
      */
@@ -123,7 +126,7 @@ class PagesControllerTest extends TestCase
     {
         $this->get('/');
         $this->assertResponseOk();
-        $this->assertResponseContains('確率で送信者の名前がバレる');
+        $this->assertResponseContains('SSR 確率で身元が開示されます');
         $this->assertResponseContains('Bluesky でログイン');
     }
 }
