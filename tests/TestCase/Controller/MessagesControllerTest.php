@@ -66,6 +66,21 @@ class MessagesControllerTest extends TestCase
     }
 
     /**
+     * EDGE-03 — Phase 8: Send form ships the overflow chip + JS hooks markup.
+     *
+     * @return void
+     */
+    public function testSendFormIncludesOverflowChipMarkup(): void
+    {
+        $this->get('/alice');
+        $this->assertResponseOk();
+        $this->assertResponseContains('data-send-overflow-chip');
+        $this->assertResponseContains('data-send-textarea');
+        $this->assertResponseContains('data-send-submit');
+        $this->assertResponseContains('長すぎます');
+    }
+
+    /**
      * @return void
      */
     public function testSendGetSlugPreviousRedirectsToCurrent(): void

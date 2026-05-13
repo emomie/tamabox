@@ -97,7 +97,10 @@ $initial = $displayName !== '' ? mb_substr($displayName, 0, 1) : '?';
             </div>
         <?php else: ?>
             <div class="tb-send__textarea-block">
-                <label for="send-body" class="tb-label">メッセージ</label>
+                <div class="tb-send__textarea-block__label-row">
+                    <label for="send-body" class="tb-label">メッセージ</label>
+                    <span class="tb-send__overflow-chip" data-send-overflow-chip aria-live="polite">長すぎます</span>
+                </div>
                 <textarea
                     id="send-body"
                     name="body" <?= $blockedDisabledAttr ?>
@@ -106,11 +109,12 @@ $initial = $displayName !== '' ? mb_substr($displayName, 0, 1) : '?';
                     rows="7"
                     aria-describedby="body-counter body-help"
                     class="tb-input send-form__body"
+                    data-send-textarea
                     placeholder="ここに書きます…"
                 ><?= h($restoredBody) ?></textarea>
                 <div class="tb-send__meta">
                     <span id="body-help">改行・絵文字 OK · 最大 2000 文字</span>
-                    <span id="body-counter" class="tb-mono char-counter" aria-live="polite">
+                    <span id="body-counter" class="tb-mono char-counter tb-send__counter" aria-live="polite">
                         <span data-counter><?= mb_strlen($restoredBody) ?></span> / 2000
                     </span>
                 </div>
@@ -131,6 +135,7 @@ $initial = $displayName !== '' ? mb_substr($displayName, 0, 1) : '?';
     <?php if ($isAccepting): ?>
         <div class="tb-screen__cta tb-send__cta">
             <button type="submit"
+                    data-send-submit
                     class="tb-btn tb-btn--primary tb-btn--full"
                     <?= $blockedDisabledAttr ?>>
                 <span><?= $isAuthenticated ? '送信する' : 'Bluesky でログインして送信' ?></span>
@@ -145,13 +150,3 @@ $initial = $displayName !== '' ? mb_substr($displayName, 0, 1) : '?';
     <?php endif; ?>
 </div>
 
-<script>
-(function () {
-    var ta = document.getElementById('send-body');
-    var counter = document.querySelector('[data-counter]');
-    if (!ta || !counter) { return; }
-    function update() { counter.textContent = (ta.value || '').length; }
-    ta.addEventListener('input', update);
-    update();
-})();
-</script>

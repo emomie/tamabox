@@ -17,7 +17,7 @@ $identity = $this->getRequest()->getAttribute('identity');
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
     <?= $this->Html->css(['normalize.min', 'milligram.min', 'tokens', 'colors_and_type', 'tamabox']) ?>
-    <?= $this->Html->script('reveal-motion', ['defer' => true]) ?>
+    <?= $this->Html->script(['reveal-motion', 'send-counter'], ['defer' => true]) ?>
     <?= $this->fetch('meta') ?>
     <?= $this->fetch('css') ?>
     <?= $this->fetch('script') ?>
