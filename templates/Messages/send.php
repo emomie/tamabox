@@ -19,7 +19,8 @@
  * - is_accepting=false → form hidden, copy shown
  */
 $displayName = $inbox->user !== null ? (string)$inbox->user->display_name : '';
-$this->assign('title', h($displayName) . ' の受信箱');
+// L-01: layout escapes title with h() on render; pre-escaping here would double-encode.
+$this->assign('title', $displayName . ' の受信箱');
 $slug = (string)$inbox->slug;
 $probabilityPct = (int)round((float)$inbox->ssr_probability * 100);
 $welcomeMessage = $inbox->welcome_message;
