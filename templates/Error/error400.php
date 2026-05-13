@@ -70,7 +70,7 @@ $this->assign('title', '箱が見つかりません');
         </p>
         <div class="tb-error-screen__cta">
             <a href="/" class="tb-btn tb-btn--primary tb-btn--full">tamabox に戻る</a>
-            <a href="javascript:history.back()" class="tb-error-screen__quiet-link">URL を確認しなおす</a>
+            <a href="/" class="tb-error-screen__quiet-link">URL を確認しなおす</a>
         </div>
     </div>
 </div>
