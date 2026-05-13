@@ -101,20 +101,23 @@ class MessagesControllerTest extends TestCase
         );
         \Cake\ORM\TableRegistry::getTableLocator()->set('Messages', $stub);
 
-        $this->enableCsrfToken();
-        $this->loginAsDave(); // non-blocked sender against alice
-        $this->post('/alice', [
-            'body' => 'retry me later',
-            'consent' => '1',
-        ]);
+        try {
+            $this->enableCsrfToken();
+            $this->loginAsDave(); // non-blocked sender against alice
+            $this->post('/alice', [
+                'body' => 'retry me later',
+                'consent' => '1',
+            ]);
 
-        $this->assertResponseCode(500);
-        $this->assertResponseContains('送信できませんでした');
-        $this->assertResponseContains('retry me later');
-        $this->assertResponseContains('もう一度送信');
-
-        // Clean up: clear the stub so other tests get the real table.
-        \Cake\ORM\TableRegistry::getTableLocator()->remove('Messages');
+            $this->assertResponseCode(500);
+            $this->assertResponseContains('送信できませんでした');
+            $this->assertResponseContains('retry me later');
+            $this->assertResponseContains('もう一度送信');
+        } finally {
+            // Clean up: clear the stub so other tests get the real table.
+            // try/finally ensures cleanup even if any assertion above throws.
+            \Cake\ORM\TableRegistry::getTableLocator()->remove('Messages');
+        }
     }
 
     /**
