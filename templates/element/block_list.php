@@ -45,8 +45,7 @@ $count = count($blocks);
                         <img class="tb-block-row__avatar"
                              src="<?= h($avatar) ?>"
                              alt=""
-                             width="40" height="40"
-                             onerror="this.outerHTML=&quot;<span class='tb-block-row__avatar tb-block-row__avatar--fallback'><?= h($initial) ?></span>&quot;">
+                             width="40" height="40">
                     <?php else: ?>
                         <span class="tb-block-row__avatar tb-block-row__avatar--fallback"><?= h($initial) ?></span>
                     <?php endif; ?>
