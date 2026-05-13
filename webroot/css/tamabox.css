@@ -1349,3 +1349,104 @@ button.button-clear {
     height: 1px;
     background: var(--tb-line-strong);
 }
+
+/* §G.5 — Delete (UI-06) + shared appbar slot helper */
+.tb-appbar__left {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    min-width: 0;
+}
+.tb-screen--delete .tb-screen__body {
+    padding: 12px 20px 16px;
+    gap: 18px;
+}
+.tb-delete__heading-block { padding-top: 8px; }
+.tb-delete__heading {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--tb-ink);
+    letter-spacing: 0.04em;
+}
+.tb-delete__lead {
+    margin: 10px 0 0;
+    font-size: 13px;
+    color: var(--tb-ink-2);
+    line-height: 1.8;
+    letter-spacing: 0.03em;
+}
+.tb-delete__consequences {
+    padding: 0;
+    overflow: hidden;
+}
+.tb-delete__row {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    padding: 14px 16px;
+    border-top: 1px solid var(--tb-line);
+}
+.tb-delete__row--first { border-top: 0; }
+.tb-delete__mark {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    flex: 0 0 auto;
+    background: var(--tb-danger-bg);
+    color: var(--tb-danger);
+    display: grid;
+    place-items: center;
+    font-size: 14px;
+    font-weight: 700;
+    margin-top: 1px;
+}
+.tb-delete__row-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--tb-ink);
+}
+.tb-delete__row-sub {
+    font-size: 12px;
+    color: var(--tb-ink-3);
+    margin-top: 2px;
+    letter-spacing: 0.02em;
+}
+.tb-delete__form { margin: 0; }
+.tb-delete__consent {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px 16px;
+    border-radius: var(--tb-r-md);
+    cursor: pointer;
+    position: relative;
+}
+.tb-delete__consent-input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+.tb-delete__consent-check {
+    width: 20px;
+    height: 20px;
+    border-radius: 5px;
+    flex: 0 0 auto;
+    margin-top: 1px;
+    background: var(--tb-card-soft);
+    border: 1px solid var(--tb-line-strong);
+    display: grid;
+    place-items: center;
+    color: transparent;
+}
+.tb-delete__consent-input:checked + .tb-delete__consent-check {
+    background: var(--tb-danger);
+    border-color: var(--tb-danger);
+    color: #fff;
+}
+.tb-delete__consent-body {
+    font-size: 13px;
+    color: var(--tb-ink);
+    line-height: 1.7;
+}
+.tb-delete__cta { gap: 8px; }
