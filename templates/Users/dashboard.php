@@ -115,14 +115,14 @@ $initialChar = $handle !== '' ? mb_substr($handle, 0, 1) : '';
                     ?>
                     <details class="message-row tb-message-row"
                              data-msg-id="<?= h((string)$msg->id) ?>"
-                             data-state="<?= h($state) ?>"
+                             data-state="<?= $state ?>"
                              id="msg-<?= h((string)$msg->id) ?>"
                              <?= $isUnread ? '' : 'open' ?>>
                         <summary class="message-row__head tb-message-row__head">
-                            <span class="tb-dash-dot tb-dash-dot--<?= h($dotMod) ?>" aria-hidden="true"></span>
+                            <span class="tb-dash-dot tb-dash-dot--<?= $dotMod ?>" aria-hidden="true"></span>
                             <div style="flex:1; min-width:0;">
                                 <div class="tb-message-row__meta">
-                                    <span class="tb-message-row__from tb-message-row__from--<?= h($fromMod) ?>"><?= h($fromText) ?></span>
+                                    <span class="tb-message-row__from tb-message-row__from--<?= $fromMod ?>"><?= h($fromText) ?></span>
                                     <?php if (!$isUnread && $isHit): ?>
                                         <span class="tb-message-row__ssr">SSR</span>
                                     <?php endif; ?>
