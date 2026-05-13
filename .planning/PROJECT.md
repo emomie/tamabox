@@ -18,6 +18,25 @@
 **Stats**: 4 phases, 15 plans, 24 tasks, 109 commits, 22 days
 **Coverage**: 34/34 v1 requirements shipped
 
+## Current Milestone: v2 Calm Gacha UI / 4-tab 構造
+
+**Goal:** handoff_tamabox の "Calm Gacha" デザインシステムを tamabox v1 に注入し、4 タブ構造化と最小限の Reveal 演出まで到達させる UI/UX overhaul milestone (バックエンド機能の新規追加なし)。
+
+**Target features:**
+- Calm Gacha デザイントークン体系の採用 (ターコイズ / 蜂蜜 / 紙基調、Noto Sans JP + JetBrains Mono)
+- 共通コンポーネント整備 (Button / Card / Chip / Letter / Input / AppBar / TabBar)
+- v1 既存画面 (Home / Send / SendDone / Settings / Report / Delete / Block) の Calm Gacha 化
+- Dashboard のタブ分離 (受信 / 発見 / 通知 / 設定) — 発見・通知タブは空骨格 (バックエンド本体は v3 送り)
+- Reveal 演出 fade-in (3D rotateX 封筒オープンは v3 送り)
+- エッジケース整備 (Send 404 / 受信停止 / 文字数オーバー / 送信失敗 + Block 確認モーダル)
+- マイクロインタラクション (press scale 0.985 / 文字数オーバーハイライト)
+
+**Key context:**
+- モバイル 390×844 基準で設計、Desktop ブレイクポイントは v3 候補
+- Bluesky 公式ロゴは引き続き雲モチーフ仮置き (handoff にも公式アセット未含)
+- Onboarding / Help / Terms / Share / Discover 機能本体は v3 候補
+- Design source of truth: `~/projects/handoff_tamabox/` (30 画面 hi-fi、tokens.css 一次情報)
+
 ## Requirements
 
 ### Validated
@@ -137,4 +156,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-05-13 after v1 MVP milestone shipped*
+*Last updated: 2026-05-13 — v2 Calm Gacha UI milestone started*

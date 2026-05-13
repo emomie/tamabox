@@ -1,9 +1,9 @@
 ---
 gsd_state_version: 1.0
 milestone: v2
-milestone_name: (planning)
-status: v1 shipped — ready for /gsd-new-milestone
-last_updated: "2026-05-13T08:45:00.000Z"
+milestone_name: Calm Gacha UI / 4-tab 構造
+status: defining requirements
+last_updated: "2026-05-13T09:25:00.000Z"
 progress:
   total_phases: 0
   completed_phases: 0
@@ -20,9 +20,9 @@ Project memory. Updated by every gsd-* command.
 
 **Core Value**: 「確率で名前がバレる」仕組みが悪意送信者の自己抑止になり、好意送信者にとってはガチャ的祝福演出となる匿名メッセージ箱 (V1 仮説)。SSR 露出確率は受け手が 0〜100% で設定可能。
 
-**Current Focus**: v1 milestone shipped 2026-05-13 (tamabox.emomie.com live, 195 tests / 0 fail / 29 STRIDE threats closed)。次は `/gsd-new-milestone` で v2 scope を定義する。
+**Current Focus**: v2 — Calm Gacha UI / 4-tab 構造 milestone を開始。handoff_tamabox の hi-fi デザインシステムを tamabox v1 に注入し、Dashboard 4 タブ分離と最小限の Reveal 演出まで到達させる。バックエンド機能の新規追加なし。
 
-> 過去の Phase 1-4 / Plan 詳細は `.planning/milestones/v1-ROADMAP.md` および `.planning/MILESTONES.md` を参照。
+> v1 MVP (Phase 1-4) は 2026-05-13 shipped。詳細は `.planning/milestones/v1-ROADMAP.md` および `.planning/MILESTONES.md` を参照。
 
 **Granularity**: coarse
 **Mode**: yolo
@@ -30,173 +30,81 @@ Project memory. Updated by every gsd-* command.
 
 ## Current Position
 
-Phase: 04 (moderation-production-launch) — **CODE-LEVEL COMPLETE** (3/3 plans shipped 2026-04-28; awaits `/gsd-verify-phase 4`)
-Plan: 3 of 3 complete in Phase 4 (04-01 ✓ wave 1 / 04-02 ✓ wave 2 / 04-03 ✓ wave 1-parallel)
-**Milestone**: v1 launch
-**Phase**: Phase 4 — Moderation & Production Launch (全 3 plan code-level 完了、verifier 待ち)
-**Next Plan**: なし — `/gsd-verify-phase 4` で manual smoke walkthrough (Phase 4 9 件 + Phase 2/3 carry-over 3 件) を実施
-**Status**: Plan 04-02 完了 2026-04-28 — 5 commits (ddbf21c / ea8dfa7 / 2312845 / b810c2c / 5c77681) で MOD-01 / MOD-02 / MOD-03 を closed。ReportsController::create (GET+POST 4 カテゴリ通報) + AccountController::delete (users.deleted_at + logout) + InboxesTable::findBySlugOrPrevious の REV-01 retired-user 404 フィルタ + Phinx migration `uk_reports_reporter_message` UNIQUE 制約 + Reports/create.php + Account/delete.php template + dashboard 通報 form 削除 + footer リンク化 + inbox_settings_form.php danger-zone + tamabox.css §2/§4/§7/§Layouts (+162 行)。phpstan level 8 [OK] / phpcs 69/69 / composer test 195 tests / 546 assertions / 0 failures。Auto-fix: ReportsTable validator uuid()→scalar() (fixture compat) + DatabaseException|PDOException union catch + SQLSTATE 23000 マッチング (CakePHP 5 raw PDOException 漏れ対策)。
-**Resume file**: `.planning/phases/04-moderation-production-launch/04-02-SUMMARY.md`
-
-**Progress**: Phase 4 at 3/3 plans — `[████████████████████] 100%` (Phase 4 internal)
-Overall: Phase 1-3 done + Phase 4 03-of-3 done — plans 15/15 done — `[████████████████████] 100%` (plan-completion, awaits Phase 4 verifier)
+Phase: Not started (defining requirements)
+Plan: —
+Status: Defining requirements
+Last activity: 2026-05-13 — Milestone v2 started
 
 ## Phase Status
 
-- [x] **Phase 1: Foundation & Schema** — Complete (4/4 plans done: 01-01 ✓, 01-02a ✓, 01-02b ✓, 01-03 ✓); awaits verifier
-- [x] **Phase 2: Bluesky OAuth & Identity** — **VERIFIED 2026-04-24** (4/4 plans: 02-01 ✓, 02-02 ✓, 02-03 ✓, 02-04 ✓; VERIFICATION.md status=human_needed for live-AS happy path only — code-level 7/7 PASS)
-- [x] **Phase 3: Inbox, Message & SSR Reveal** — **VERIFIED 2026-04-26** (4/4 plans done; 03-01 ✓ / 03-02 ✓ / 03-03a ✓ / 03-03b ✓; VERIFICATION.md status=human_needed — code-level 7/7 PASS, 3 human items for live-AS / browser deferred to Phase 4 deploy)
-- [x] **Phase 4: Moderation & Production Launch** — CODE-LEVEL COMPLETE 2026-04-28 (3/3 plans done: 04-01 ✓ block+soft-delete / 04-02 ✓ report+退会+REV-01 / 04-03 ✓ runbook+smoke checklist; awaits `/gsd-verify-phase 4`)
+(v2 phases will be populated after roadmap creation)
 
 ## Performance Metrics
 
 | Metric | Value |
 |--------|-------|
-| Phases completed | 2/4 certified (Phase 2 VERIFIED 2026-04-24, Phase 3 VERIFIED 2026-04-26; Phase 1 + Phase 4 pending verify) |
-| Plans completed | 15/15 (Phase 1: 4 / Phase 2: 4 / Phase 3: 4 / Phase 4: 3 [04-01 + 04-02 + 04-03]) |
-| Nodes completed | ~41 tasks across 15 plans (+5 Phase 4-02: migration / controllers+routes / templates / CSS / tests) |
-| Requirements shipped | 34/34 (Phases 1-3 の 25 件 + Phase 4 全 9 件 INBOX-04, INBOX-05, MSG-08, MOD-01..04, INFRA-01, INFRA-06) |
-| Requirements partial | なし |
-| Phase 03-inbox-message-ssr-reveal P02 | 90min | 4 tasks | 12 files |
-| Phase 03-inbox-message-ssr-reveal P03a | 30m | - tasks | - files |
-| Phase 04-moderation-production-launch P01 | ~14m 38s | 4 tasks | 17 files (16 modified + 1 created) |
-| Phase 04-moderation-production-launch PP03 | 5m 24s | 4 tasks | 4 files |
+| Milestones shipped | 1 (v1 MVP, 2026-05-13) |
+| Phases completed (cumulative) | 4/4 (v1 Phase 1-4) |
+| Plans completed (cumulative) | 15/15 (v1) |
+| Requirements shipped (cumulative) | 34/34 (v1: AUTH×9, INBOX×6, MSG×8, MOD×4, INFRA×7) |
+| Current milestone phases | 0 (defining) |
+| Current milestone plans | 0 |
 
-### Plan Duration Log
+### Plan Duration Log (carried from v1)
 
-| Plan | Wave | Tasks | Duration | Date |
-|------|------|-------|----------|------|
-| 01-01 infra-hygiene | 1 | 5 | (not recorded) | 2026-04-22 |
-| 01-02a schema-root | 2 | 4 | 4m 29s | 2026-04-22 |
-| 01-02b schema-dependents | 3 | 4 | 6m 57s | 2026-04-22 |
-| 01-03 table-classes | 4 | 4 | 12m | 2026-04-22 |
-| 02-01 foundation-setup | 1 | 4 | (not recorded) | 2026-04-23 |
-| 02-02 crypto-services | 2 | 2 | ~20m | 2026-04-23 |
-| 02-03 metadata-did | 2 | 2 | ~4m | 2026-04-23 |
-| 02-04 oauth-flow | 3 | 3 | ~17m 29s | 2026-04-24 |
-| 02-verify | — | — | ~9m | 2026-04-24 |
-| 04-01 moderation-block-soft-delete | 1 | 4 | ~14m 38s | 2026-04-28 |
-| 04-03 launch-runbook | 1 (parallel) | 4 | ~5m 24s | 2026-04-28 |
-| 04-02 report-account-deletion-retired | 2 | 5 | ~25m | 2026-04-28 |
+See `.planning/milestones/v1-ROADMAP.md` for the full Phase 1-4 plan duration history (15 plans / 22 days / 109 commits).
 
 ## Accumulated Context
 
-### Key Decisions
+### Key Decisions (carried from v1)
 
-(Carried from PROJECT.md Key Decisions — re-summarized here for quick reference)
+Carried from PROJECT.md Key Decisions — re-summarized here for quick reference:
 
-- Bluesky OAuth 先行 / X は Phase 2 (本プロダクト外 v2) — マルチプロバイダ抽象化は最初から
-- SNS OAuth 送信必須 (完全匿名送信不可) — V1 仮説の根幹
-- SSR 判定は送信時確定 / 開封時は開示のみ (F2 仮説の監査性)
-- メッセージ本文は暗号化せず、OAuth トークンのみ AES-GCM (通報レビュー運営要件とのバランス)
-- AI 事前検閲は採用せず事後通報 (A2) — 言論抑圧リスク (E3) と MVP コスト回避
-- UUID (CHAR(36)) PK 採用 — 共有鯖 + CakePHP 統合容易
-- 退会時も送信者 snapshot 保持 — V1 仮説補強(逃げ得防止)
+- Web only(ネイティブアプリ非対応)
+- Bluesky OAuth 先行 / X provider は v3+ で extend (OAuthProviderInterface 抽象化済)
+- slug は SNS handle 由来で自動付与・改名追従(1 世代 grace)
+- SNS OAuth 送信必須(完全匿名送信不可)— V1 仮説の根幹
+- SSR 判定は送信時確定 / 開封時は開示のみ(監査性)
+- メッセージ本文は暗号化せず、OAuth トークンのみ AES-GCM
+- AI 事前検閲は採用せず事後通報のみ(A2)
+- UUID (CHAR(36)) PK 採用
+- 退会時も送信者 snapshot 保持(MOD-03、V1 仮説補強)
+- `DatabaseException | PDOException` union catch + SQLSTATE 23000 マッチング(UNIQUE 衝突冪等吸収パターン)
+- REV-01 retired-user slug 404(timing oracle 防止)
+- Lolipop git deploy で migrations は hook に含めず手動 SSH
 
-### Executor-discovered decisions (Phase 1)
+### Codebase conventions (from v1 executor decisions — relevant to v2 UI work)
 
-- **D-10 applied 13 times** in Waves 2+3: DB-SCHEMA.md v0.2 wins over plan text paraphrases. Every migration's column set, CHECK name, FK cascade direction, and index name matches DB-SCHEMA verbatim.
-- `messages`, `blocks`, `reports` tables have **NO `updated_at`** column (DB-SCHEMA v0.2 §4-§6 define only `created_at`). Plan 01-03 Table classes must NOT apply default Timestamp Behavior `modified` mapping on these three.
-- `messages.ssr_seed` is `VARCHAR(64) NOT NULL` (not nullable). Phase 3 MSG-03 must compute the sha256 before INSERT.
-- `reports.status` ENUM has 4 values: `pending` / `reviewed` / `actioned` / `dismissed` (Phase 4 moderation UI must handle the intermediate `reviewed` state).
-- `messages.deleted_reason` is `VARCHAR(64)` NOT ENUM, with allowed values enforced at app layer (app-layer validation in Phase 4 MOD-03).
-- `config/app_local.php` is required for any `bin/cake` invocation but is gitignored; recreate from `config/app_local.example.php` if local state is wiped.
-- cakephp/bake 2.8 correctly emits `@property string` for CHAR(36) UUID columns; RESEARCH Pitfall 6 does not apply to this bake version (verified empirically in Plan 01-03 Task 1).
-- Bake default fixtures violate tamabox CHECK/ENUM/DATETIME constraints; Plan 01-03 rewrote all 6 fixtures with schema-valid data (deviation #1). Future bake re-runs will re-introduce the broken defaults — do NOT re-bake fixtures without re-applying the fix.
-- BlocksTable's dual FK-to-users required manual alias disambiguation (BlockerUsers/BlockedUsers) — bake emitted duplicate `belongsTo('Users')` which silently overwrites in CakePHP's associations collection (Plan 01-03 deviation #2).
+UI / Template 関連の v1 知見（v2 で参照する可能性が高い）:
 
-### Executor-discovered decisions (Phase 2)
-
-- **phpstan level 8 requires CakePHP runtime constants bootstrap** (Plan 02-02 deviation #1): First `src/` file using `CONFIG`/`DS` (KeyManager) broke phpstan. Added `bootstrapFiles: - config/paths.php` to `phpstan.neon`. Applies to every future service file referencing CakePHP path constants — no per-file workaround needed. Phase 1 never hit this because no Phase 1 `src/` file referenced the constants.
-- **`tests/Fixture/keys/` now hosts VCS-tracked dummy ES256 P-256 keypair** (Plan 02-02 Task 1). These are separate from production `config/keys/*.key` (gitignored). Any future crypto test should inject `TESTS . 'Fixture' . DS . 'keys' . DS . 'private.key'` (or `public.key`) through KeyManager's constructor override.
-- **`derToRawSignature()` is duplicated across DpopService and ClientJwtService** by design (Plan 02-02 Task 2). Altotoo verbatim copy — per-class review locality chosen over DRY for 15 lines of crypto. Trait extraction deferred to post-MVP refactor. If Plan 02-03 or 02-04 needs a third signer, THEN extract to `App\Service\OAuth\Support\Es256JwtSignerTrait`.
-- **OAUTH_KID must match across jwks.json and client_assertion**: `KeyManager::getPublicJwk()` uses `env('OAUTH_KID')` for `kid`; `ClientJwtService::createAssertion()` uses the same env var for header `kid`. Must be set once in `config/.env` and never drift. Default `'ssr-box-key-1'` covers test/CI; production deploy MUST set explicitly to enable future rotation.
-- **D-DEF-01 RESOLVED 2026-04-24 by verifier**: Pre-existing `templates/Pages/home.php` `$connection->connect()` deprecation trace is gone — Plan 02-04 Task 3 fully rewrote home.php as the Bluesky CTA landing, removing all skeleton code. `grep -c '$connection' templates/Pages/home.php` = 0; `composer test 2>&1 | grep -i deprecat` only emits the benign `phpunit.xml.dist` XML-schema migration notice (unrelated to D-DEF-01). `deferred-items.md` D-DEF-01 entry can be marked resolved.
-- **Cake\Http\Client mock pattern for 4.5** (Plan 02-03 deviation #1): the public static `Client::addMockResponse($method, $url, $response, $options = [])` is the idiomatic HTTP test stub — it installs a process-global mock adapter that intercepts every Client instance. The lower-level `Cake\Http\Client\Adapter\Mock::addResponse(RequestInterface, Response, array)` exists but the signature is awkward; skip it. Always call `Client::clearMockResponses()` in both `setUp()` AND `tearDown()` to prevent cross-test bleed. Applies to Plan 02-04 BlueskyOAuthClient tests (PAR / token / profile endpoint stubs all use the same pattern).
-- **Callback stub invariant for forward-plan reservation** (Plan 02-03 Task 1): `OauthController::callback()` ships as a 501 stub with integration test `testCallbackStubReturns501` locking that contract. Plan 02-04's first task MUST replace both the method body AND this test — if the 501 test still passes after Plan 02-04, the implementation never happened. This is the general pattern for "reserve the class method slot now so the future plan is pure logic fill-in without class-level edits." — **RESOLVED 2026-04-24 in Plan 02-04 Task 3**: callback 完全実装 + 501 test を 302 assert 版に差し替え、Plan 02-04 SUMMARY Self-Check で verified. Verifier re-confirmed `grep -c 'withStatus(501)' src/Controller/OauthController.php` = 0.
-- **AppController Authentication component wiring missed in Plan 02-01** (Plan 02-04 deviation Rule 2): Plan 02-01 wired `AuthenticationMiddleware` in `Application::middleware()` but **did not** load the `Authentication.Authentication` component in `AppController::initialize()`. Middleware alone populates `request.identity` attribute, but `$this->Authentication->getIdentity()` / `setIdentity()` / `logout()` / `allowUnauthenticated()` calls need the component. Plan 02-04 added this retroactively. Future plans (Phase 3+) can assume `$this->Authentication` is always available in any AppController subclass.
-- **CakePHP 4.5 `protected array $fixtures` typed-property collision** (Plan 02-04 Task 3 deviation Rule 1): `Cake\TestSuite\TestCase` declares `protected $fixtures = []` with no native type. Subclasses MUST NOT redeclare with `protected array $fixtures` — PHP emits `Fatal error: Type of $fixtures must not be defined`. Always use phpdoc `@var array<int, string>` + `protected $fixtures = [...]`. Future integration tests inherit this convention.
-- **`$request->getQuery()` return type `array|string|null` breaks phpstan level 8** (Plan 02-04 Task 3 deviation Rule 1): naive `(string)$this->request->getQuery('k')` is flagged. Introduced `queryString(string $key): string` + `sessionString(string $key): string` private helpers on OauthController that `is_string()`-guard the value. Phase 3+ controllers consuming query params should use the same pattern.
-- **Plan 02-04 replaced `templates/Pages/home.php`** — old CakePHP skeleton welcome page is gone; new version shows 'Bluesky でログイン' CTA. `PagesControllerTest::testDisplay` was updated accordingly. **D-DEF-01 verified resolved 2026-04-24.**
-
-### Executor-discovered decisions (Phase 3 — Plan 03-03a)
-
-- **Controller::paginate() re-throws PageOutOfBoundsException as NotFoundException** (Plan 03-03a deviation Rule 1): `Cake\Controller\Controller::paginate()` internally catches `Cake\Datasource\Paging\Exception\PageOutOfBoundsException` and re-throws it as `Cake\Http\Exception\NotFoundException`. Controllers must catch `NotFoundException` for out-of-range page handling — catching `PageOutOfBoundsException` directly never fires.
-- **IntegrationTestTrait._session persists between requests in same test** (Plan 03-03a deviation Rule 1): `$this->session()` accumulates in `$this->_session` and is re-written to the session before every request. Custom session data set via `session()` (e.g., `Flash.slug_collision_suffix`) must be manually cleared via `$this->session(['Flash' => []])` before subsequent GET requests that should NOT see that data — controller-side `session->delete()` does not affect `_session`.
-- **`public array $paginate` causes PHP Fatal error in Controller subclass** (Plan 03-03a deviation Rule 1): Parent `Cake\Controller\Controller::$paginate` is untyped (`public $paginate = []`). Redeclaring with `public array $paginate` causes PHP fatal "Type of X::$paginate must not be defined". Always use untyped declaration with `@var array<string, mixed>` phpdoc.
-- **body_length CHECK constraint must be kept in sync when patching message body in tests** (Plan 03-03a deviation Rule 1): DB has `CHECK (body_length = LENGTH(body))`. When patching `body` in tests, always also patch `body_length` with `mb_strlen($newBody)`.
-
-### Executor-discovered decisions (Phase 3 — Plan 03-02)
-
-- **Authentication.Session identify=false is required for OAuth-only apps** (Plan 03-02 deviation Rule 1): CakePHP `Authentication.Password` identifier's `_checkPassword` calls `password_verify($input, $storedHash)` where storedHash resolves to `$user[null]` (no password column), causing silent auth failure. Setting `identify => false` on the Session authenticator tells it to trust session data as-is. Safe because `setIdentity()` in OauthController already ORM-validates the user before writing to session. Future plans: never use `identify => true` with a passwordless user model.
-- **->scalar() instead of ->uuid() for FK fields when test fixtures use sequential IDs** (Plan 03-02 deviation Rule 1): CakePHP's `->uuid()` validator enforces RFC 4122 variant bits; test fixture IDs like `11111111-1111-1111-1111-111111111111` have variant=0 and fail. Using `->scalar()` for FK validation columns (inbox_id, sender_user_id) avoids mass-fixture rewrites. Production IDs from `Text::uuid()` are always RFC 4122 compliant, so no production risk.
-- **hasOne ORM result is accessible as singular key** (Plan 03-02 deviation Rule 1): UserIdentities is a `hasOne` association on Users; ORM hydrates result as `$user->user_identity` (singular), NOT `$user->user_identities`. Use `$entity->get('user_identity')` to avoid phpstan level 8 undefined-property error.
-- **SlugCollisionSuffixApplied listener in bootstrap() not in controller action** (Plan 03-02): EventManager listener registered in `Application::bootstrap()` rather than OauthController::callback(). Per-request registration is order-sensitive (listener must be registered BEFORE the event fires in the same request). Bootstrap-time binding is process-lifetime and avoids this ordering hazard entirely.
-- **CakePHP render() auto-prepends controller name** (Plan 03-02 deviation Rule 1): `$this->render('Messages/send_done')` from MessagesController resolves to `templates/Messages/Messages/send_done.php` (double prefix). Always use bare template name: `$this->render('send_done')`.
-- **postString() helper pattern extends queryString() to POST data** (Plan 03-02): MessagesController adds `postString(string $key): string` analogous to OauthController's `queryString()` for phpstan-level-8-safe POST data reads. Pattern: `$v = $this->request->getData($key); return is_string($v) ? $v : '';`
-
-### Executor-discovered decisions (Phase 4 — Plan 04-01)
-
-- **Plan-provided controller code returned `: Response` but redirect()→Response|null** (Plan 04-01 Task 2 deviation Rule 1): `BlocksController::create` / `delete` の plan body は `: Response` 宣言だったが `$this->redirect()` の戻り値型は `Cake\Http\Response|null` で phpstan level 8 が 8 errors。両 method を `: ?Response` に変更し docblock も `@return \Cake\Http\Response|null` に揃えた。Phase 4 以降の controller method で redirect を返す分岐がある場合は `: ?Response` 必須。
-- **既存 send-flow テスト群の loginAsBob → loginAsDave 切替** (Plan 04-01 Task 2 deviation Rule 1): Phase 3 までは alice→bob block fixture が存在しても `MessagesController::send` がブロック判定を呼んでいなかったため inert だった。Phase 4 04-01 で dual-gate block check を入れた瞬間、`loginAsBob → /alice POST` 系の既存 5 件が consent / body validation に到達する前にブロックされ Flash error 'この受信箱には送信できません。' で fail。dave (44444444-..., handle=`dave.bsky.social`) を UsersFixture / UserIdentitiesFixture に追加し、send-flow テストを `loginAsDave()` に切り替え。bob は `testOpenOtherUsersMessageReturns403` 等で引き続き必要なため `loginAsBob()` ヘルパー温存。
-- **Test fixture に "ブロックされていない sender" を 1 体常備する** (Plan 04-01 deviation Rule 2): Phase 3 fixture には alice / bob / charlie の 3 user しかおらず、charlie は UserIdentities が無いため `MessagesTable::sendMessage` が "sender has no user_identity" で落ちる。bob は alice にブロックされている。Phase 4 でブロック検査が有効化されると send-flow validation テストの validation 検査自体に到達できなかった。dave を追加して解消。Phase 4 後続 plan の test design 時にも「特定の block / report fixture の影響を受けない sender」が必要なら dave を再利用。
-- **Plan 構造由来の Red 期間を回避するため Task 4(a) を Task 2 commit に前倒し** (Plan 04-01 deviation Rule 3): plan は Task 2 で BlocksController body を 501 stub から本実装に差し替え、Task 4 (a) で対応する `testCreateReturns501Stub` を含む BlocksControllerTest 全体を置換する構造。順番通り実行すると Task 2 commit ~ Task 4 commit 間で BlocksControllerTest が必ず failing になる。GSD の atomic-commit-stays-green 不変条件を守るため Task 4 (a) を Task 2 commit に統合。本パターンは「controller body の 501 stub 解消」と「同 controller の 501 stub テスト削除」が分かれた task 間で発生しうる一般則。
-- **`/report/{id}` route は意図的に 04-01 → 04-02 の gap 状態** (Plan 04-01 known stub): config/routes.php の `/report/{id}` は今も `Messages::report` を指すが action は 04-01 で削除済。Plan 04-02 で ReportsController を作成して route を `Reports::create` に re-point する設計。テスト suite はこの経路を踏まないため green を維持しつつ、04-02 までのウィンドウで本番 dashboard SSR-hit カードの「通報する」ボタンは Missing Action になる。同 wave 内で 04-02 が続く前提のリスク許容。
-- **D-22 reason literals を MessagesTable の const 化** (Plan 04-01 implementation choice): `MessagesTable::DELETED_REASON_USER = 'user_deleted'` / `DELETED_REASON_ADMIN = 'admin_action'`。型安全 + 検索容易性 + 04-02 で運営側削除 path が同じ const を再利用できる。Phase 1 の `messages.deleted_reason VARCHAR(64) NULL` の app-layer enforcement として後続 plan も踏襲する。
-- **DatabaseException catch で UNIQUE 衝突を冪等吸収** (Plan 04-01 implementation choice): `BlocksController::create` の uk_blocks_pair UNIQUE 衝突は `try { saveOrFail() } catch (DatabaseException) {}` で完全 silent。Flash success のみ出して `/dashboard` redirect (D-03 idempotent silent success)。`PersistenceFailedException` (validation 失敗) は別 catch で Flash error。Phase 4 後続 plan で同様の UNIQUE 制約付き INSERT を扱う場合 (04-02 の `uk_reports_reporter_message` 等) も同パターンを使う。
-
-### Verifier-discovered decisions (Phase 2)
-
-- **Live-AS OAuth happy-path is out of automated verification scope** (recorded 2026-04-24 by `/gsd-verify-phase 2`): BlueskyOAuthClient integration tests use `Client::addMockResponse()` stubs for PAR / token / profile endpoints. The actual AS + PDS handshake (production Bluesky) can only be observed from a real browser against `tamabox.emomie.com`. Verifier returned `status: human_needed` with 3 human items (live signup / logout cookie-destroy / handle-change sync). Phase 2 goal is achieved at code level; production smoke test is a Phase 4 launch gate.
-- **Data-flow Level 4 pattern reusable for Phase 3**: verifier traced rendered-to-source for UsersController::dashboard (real ORM query + contain), OauthController::clientMetadata (Configure read), and upsertBlueskyIdentity (encrypt → `*_enc` write). No hollow props / static returns in Phase 2. Phase 3 inbox/message controllers should follow the same pattern (no `return Response::json([])` style stubs).
+- **既存 CSS スタック**: `webroot/css/{normalize.min, milligram.min, tamabox}.css` を `layout/default.php` で chain ロード。`tamabox.css` 911 行に `:root` CSS variables (`--color-bg / --color-accent / --space-* / --radius-* / --shadow-subtle / --font-family`) と全コンポーネントスタイル集中。v2 では tokens.css を追加 + `tamabox.css` の :root を Calm Gacha 値で書き換えるアプローチが破壊最小。
+- **CakePHP テンプレート構造**: `templates/{Pages,Messages,Inboxes,Users,Account,Auth,Reports}/` + `templates/{layout,element,cell}/`。inline JS が `inbox_settings_form.php` (probability slider sync) に存在。
+- **Dashboard モノリス**: `templates/Users/dashboard.php` 149 行に 受信リスト + Reveal inline + 設定 element + ブロックリスト element が同居。v2 タブ分離時に分割対象。
+- **既存 Form helper パターン**: `$this->Form->create(null, ['url' => '/path', 'type' => 'post', 'class' => 'xxx-form'])` + `$this->Form->end()` で wrap、CSRF token は自動付与。
+- **既存 Identity アクセス**: `$identity = $this->getRequest()->getAttribute('identity')` → `$identity->getOriginalData()->user_identity->handle_cached / avatar_url_cached` で SNS info 取得。v2 でも同 path 維持。
+- **`postString()` / `queryString()` helper パターン**: phpstan level 8 安全な POST / query 値取得。新 controller でも踏襲必須。
+- **既存 Phase 4 CSS section コメント慣習**: `tamabox.css` 内に `/* ========== Phase N — ... ========== */` で phase 単位の追加範囲明示。v2 でも同方式を踏襲予定。
 
 ### Open Todos
 
-- [x] Phase 2 planning complete 2026-04-23 — 4 plans (02-01 foundation / 02-02 crypto / 02-03 metadata+DID / 02-04 oauth-flow), 3 waves, VERIFICATION PASSED on first pass.
-- [x] Phase 2 Wave 1 done 2026-04-23 — 02-01 foundation shipped (cakephp/authentication wired, config/bluesky.php, 6 Phase-2 routes, OAuthProviderInterface shell, config/keys/ ES256 P-256 keypair).
-- [x] Phase 2 Wave 2 crypto leg done 2026-04-23 — 02-02 crypto-services shipped (KeyManager / TokenEncryptionService / DpopService / ClientJwtService; 25 unit tests; signature-verification-via-openssl_verify invariant established; AUTH-07 closed, AUTH-08 partial).
-- [x] Phase 2 Wave 2 metadata leg done 2026-04-23 — 02-03 metadata+DID shipped (OauthController with clientMetadata/jwks/callback-stub actions + DidResolver for plc.directory DID → PDS lookup; 20 new tests; AUTH-08 closed; callback 501 stub held as hand-off contract for 02-04).
-- [x] Phase 2 Wave 3 oauth-flow done 2026-04-24 — 02-04 shipped (BlueskyOAuthClient 5-method impl + TDD RED/GREEN, UsersTable::findByDid + UserIdentitiesTable::upsertBlueskyIdentity with AES-GCM encrypt & UPSERT-in-txn, AuthController::startBluesky + logout, OauthController::callback full implementation replacing 501 stub, UsersController::dashboard, 5 templates + tamabox.css 218 lines, 10 new integration tests + 13 unit tests = 23 new tests; 85 tests total green). AUTH-01/02/04/05/06/09 closed.
-- [x] `/gsd-verify-phase 2` complete 2026-04-24 — VERIFICATION.md written. 7/7 ROADMAP Success Criteria verified at code level (truths + artifacts + key links + data-flow trace + spot-checks all green). phpcs 54/54 / phpstan level 8 [OK] / composer test 85/221/0-failure re-confirmed live. D-DEF-01 resolved as a side effect of Plan 02-04 home.php rewrite. Zero anti-patterns found. status=human_needed with 3 inherent human items (live Bluesky AS signup / browser cookie destroy / handle-change sync) deferred to tamabox.emomie.com launch.
-- [x] `/gsd-plan-phase 3` complete — see Phase 3 verifier-discovered decisions section.
-- [x] Phase 4 Plan 04-01 done 2026-04-28 — block CRUD + send block-check + soft-delete + dashboard footer / block_list + tamabox.css §1/§3/§5/§6/§9。INBOX-04 / INBOX-05 / MSG-08 / MOD-04 closed。4 commits 32b8da6 → 51e0d53、177 tests / 485 assertions / 0 failures。
-- [x] Phase 4 Plan 04-02 done 2026-04-28 — Reports + AccountController + retired-user filter (MOD-01 / MOD-02 / MOD-03)。5 commits (ddbf21c / ea8dfa7 / 2312845 / b810c2c / 5c77681)、195 tests / 546 assertions / 0 failures。`/report/{id}` route が `Reports::create` に re-point され、`/account/delete` route 新設。Auto-fix 2 件 (ReportsTable validator uuid()→scalar() + DatabaseException|PDOException union catch)。
-- [x] Phase 4 Plan 04-03 done 2026-04-28 — LAUNCH-RUNBOOK + MANUAL-SMOKE-CHECKLIST + DEBUG=false guidance (INFRA-01 / INFRA-06)。4 commits (6ecdd0c / bc22dd0 / 84d8281 / a4715a5 → 9b8db14)。
-- [ ] `/gsd-verify-phase 4` 次 — Phase 4 全 3 plan code-level 完了、manual smoke walkthrough (12 items) と code-level success criteria 確認を verifier 視点で実施。Phase 2/3 carry-over の 3 human items も同セッションで消化予定。
-- [x] **Phase 2 sticky #5 — `BlueskyOAuthClient::refreshToken()` call-site defer** = `resolved-as-not-needed-for-MVP` (Phase 4 04-CONTEXT.md REV-03, 2026-04-28 03:10 JST user confirmation). The method body itself remains in `src/Service/OAuth/Bluesky/BlueskyOAuthClient.php:156-187` for future PDS-API phases (e.g., AUTH-06 X provider extension or post-MVP eager refresh middleware). Phase 4 ships moderation + 退会 + production launch only; **no live PDS call site exists in the MVP**, so refresh integration would be 100% dead code. Phase 4 verify-phase will confirm: (a) `BlueskyOAuthClient::refreshToken()` is unreachable from any controller flow; (b) the existing tests for `refreshToken()` (Phase 2 unit tests) still pass even though the method is unused.
+(v2 milestone 開始時点 — clean)
 
 ### Blockers
 
-None currently. Resolved blockers:
-
-- **Rule 3 (resolved in Plan 01-02b Task 4)**: `config/app_local.php` was absent, blocking `bin/cake migrations migrate`. Created locally with `DATABASE_URL` / `DATABASE_TEST_URL` passthroughs from `config/.env`. File is gitignored per CakePHP convention. If you wipe local state, recreate from `config/app_local.example.php`. See `.planning/phases/01-foundation-schema/01-02b-SUMMARY.md` deviation #12.
+None currently.
 
 ### Research Flags
 
-- Lolipop 共有鯖での `trustProxy` / `fullBaseUrl` / TLS 終端の実測が必要 (Phase 2 で OAuth redirect_uri 決定時、または Phase 4 本番デプロイ時)
-- `session.save_path` が Lolipop でどこに向くか実測 (Phase 1 または 2)
-- `altotoo.emomie.com` の OAuth 実装知見を流用(Phase 2 開始時に参照)
-- **Phase 4 production smoke test contract**: VERIFICATION.md の 3 human items (live-AS signup / cookie destroy / handle-change sync) は tamabox.emomie.com デプロイ直後に人手確認必要。デプロイ手順 + 確認手順を Phase 4 plan に入れる。
+- v2 は frontend UI 改修中心、新規バックエンド機能なし。Tech stack 調査は不要。
+- 設計仕様の一次情報: `~/projects/handoff_tamabox/` 配下 (tokens.css / colors_and_type.css / 30 画面 hi-fi)
+- 4 タブ分離で CakePHP のルーティングをどう設計するか(複数 route vs single route + query / fragment)は Phase 7 planning 時に判断
+- Bluesky 公式ロゴアセットは引き続き未取得 — 雲モチーフ仮置きで v2 を完走、差し替えは v3
 
 ## Session Continuity
 
-**Last Agent Run**: execute-phase 4 plan 04-02 @ 2026-04-28 — ReportsController::create (4 カテゴリ通報 GET+POST、UNIQUE collision dedupe) + AccountController::delete (users.deleted_at + logout + redirect /) + InboxesTable::findBySlugOrPrevious REV-01 retired-user 404 フィルタ + Phinx migration `uk_reports_reporter_message` UNIQUE (reporter_user_id + message_id) + ReportsFixture +1 row / config/routes.php /report/{id} を `Messages::report` から `Reports::create` に re-point + `/account/delete` 新設 / templates/Reports/create.php + templates/Account/delete.php 新規 / templates/element/inbox_settings_form.php danger-zone fieldset / templates/Users/dashboard.php SSR-hit sender card 内 inline 通報 form 削除 + footer に <a href> 通報リンク追加 / webroot/css/tamabox.css §2/§4/§7/§Layouts danger-zone (+162 行) / ReportsControllerTest (11) + AccountControllerTest (5) + REV-01 sentinels (Messages +1 / Inboxes +1)。Phase 4 04-01 baseline 177 → 195 tests / 546 assertions / 0 failures。phpstan level 8 [OK] / phpcs 69/69。5 commits (ddbf21c / ea8dfa7 / 2312845 / b810c2c / 5c77681)。Auto-fixed: (1) ReportsTable.validationDefault の uuid() を scalar() に格下げ (fixture non-versioned UUID 互換)、(2) UNIQUE collision catch を `DatabaseException | PDOException` 化 + SQLSTATE 23000 / 'Duplicate entry' / index 名 マッチング (CakePHP 5 raw PDOException 漏れ対策)。
-**Next Action**: `/gsd-verify-phase 4` — Phase 4 全 3 plan code-level 完了、verifier に渡す。Manual smoke walkthrough (Phase 4 9 + Phase 2/3 carry-over 3 = 12 items) を verifier セッションで実施。
-**Context Notes**: Phase 4 全 3 plan (04-01 / 04-02 / 04-03) 完了。9/9 Phase 4 要件 (INBOX-04, INBOX-05, MSG-08, MOD-01, MOD-02, MOD-03, MOD-04, INFRA-01, INFRA-06) closed。Verifier 着手時の前提:
-
-- 195 tests / 546 assertions / 0 failures (`composer test`)
-- phpstan level 8 [OK] / phpcs 69/69 clean
-- bin/cake migrations status → 8 migrations 全 up (Phase 4 で 1 追加: AddReporterMessageUniqueToReports)
-- routes.php: /report/{id} (Reports::create GET+POST), /account/delete (Account::delete GET+POST), /dashboard/messages/{id}/delete, /dashboard/blocks/{id}/delete, /block/{senderUserId}, /dashboard/messages/{id}/open など Phase 4 の全 route 結線済
-- LAUNCH-RUNBOOK.md (D-37 6 step) + MANUAL-SMOKE-CHECKLIST.md (12 items) は repo root 直下
-- REV-01 (inboxes.deleted_at 不存在) / REV-03 (token refresh descope) は 04-CONTEXT.md に記録、影響範囲は plan 全体に伝播済
-- 退会済 user の slug GET は 404 (`testSendReturns404WhenInboxOwnerRetired` で sentinel)
-- 退会後 messages.sender_*_snapshot は不変 (`testDeletePostPreservesSenderSnapshots` で MOD-03 sentinel)
-
-### Executor-discovered decisions (Phase 4 — Plan 04-02)
-
-- **ReportsTable::validationDefault の `->uuid()` を `->scalar()` に格下げ** (Plan 04-02 Task 5 deviation Rule 1): Phase 1 で bake された validator は `message_id` / `reporter_user_id` に CakePHP の strict UUID rule を付けていたが、これは RFC-4122 versioned UUID (v1〜v5) のみ受理。test fixture が読みやすさのため使う `aaaa1111-aaaa-aaaa-aaaa-aaaaaaaaaaaa` のような non-versioned CHAR(36) 値は invalid 判定され `saveOrFail` が PersistenceFailedException を throw。MessagesTable / BlocksTable は scalar() を使って同問題を回避済。Phase 4 で同 convention に揃えた。Phase 5 以降の新規 Table validator も `->scalar('xxx_id') ->notEmptyString` を default に、`->uuid()` は production-only テーブル (将来) に限定する。
-- **UNIQUE collision catch は `DatabaseException | PDOException` union + SQLSTATE 23000 マッチング** (Plan 04-02 Task 5 deviation Rule 1): 研究フェーズ Pattern 4 / Plan 04-01 BlocksController 実装は `DatabaseException` のみ catch だったが、CakePHP 5 / MySQL driver では UNIQUE 衝突を raw PDOException で throw する場合があった。Phase 4 後続あるいは新 phase で同 pattern を使う場合は同様に union 化推奨。判定は `$e->getCode() === '23000'` または `str_contains($e->getMessage(), '<index 名>')` または `str_contains($e->getMessage(), 'Duplicate entry')` の OR 条件で。
+**Last Agent Run**: /gsd-new-milestone v2 — milestone scope 定義中 (2026-05-13)
+**Next Action**: REQUIREMENTS.md 定義 → roadmap 作成 → /gsd-discuss-phase 5 で Phase 5 着手
+**Context Notes**: v1 shipped 完全クローズ済。v2 は UI/UX overhaul のみで、PHP/MySQL/Bluesky OAuth/SSR メカニクスへの変更は出ない想定。handoff package `~/projects/handoff_tamabox/` の `tokens.css` を一次情報として扱う。
 
 ---
-*Last updated: 2026-04-28 (Phase 4 04-02 EXECUTED — 5 commits ddbf21c → 5c77681、MOD-01/02/03 closed、Phase 4 全 9 要件 closed、195 tests / 546 assertions / 0 failures、`/gsd-verify-phase 4` 待ち)*
+*Last updated: 2026-05-13 — v2 Calm Gacha UI milestone started, defining requirements*
