@@ -96,7 +96,6 @@ class UsersController extends AppController
                 'messages' => [],
                 'pageOutOfRange' => true,
                 'collisionFlash' => null,
-                'blocks' => [],
                 'reportedSet' => [],
                 'unreadCount' => 0,
                 'activeTab' => 'inbox',
@@ -105,14 +104,10 @@ class UsersController extends AppController
             return null;
         }
 
-        // Phase 4 D-04 — block list for "ブロック中ユーザー" section.
-        /** @var \App\Model\Table\BlocksTable $blocksTable */
-        $blocksTable = $this->fetchTable('Blocks');
-        $blocks = $blocksTable->find()
-            ->where(['Blocks.blocker_user_id' => $userId])
-            ->contain(['BlockedUsers' => ['UserIdentities']])
-            ->order(['Blocks.created_at' => 'DESC'])
-            ->toArray();
+        // Phase 8 D-22 — block-list query removed from dashboard() (was Phase 4 D-04).
+        // The "ブロック中ユーザー" section now lives in /dashboard/settings,
+        // queried inside InboxesController::settings() instead. Removing the
+        // dead query from dashboard() trims one DB roundtrip per dashboard render.
 
         // 通報済 badge map (Phase 4 D-16) — keys=message_id, vals=true. Used by 04-02 once /report exists,
         // but the data is fetched here so 04-01 dashboard re-render exposes the structure.
@@ -162,7 +157,6 @@ class UsersController extends AppController
             'messages' => $messages,
             'pageOutOfRange' => false,
             'collisionFlash' => $collisionFlash,
-            'blocks' => $blocks,
             'reportedSet' => $reportedSet,
             'unreadCount' => $unreadCount,
             'activeTab' => 'inbox',

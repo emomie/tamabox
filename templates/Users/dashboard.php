@@ -6,7 +6,6 @@
  * @var \Cake\Datasource\ResultSetInterface|array $messages
  * @var bool $pageOutOfRange
  * @var array{slug: string, base: string}|null $collisionFlash
- * @var array<int, \App\Model\Entity\Block> $blocks  // unused in this template (moved to /dashboard/settings)
  * @var array<string, bool> $reportedSet
  * @var int $unreadCount
  * @var string $activeTab
@@ -65,7 +64,7 @@ $initialChar = $handle !== '' ? mb_substr($handle, 0, 1) : '';
         <?php endif; ?>
 
         <div class="tb-dash-box">
-            <div style="flex:1; min-width:0;">
+            <div class="tb-flex-grow">
                 <div class="tb-dash-box__label">あなたの箱</div>
                 <div class="tb-mono tb-dash-box__url">tamabox.emomie.com<?= h('/' . $slug) ?></div>
             </div>
@@ -73,7 +72,7 @@ $initialChar = $handle !== '' ? mb_substr($handle, 0, 1) : '';
         </div>
 
         <div class="tb-dash-counts">
-            <div style="display:flex; align-items:baseline; gap:10px;">
+            <div class="tb-flex-row--baseline">
                 <span class="tb-dash-counts__title">受信</span>
                 <span class="tb-mono tb-dash-counts__num"><?= $totalCount ?> 件</span>
             </div>
@@ -120,7 +119,7 @@ $initialChar = $handle !== '' ? mb_substr($handle, 0, 1) : '';
                              <?= $isUnread ? '' : 'open' ?>>
                         <summary class="message-row__head tb-message-row__head">
                             <span class="tb-dash-dot tb-dash-dot--<?= $dotMod ?>" aria-hidden="true"></span>
-                            <div style="flex:1; min-width:0;">
+                            <div class="tb-flex-grow">
                                 <div class="tb-message-row__meta">
                                     <span class="tb-message-row__from tb-message-row__from--<?= $fromMod ?>"><?= h($fromText) ?></span>
                                     <?php if (!$isUnread && $isHit): ?>
@@ -147,13 +146,13 @@ $initialChar = $handle !== '' ? mb_substr($handle, 0, 1) : '';
                                 <?php if ($isHit): ?>
                                     <div class="ssr-reveal" data-outcome="hit">
                                         <div class="tb-reveal-hit-card">
-                                            <span aria-hidden="true" style="position:absolute; right:-14px; top:-22px; font-size:130px; line-height:1; color:rgba(217,162,60,0.10); font-weight:300; pointer-events:none;">✦</span>
+                                            <span class="tb-reveal-hit-card__corner-glyph" aria-hidden="true">✦</span>
                                             <div class="tb-reveal-hit-card__symbol" aria-hidden="true">✦</div>
-                                            <div style="flex:1; min-width:0; position:relative; z-index:1;">
-                                                <div style="font-size:10px; font-weight:700; color:var(--tb-warm-700); letter-spacing:0.2em; text-transform:uppercase;">抽選結果 · SSR</div>
-                                                <div style="font-size:16px; font-weight:700; color:var(--tb-ink); margin-top:3px; letter-spacing:0.04em;">送信者が開示されました</div>
-                                                <div style="font-size:12px; color:var(--tb-ink-2); margin-top:2px; letter-spacing:0.04em;">
-                                                    <span class="tb-mono" style="color:var(--tb-warm-700); font-weight:700;"><?= $ssrPct ?>%</span> を引き当てました
+                                            <div class="tb-reveal-hit-card__content">
+                                                <div class="tb-reveal-hit-card__kicker">抽選結果 · SSR</div>
+                                                <div class="tb-reveal-hit-card__title">送信者が開示されました</div>
+                                                <div class="tb-reveal-hit-card__sub">
+                                                    <span class="tb-mono tb-reveal-hit-card__sub-pct"><?= $ssrPct ?>%</span> を引き当てました
                                                 </div>
                                             </div>
                                             <span class="visually-hidden">★ 抽選 hit — 送信者が開示されました</span>
@@ -169,10 +168,10 @@ $initialChar = $handle !== '' ? mb_substr($handle, 0, 1) : '';
                                             <?php else: ?>
                                                 <span class="tb-sender-card__avatar" aria-hidden="true"><?= h($senderInitial) ?></span>
                                             <?php endif; ?>
-                                            <div style="flex:1; min-width:0;">
-                                                <div style="display:flex; align-items:center; gap:6px;">
+                                            <div class="tb-flex-grow">
+                                                <div class="tb-flex-row--sm-gap">
                                                     <span class="tb-sender-card__name"><?= h($senderHandle) ?></span>
-                                                    <span style="font-size:10px; color:var(--tb-warm-500); font-weight:700; letter-spacing:0.18em;">SSR</span>
+                                                    <span class="tb-sender-card__name-ssr">SSR</span>
                                                 </div>
                                                 <a class="tb-mono tb-sender-card__handle sender-card__handle"
                                                    href="https://bsky.app/profile/<?= h($senderHandle) ?>"
@@ -203,11 +202,11 @@ $initialChar = $handle !== '' ? mb_substr($handle, 0, 1) : '';
                                     <div class="ssr-reveal" data-outcome="miss">
                                         <div class="tb-reveal-miss-card">
                                             <div class="tb-reveal-miss-card__dash" aria-hidden="true">—</div>
-                                            <div style="flex:1; min-width:0;">
-                                                <div style="font-size:10px; font-weight:600; color:var(--tb-ink-3); letter-spacing:0.2em; text-transform:uppercase;">抽選結果</div>
-                                                <div style="font-size:15px; font-weight:600; color:var(--tb-ink); margin-top:3px; letter-spacing:0.04em;">送信者は匿名のまま</div>
-                                                <div style="font-size:11px; color:var(--tb-ink-3); margin-top:2px; letter-spacing:0.04em;">
-                                                    <span class="tb-mono" style="color:var(--tb-warm-700); font-weight:600;"><?= 100 - $ssrPct ?>%</span> を引きました
+                                            <div class="tb-flex-grow">
+                                                <div class="tb-reveal-miss-card__kicker">抽選結果</div>
+                                                <div class="tb-reveal-miss-card__title">送信者は匿名のまま</div>
+                                                <div class="tb-reveal-miss-card__sub">
+                                                    <span class="tb-mono tb-reveal-miss-card__sub-pct"><?= 100 - $ssrPct ?>%</span> を引きました
                                                 </div>
                                             </div>
                                             <span class="visually-hidden ssr-reveal__miss">★ 抽選 miss(送信者は匿名のまま)</span>

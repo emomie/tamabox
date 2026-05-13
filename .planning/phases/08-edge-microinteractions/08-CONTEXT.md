@@ -94,6 +94,23 @@ v2 milestone の最終 phase。Send フローの 4 エラー画面 (EDGE-01 404 
 - **Justification:** hi-fi `Dashboard.jsx` の unread row 表現で使用。Calm Gacha tokens の `--tb-paper` (#FFFFFF) と `--tb-paper-soft` (#F8F4EC、honey paper) の中間が必要だが既存トークンで近似値が無い。新トークン `--tb-paper-cold` を追加する案もあるが、現状 1 箇所限定使用なので逐次拡大時に再判断 (ad-hoc 追加禁止ポリシーは継承)
 - **Scope-of-override:** 本セレクタのみ。他で同色を使う場合は新トークン化を検討
 
+### Locked Decision — Acknowledged sub-grid micro-offset (Phase 8 D-24)
+
+- **Scope:** `.tb-dash-box__url` (tamabox.css §H.3), `.tb-reveal-hit-card__title` (§I.7), `.tb-reveal-miss-card__title` (§I.7)
+- **Value:** `margin-top: 3px` (1px off the 4-grid spacing system)
+- **Justification:** matches hi-fi `Dashboard.jsx` / `RevealHit.jsx` / `Reveal.jsx` typographic optical baseline — the 4px nominal would create a visually-too-loose gap between the small kicker label and the larger title beneath. The 3px keeps the title visually anchored without making the kicker appear glued.
+- **Scope-of-override:** these 3 selectors only. New 3px values require fresh review against the 4-grid policy.
+- **Locked at:** Plan 08-07 (Phase 7 deferred cleanup carry-over)
+
+### Locked Decision — Single-use literal hex values (Phase 8 §I)
+
+- **Scope (3 locations):**
+  - `#F0DCA8` — reused from Phase 7 §H.5 (warm-card border), also used in §I.3 inbox-closed status block border.
+  - `#FFFBEF` — §I.4 textarea overflow background (cream tint of warm-100).
+  - `#EFD5D2` — §I.5 send-failed banner border (edge tone of `--tb-danger-bg`).
+- **Justification:** each value is hi-fi-required and used exactly once (or in the case of #F0DCA8, twice in the same edge-tone role). Promoting to `--tb-*` tokens would expand the design-token surface without payoff. If a second non-edge consumer arises for any value, promote at that time.
+- **Scope-of-override:** these specific selectors only.
+
 </decisions>
 
 <canonical_refs>
