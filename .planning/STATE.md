@@ -3,9 +3,9 @@ gsd_state_version: 1.0
 milestone: v3
 milestone_name: TBD
 status: ready_for_new_milestone
-stopped_at: v2 milestone shipped + archived — awaits /gsd-new-milestone to scope v3
-last_updated: "2026-05-13T15:00:00.000Z"
-last_activity: 2026-05-13 -- v2 milestone closeout sequence (audit → complete → cleanup) executed
+stopped_at: v2 milestone shipped + deployed + smoke verified — awaits /gsd-new-milestone to scope v3
+last_updated: "2026-05-15T10:35:00.000Z"
+last_activity: 2026-05-15 -- Phase 7+8 deployed (77567cf) + smoke verified, EDGE-03 known gap deferred to v3
 progress:
   total_phases: 0
   completed_phases: 0

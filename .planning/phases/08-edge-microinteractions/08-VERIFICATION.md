@@ -1,14 +1,17 @@
 ---
 phase: 8
 slug: edge-microinteractions
-status: human_needed
+status: passed_with_known_gap
 created: 2026-05-13
+smoke_verified: 2026-05-15 (tamabox.emomie.com, deploy 77567cf)
+known_gaps:
+  - EDGE-03 visual feedback (overflow chip / counter color / disabled CTA) unreachable due to textarea `maxlength="2000"` attribute physically blocking input past 2000 chars. JS overflow detection never fires. Accepted by user as v3 carry-over (no UX impact — 2000 is still enforced, just no fancy feedback).
 ---
 
 # Phase 8 — Verification Report (v2 milestone closer)
 
 > Audit of the 6 ROADMAP success criteria for Phase 8 (エッジケース & マイクロインタラクション) plus the 4 Phase 7 deferred cleanup items resolved in 08-07.
-> Code-side audit: PASS for all 10 items. Browser/smoke verification deferred to the user via the §"Smoke checklist" below. `status: human_needed` because each visual requires a real browser to confirm rendering — PHPUnit covers markup contracts only.
+> Code-side audit: PASS for all 10 items. Smoke verified 2026-05-15 on `tamabox.emomie.com` (deploy `77567cf`). 5/6 EDGE + MOTION criteria PASS via browser; EDGE-03 visual feedback flagged as known gap (see frontmatter `known_gaps`).
 
 **Final test state:** `Tests: 203, Assertions: 576, Incomplete: 6, Failures: 0.` (Baseline 199 → 203 = +4 new tests across 08-02, 08-04, 08-05, 08-06.)
 

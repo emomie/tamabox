@@ -54,7 +54,7 @@ Full archive with per-requirement deploy traceability: `.planning/milestones/v2-
 
 - ✓ **EDGE-01**: Send 404 (slug 不在) が hi-fi `SendErrors :: SendNotFound` レイアウトで表示
 - ✓ **EDGE-02**: Send 受信停止中 (`is_accepting=false`) が hi-fi `SendErrors :: SendInboxClosed` で表示
-- ✓ **EDGE-03**: Send 文字数オーバー (>2000) で counter 変色 + chip + disabled CTA
+- ⚠️ **EDGE-03**: Send 文字数オーバー (>2000) で counter 変色 + chip + disabled CTA — **コード実装済だが smoke で未到達** (textarea `maxlength="2000"` で 2001 字目以降の入力をブラウザが物理ブロック、JS の overflow 検知が発火しない)。実害なし (2000 制限は維持)、視覚 feedback の dead code 化を v3 `TECH-06` で解消
 - ✓ **EDGE-04**: Send 送信失敗 (POST エラー) が hi-fi `SendErrors :: SendFailed` で表示
 - ✓ **EDGE-05**: Block 確認モーダル (RevealHit 直後) が bottom sheet で hi-fi 一致
 
@@ -101,6 +101,7 @@ v2 に含めない、後続 milestone の候補。
 - **TECH-03**: Phase 7 IN-01 — replace substring assertions in 4 dashboard tab tests with structural assertions
 - **TECH-04**: Phase 8 IN-02 — Block modal element should accept `$displayName` as parameter (currently re-derives from handle)
 - **TECH-05**: Phase 5 UI-REVIEW — `.button` backward-compat geometry (legacy v1 shim, only used in old templates)
+- **TECH-06**: Phase 8 EDGE-03 — `templates/Messages/send.php:108` の textarea `maxlength="2000"` を外す + JS の overflow 検知を発火可能にする (server validation `mb_strlen > 2000` で defense in depth は維持)。Phase 8 で実装した overflow chip / counter color / disabled CTA を実際に visible にする。Smoke 2026-05-15 で発覚した dead-code gap の解消
 
 ---
 

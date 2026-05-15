@@ -1,9 +1,12 @@
 ---
 milestone: v2
 milestone_name: Calm Gacha UI / 4-tab 構造
-status: passed
+status: passed_with_known_gap
 audited: 2026-05-13
 audit_iteration: 1
+smoke_verified: 2026-05-15 (Phase 5+6 on 2026-05-13、Phase 7+8 on 2026-05-15、deploy 77567cf)
+known_gaps:
+  - "EDGE-03 visual feedback (overflow chip / counter color / disabled CTA) は textarea `maxlength=\"2000\"` のため到達不能 — dead code 状態。実害なし、v3 `TECH-06` で解消予定"
 ---
 
 # v2 Milestone Audit

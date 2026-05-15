@@ -1,8 +1,9 @@
 ---
 phase: 7
 slug: dashboard-4-reveal
-status: human_needed
+status: passed
 created: 2026-05-13
+smoke_verified: 2026-05-15 (tamabox.emomie.com, deploy 77567cf)
 ---
 
 # Phase 7 Verification — Dashboard 4 タブ分離 + Reveal 演出
