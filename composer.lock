@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0b344a090ed560e03a579feb2ad6d5a7",
+    "content-hash": "cea98b6b16f9ce5ef6d0441bf868457f",
     "packages": [
         {
             "name": "cakephp/authentication",
@@ -307,26 +307,26 @@
         },
         {
             "name": "cakephp/plugin-installer",
-            "version": "1.3.1",
+            "version": "2.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cakephp/plugin-installer.git",
-                "reference": "e27027aa2d3d8ab64452c6817629558685a064cb"
+                "reference": "b50925d28e3301d9108562a899e3f68cc4cc18bd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cakephp/plugin-installer/zipball/e27027aa2d3d8ab64452c6817629558685a064cb",
-                "reference": "e27027aa2d3d8ab64452c6817629558685a064cb",
+                "url": "https://api.github.com/repos/cakephp/plugin-installer/zipball/b50925d28e3301d9108562a899e3f68cc4cc18bd",
+                "reference": "b50925d28e3301d9108562a899e3f68cc4cc18bd",
                 "shasum": ""
             },
             "require": {
-                "composer-plugin-api": "^1.0 || ^2.0",
-                "php": ">=5.6.0"
+                "composer-plugin-api": "^2.0",
+                "php": ">=8.1"
             },
             "require-dev": {
-                "cakephp/cakephp-codesniffer": "^3.3",
+                "cakephp/cakephp-codesniffer": "^5.0",
                 "composer/composer": "^2.0",
-                "phpunit/phpunit": "^5.7 || ^6.5 || ^8.5 || ^9.3"
+                "phpunit/phpunit": "^10.1.0 || ^11.1.3 || ^12.0 || ^13.0"
             },
             "type": "composer-plugin",
             "extra": {
@@ -347,12 +347,18 @@
                     "homepage": "https://cakephp.org"
                 }
             ],
-            "description": "A composer installer for CakePHP 3.0+ plugins.",
+            "description": "A composer installer for CakePHP plugins.",
+            "keywords": [
+                "cakephp",
+                "composer-plugin",
+                "installer",
+                "plugin"
+            ],
             "support": {
                 "issues": "https://github.com/cakephp/plugin-installer/issues",
-                "source": "https://github.com/cakephp/plugin-installer/tree/1.3.1"
+                "source": "https://github.com/cakephp/plugin-installer"
             },
-            "time": "2020-10-29T04:00:42+00:00"
+            "time": "2026-10-10T14:35:32+00:00"
         },
         {
             "name": "composer/ca-bundle",
@@ -6345,12 +6351,12 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": [],
+    "stability-flags": {},
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
         "php": "^8.0"
     },
-    "platform-dev": [],
-    "plugin-api-version": "2.6.0"
+    "platform-dev": {},
+    "plugin-api-version": "2.9.0"
 }
