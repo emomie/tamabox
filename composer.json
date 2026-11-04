@@ -11,7 +11,7 @@
         "cakephp/migrations": "^3.7",
         "cakephp/plugin-installer": "^1.3",
         "josegonzalez/dotenv": "^4.0",
-        "mobiledetect/mobiledetectlib": "^3.74"
+        "mobiledetect/mobiledetectlib": "^4.11"
     },
     "require-dev": {
         "cakedc/cakephp-phpstan": "^2.1",
